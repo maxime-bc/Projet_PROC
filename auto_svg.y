@@ -14,7 +14,7 @@ int yyerror(char *s);
    char* string;
 }
 
-%token CREATE NODE
+%token CREATE NODE EDGE FROM TO
 %token <string> ID
 %token <string> LABEL
 %token <number> FLOAT
@@ -23,11 +23,14 @@ int yyerror(char *s);
 %%
 
 S:
-    CREATE              { printf("CREATE"); return 0; } 
-  | NODE                { printf("NODE"); return 0; }   
-  | LABEL               { printf("LABEL = %s", $1); return 0; }
-  | ID                  { printf("ID = %s", $1); return 0; }
-  | FLOAT               { printf("FLOAT = %f", $1); return 0; }
+    Command                 { }
+  | S Command               { }
+  ;
+
+Command:
+    CREATE NODE ID               { printf("CREATE NODE %s", $3); } 
+  | CREATE EDGE FROM ID TO ID    { printf("CREATE EDGE FROM %s TO %s", $4, $6); }
+  | FLOAT               { printf("FLOAT = %f", $1); }
   ;
 
 %%

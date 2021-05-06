@@ -11,6 +11,9 @@ FLOAT [+-]?([0-9]*[.])?[0-9]+
 
 (?i:create) {return(CREATE);}
 (?i:node) {return(NODE);}
+(?i:edge) {return(EDGE);}
+(?i:from) {return(FROM);}
+(?i:to) {return(TO);}
 {ID} {
   yylval.string = strdup(yytext);
   return(ID); 
