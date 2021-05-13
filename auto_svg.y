@@ -43,7 +43,7 @@ Command:
 Create_Attrs_1:
     EOL                                     { }
   | LABEL LABEL_STRING Create_Attrs_1 { set_label($2); }
-  | COLOR LABEL_STRING Create_Attrs_1 { set_color($2); }
+  | COLOR LABEL_STRING Create_Attrs_1 { set_node_color($2); }
   | BGCOLOR LABEL_STRING Create_Attrs_1 { set_bgcolor($2); }
   | SIZE FLOAT Create_Attrs_1 { set_size($2); }
   | FINAL Directions Create_Attrs_1 { }

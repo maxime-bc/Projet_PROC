@@ -2,15 +2,15 @@
 #include <stdio.h>
 #include "edge.h"
 
-Edge* current_edge;
+Edge *current_edge;
 
-void init_current_edge(){
-    if(!current_edge){
+void init_current_edge() {
+    if (!current_edge) {
         current_edge = malloc(sizeof(*current_edge));
     }
 }
 
-void create_edge_pos(char* source, char* dest, char* label, float pos_x, float pos_y){
+void create_edge_pos(char *source, char *dest, char *label, float pos_x, float pos_y) {
     init_current_edge();
     printf("In create edge pos\n");
     //char prefix[30] = "";
@@ -23,7 +23,7 @@ void create_edge_pos(char* source, char* dest, char* label, float pos_x, float p
     current_edge->pos_y = pos_y;
 }
 
-void create_edge(char* source, char* dest, char* label){
+void create_edge(char *source, char *dest, char *label) {
     init_current_edge();
     printf("In create edge\n");
     //char prefix[30] = "";
