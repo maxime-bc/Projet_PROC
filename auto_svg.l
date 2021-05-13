@@ -16,6 +16,8 @@ FLOAT [+-]?([0-9]*[.])?[0-9]+
 (?i:to) {return(TO);}
 (?i:at) {return(AT);}
 (?i:label) {return(LABEL);}
+(?i:color) {return(COLOR);}
+(?i:bgcolor) {return(BGCOLOR);}
 {ID} {
   yylval.string = strdup(yytext);
   return(ID); 

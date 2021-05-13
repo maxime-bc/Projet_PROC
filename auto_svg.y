@@ -14,7 +14,7 @@ int yyerror(char *s);
    char* string;
 }
 
-%token CREATE NODE EDGE FROM TO AT EOL LABEL
+%token CREATE NODE EDGE FROM TO AT EOL LABEL COLOR BGCOLOR
 %token <string> ID
 %token <string> LABEL_STRING
 %token <number> FLOAT
@@ -40,8 +40,10 @@ Command:
 
 Attributes:
     EOL                                     { }
-  | AT FLOAT FLOAT { printf("AT %f %f\n", $2, $3); }
-  | LABEL LABEL_STRING { printf("LABEL %s\n", $2); }
+  | AT FLOAT FLOAT Attributes { printf("AT %f %f\n", $2, $3); }
+  | LABEL LABEL_STRING Attributes { printf("LABEL %s\n", $2); }
+  | COLOR LABEL_STRING Attributes { printf ("COLOR %s\n", $2); }
+  | BGCOLOR LABEL_STRING Attributes { printf ("BGCOLOR %s\n", $2); }
   ;
 
 %%
