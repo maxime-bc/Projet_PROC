@@ -14,23 +14,34 @@ int yyerror(char *s);
    char* string;
 }
 
-%token CREATE NODE EDGE FROM TO
+%token CREATE NODE EDGE FROM TO AT EOL LABEL
 %token <string> ID
-%token <string> LABEL
+%token <string> LABEL_STRING
 %token <number> FLOAT
 
 %start S
 %%
 
 S:
-    Command                 { }
-  | S Command               { }
+    Line                 { }
+  | S Line               { }
+  ;
+
+Line:
+    EOL                   { }
+  | Command               { }
   ;
 
 Command:
-    CREATE NODE ID               { printf("CREATE NODE %s", $3); } 
-  | CREATE EDGE FROM ID TO ID    { printf("CREATE EDGE FROM %s TO %s", $4, $6); }
-  | FLOAT               { printf("FLOAT = %f", $1); }
+    EOL                                    { }
+  | CREATE NODE ID Attributes              { } 
+  | CREATE EDGE FROM ID TO ID   { printf("CREATE EDGE FROM %s TO %s", $4, $6); }
+  ;
+
+Attributes:
+    EOL                                     { }
+  | AT FLOAT FLOAT { printf("AT %f %f\n", $2, $3); }
+  | LABEL LABEL_STRING { printf("LABEL %s\n", $2); }
   ;
 
 %%

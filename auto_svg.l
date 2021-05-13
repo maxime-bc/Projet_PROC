@@ -3,7 +3,7 @@
   #include <stdlib.h>
 %}
 
-LABEL \"[^\"\\<\>]*\"
+LABEL_STRING \"[^\"\\<\>]*\"
 ID  [a-zA-Z][a-zA-Z0-9_]{0,14}
 FLOAT [+-]?([0-9]*[.])?[0-9]+
 
@@ -14,6 +14,8 @@ FLOAT [+-]?([0-9]*[.])?[0-9]+
 (?i:edge) {return(EDGE);}
 (?i:from) {return(FROM);}
 (?i:to) {return(TO);}
+(?i:at) {return(AT);}
+(?i:label) {return(LABEL);}
 {ID} {
   yylval.string = strdup(yytext);
   return(ID); 
@@ -22,10 +24,11 @@ FLOAT [+-]?([0-9]*[.])?[0-9]+
   yylval.number = strtod(yytext, NULL);
   return(FLOAT); 
 }
-{LABEL} { 
+{LABEL_STRING} { 
   yylval.string = strdup(yytext);
-  return(LABEL); 
+  return(LABEL_STRING); 
 }
+"\n" {return EOL;}
 . { }
 
 %%
