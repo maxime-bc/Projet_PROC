@@ -6,15 +6,14 @@
 Node *current_node;
 NodesList *nodes_list;
 
-void init_current_node() {
+void declare_current_node() {
     if (!current_node) {
-        printf("INIT CURR NODE\n");
         current_node = malloc(sizeof(*current_node));
-        clear_current_node();
+        init_current_node();
     }
 }
 
-void clear_current_node(void) {
+void init_current_node() {
     current_node->id = "";
     current_node->pos_x = 0;
     current_node->pos_y = 0;
@@ -27,7 +26,7 @@ void clear_current_node(void) {
     current_node->next = NULL;
 }
 
-Node *copy_current_node(void) {
+Node *copy_current_node() {
     Node *node_copy = malloc(sizeof(*node_copy));
     node_copy->id = current_node->id;
     node_copy->pos_x = current_node->pos_x;
@@ -63,7 +62,7 @@ void add_node(Node *new_node) {
 }
 
 void create_node(char *id, float pos_x, float pos_y) {
-    init_current_node();
+    declare_current_node();
     if (!nodes_list) {
         nodes_list = malloc(sizeof(*nodes_list));
     }
@@ -73,48 +72,48 @@ void create_node(char *id, float pos_x, float pos_y) {
 
     Node *node_to_add = copy_current_node();
     add_node(node_to_add);
-    clear_current_node();
+    init_current_node();
 
     print_nodes_list();
 }
 
 void set_label(char *label) {
-    init_current_node();
+    declare_current_node();
     current_node->label = label;
 }
 
 void set_node_color(char *color) {
-    init_current_node();
+    declare_current_node();
     current_node->color = color;
 }
 
 void set_bgcolor(char *bgcolor) {
-    init_current_node();
+    declare_current_node();
     current_node->bgcolor = bgcolor;
 }
 
 void set_size(float size) {
     printf("SET SIZE\n");
-    init_current_node();
+    declare_current_node();
     current_node->size = size;
 }
 
 void set_final(char *fnl) {
-    init_current_node();
+    declare_current_node();
     current_node->fnl = fnl;
 }
 
 void choose_final_direction() {
-    init_current_node();
+    declare_current_node();
     current_node->fnl = ""; // #TODO choose best direction
 }
 
 void set_initial(char *initial) {
-    init_current_node();
+    declare_current_node();
     current_node->initial = initial;
 }
 
 void choose_initial_direction() {
-    init_current_node();
+    declare_current_node();
     current_node->initial = ""; // #TODO choose best direction
 }

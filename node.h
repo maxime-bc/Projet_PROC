@@ -20,9 +20,9 @@ struct NodesList {
     Node *first_node;
 };
 
-void init_current_node();
+void declare_current_node();
 
-void clear_current_node(void);
+void init_current_node(void);
 
 Node *copy_current_node(void);
 

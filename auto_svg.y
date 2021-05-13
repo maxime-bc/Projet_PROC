@@ -53,9 +53,9 @@ Create_Attrs_1:
   ;
 
 Create_Attrs_2:
-    EOL
-  | COLOR LABEL_STRING Create_Attrs_2 { printf("COLOR %s\n", $2); }
-  | PATH LABEL_STRING Create_Attrs_2  { printf("PATH %s\n", $2); }
+    EOL                               { }
+  | COLOR LABEL_STRING Create_Attrs_2 { set_edge_color($2); }
+  | PATH LABEL_STRING Create_Attrs_2  { set_path($2); }
   ;
 
 Directions:
