@@ -1,5 +1,5 @@
-#ifndef STRUCT_H
-#define STRUCT_H
+#ifndef NODE_H
+#define NODE_H
 
 typedef struct Node Node;
 struct Node {
@@ -14,8 +14,24 @@ struct Node {
     char* fnl;
 };
 
+void init_current_node();
+
 void create_node(char* id, float pos_x, float pos_y);
 
 void set_label(char* label);
+
+void set_color(char* color);
+
+void set_bgcolor(char* bgcolor);
+
+void set_size(float size);
+
+void set_final(char* fnl);
+
+void choose_final_direction();
+
+void set_initial(char* initial);
+
+void choose_initial_direction();
 
 #endif

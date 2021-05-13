@@ -5,9 +5,10 @@ all: $(BIN).y $(BIN).l
 	dot -Tpng $(BIN).dot -o $(BIN).png
 	flex -vT $(BIN).l
 	$(CC) -c lex.yy.c -o lex.yy.o
-	$(CC) -c struct.c -o struct.o
+	$(CC) -c edge.c -o edge.o
+	$(CC) -c node.c -o node.o
 	$(CC) -c $(BIN).tab.c -o $(BIN).tab.o
-	$(CC) -o $(BIN).bin lex.yy.o $(BIN).tab.o struct.o -ll -lm
+	$(CC) -o $(BIN).bin lex.yy.o $(BIN).tab.o edge.o node.o -ll -lm
 	./$(BIN).bin
 
 clean:
