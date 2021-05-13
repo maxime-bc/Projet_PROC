@@ -29,7 +29,6 @@ FLOAT [+-]?([0-9]*[.])?[0-9]+
 (?i:north-west) {return(NORTH_WEST);}
 (?i:south-east) {return(SOUTH_EAST);}
 (?i:south-west) {return(SOUTH_WEST);}
-(?i:south-west) {return(SOUTH_WEST);}
 (?i:path) {return(PATH);}
 {ID} {
   yylval.string = strdup(yytext);

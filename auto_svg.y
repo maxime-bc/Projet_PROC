@@ -34,14 +34,13 @@ Line:
   ;
 
 Command:
-    EOL                                    { }
-  | CREATE NODE ID Create_Attrs_1          { } 
+  | CREATE NODE ID Create_Attrs_1    { } /*demander au prof*/
   | CREATE EDGE FROM ID TO ID Create_Attrs_2   { }
   ;
 
 Create_Attrs_1:
     EOL                                     { }
-  | AT FLOAT FLOAT Create_Attrs_1 { printf("AT %f %f\n", $2, $3); }
+  | AT FLOAT FLOAT Create_Attrs_1 { printf("AT %f %f\n", $2, $3); }  
   | LABEL LABEL_STRING Create_Attrs_1 { printf("LABEL %s\n", $2); }
   | COLOR LABEL_STRING Create_Attrs_1 { printf("COLOR %s\n", $2); }
   | BGCOLOR LABEL_STRING Create_Attrs_1 { printf("BGCOLOR %s\n", $2); }
@@ -54,10 +53,10 @@ Create_Attrs_1:
 
 Create_Attrs_2:
     EOL
-  | LABEL LABEL_STRING Create_Attrs_1 { printf("LABEL %s\n", $2); }
-  | LABEL LABEL_STRING AT FLOAT FLOAT Create_Attrs_1 { printf("LABEL %s AT %f %f\n", $2, $4, $5); }
-  | COLOR LABEL_STRING Create_Attrs_1 { printf("COLOR %s\n", $2); }
-  | PATH LABEL_STRING Create_Attrs_1  { printf("PATH %s\n", $2); }
+  | LABEL LABEL_STRING AT FLOAT FLOAT Create_Attrs_2 { printf("LABEL %s AT %f %f\n", $2, $4, $5); }   
+  | LABEL LABEL_STRING Create_Attrs_2 { printf("LABEL %s\n", $2); }
+  | COLOR LABEL_STRING Create_Attrs_2 { printf("COLOR %s\n", $2); }
+  | PATH LABEL_STRING Create_Attrs_2  { printf("PATH %s\n", $2); }
   ;
 
 Directions:
