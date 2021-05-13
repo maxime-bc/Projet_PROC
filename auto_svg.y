@@ -14,7 +14,7 @@ int yyerror(char *s);
    char* string;
 }
 
-%token CREATE NODE EDGE FROM TO AT EOL LABEL COLOR BGCOLOR SIZE INIT FINAL
+%token CREATE NODE EDGE FROM TO AT EOL LABEL COLOR BGCOLOR SIZE INIT FINAL PATH
 %token NORTH SOUTH EAST WEST NORTH_EAST NORTH_WEST SOUTH_EAST SOUTH_WEST
 %token <string> ID
 %token <string> LABEL_STRING
@@ -36,7 +36,7 @@ Line:
 Command:
     EOL                                    { }
   | CREATE NODE ID Create_Attrs_1          { } 
-  | CREATE EDGE FROM ID TO ID   { printf("CREATE EDGE FROM %s TO %s", $4, $6); }
+  | CREATE EDGE FROM ID TO ID Create_Attrs_2   { }
   ;
 
 Create_Attrs_1:
@@ -50,6 +50,14 @@ Create_Attrs_1:
   | FINAL Create_Attrs_1 {}
   | INIT Directions Create_Attrs_1 {}
   | INIT Create_Attrs_1 {}
+  ;
+
+Create_Attrs_2:
+    EOL
+  | LABEL LABEL_STRING Create_Attrs_1 { printf("LABEL %s\n", $2); }
+  | LABEL LABEL_STRING AT FLOAT FLOAT Create_Attrs_1 { printf("LABEL %s AT %f %f\n", $2, $4, $5); }
+  | COLOR LABEL_STRING Create_Attrs_1 { printf("COLOR %s\n", $2); }
+  | PATH LABEL_STRING Create_Attrs_1  { printf("PATH %s\n", $2); }
   ;
 
 Directions:
