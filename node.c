@@ -13,6 +13,12 @@ void declare_current_node() {
     }
 }
 
+void declare_nodes_list() {
+    if (!nodes_list) {
+        nodes_list = malloc(sizeof(*nodes_list));
+    }
+}
+
 void init_current_node() {
     current_node->id = "";
     current_node->pos_x = 0;
@@ -49,6 +55,7 @@ void print_node(Node *node) {
 }
 
 void print_nodes_list() {
+    declare_nodes_list();
     Node *node = nodes_list->first_node;
     while (node != NULL) {
         print_node(node);
@@ -63,9 +70,8 @@ void add_node(Node *new_node) {
 
 void create_node(char *id, float pos_x, float pos_y) {
     declare_current_node();
-    if (!nodes_list) {
-        nodes_list = malloc(sizeof(*nodes_list));
-    }
+    declare_nodes_list();
+
     current_node->id = id;
     current_node->pos_x = pos_x;
     current_node->pos_y = pos_y;
@@ -73,8 +79,6 @@ void create_node(char *id, float pos_x, float pos_y) {
     Node *node_to_add = copy_current_node();
     add_node(node_to_add);
     init_current_node();
-
-    print_nodes_list();
 }
 
 void set_label(char *label) {

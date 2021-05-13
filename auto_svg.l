@@ -30,6 +30,7 @@ FLOAT [+-]?([0-9]*[.])?[0-9]+
 (?i:south-east) {return(SOUTH_EAST);}
 (?i:south-west) {return(SOUTH_WEST);}
 (?i:path) {return(PATH);}
+(?i:dump) {return(DUMP);}
 {ID} {
   yylval.string = strdup(yytext);
   return(ID); 

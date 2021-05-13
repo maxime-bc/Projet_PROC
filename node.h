@@ -22,11 +22,15 @@ struct NodesList {
 
 void declare_current_node();
 
+void declare_nodes_list();
+
 void init_current_node(void);
 
 Node *copy_current_node(void);
 
 void print_node(Node *node);
+
+void print_nodes_list();
 
 void add_node(Node *new_node);
 

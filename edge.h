@@ -21,6 +21,8 @@ struct EdgesList {
 
 void declare_current_edge();
 
+void declare_edges_list();
+
 void init_current_edge();
 
 Edge *copy_current_edge();

@@ -12,6 +12,12 @@ void declare_current_edge() {
     }
 }
 
+void declare_edges_list() {
+    if (!edges_list) {
+        edges_list = malloc(sizeof(*edges_list));
+    }
+}
+
 void init_current_edge() {
     current_edge->id = "";
     current_edge->source = "";
@@ -45,6 +51,7 @@ void print_edge(Edge *edge) {
 }
 
 void print_edges_list() {
+    declare_edges_list();
     Edge *edge = edges_list->first_edge;
     while (edge != NULL) {
         print_edge(edge);
@@ -59,9 +66,8 @@ void add_edge(Edge *new_edge) {
 
 void create_edge_pos(char *source, char *dest, char *label, float pos_x, float pos_y) {
     declare_current_edge();
-    if (!edges_list) {
-        edges_list = malloc(sizeof(*edges_list));
-    }
+    declare_edges_list();
+
     // TODO: id
     //char prefix[30] = "";
     //current_edge->id = snprintf(prefix,"%s%s", source, dest);
@@ -75,15 +81,11 @@ void create_edge_pos(char *source, char *dest, char *label, float pos_x, float p
     Edge *edge_to_add = copy_current_edge();
     add_edge(edge_to_add);
     init_current_edge();
-
-    print_edges_list();
 }
 
 void create_edge(char *source, char *dest, char *label) {
     declare_current_edge();
-    if (!edges_list) {
-        edges_list = malloc(sizeof(*edges_list));
-    }
+    declare_edges_list();
 
     //char prefix[30] = "";
     //current_edge->id = snprintf(prefix,"%s%s", source, dest);
@@ -95,8 +97,6 @@ void create_edge(char *source, char *dest, char *label) {
     Edge *edge_to_add = copy_current_edge();
     add_edge(edge_to_add);
     init_current_edge();
-
-    print_edges_list();
 }
 
 void set_edge_color(char *color) {
