@@ -27,9 +27,9 @@ void init_current_node() {
     current_node->label = "";
     current_node->color = "";
     current_node->bgcolor = "";
-    current_node->size = 0;
-    current_node->initial = "";
-    current_node->fnl = "";
+    current_node->size = 30;
+    current_node->initial = "west";
+    current_node->fnl = "east";
     current_node->next = NULL;
 }
 
@@ -109,6 +109,10 @@ void create_node(char *id, float pos_x, float pos_y) {
         current_node->id = id;
         current_node->pos_x = pos_x;
         current_node->pos_y = pos_y;
+
+        if (*current_node->label == '\0') {
+            current_node->label = id;
+        }
 
         Node *node_to_add = copy_current_node();
         add_node(node_to_add);
