@@ -163,7 +163,7 @@ void move_node(char *node_id, float x_offset, float y_offset) {
     declare_nodes_list();
 
     if (!node_exists(node_id)) {
-        printf("ERROR : node %s doesn't exists.\n", node_id);
+        printf("ERROR : Node %s doesn't exists.\n", node_id);
         return;
     }
 
@@ -181,12 +181,12 @@ void rename_node(char *current_id, char *new_id) {
     declare_nodes_list();
 
     if (!node_exists(current_id)) {
-        printf("ERROR : node %s doesn't exists.\n", current_id);
+        printf("ERROR : Node %s doesn't exists.\n", current_id);
         return;
     }
 
     if (node_exists(new_id)) {
-        printf("ERROR : node %s already exists.\n", new_id);
+        printf("ERROR : Node %s already exists.\n", new_id);
         return;
     }
 

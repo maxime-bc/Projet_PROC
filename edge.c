@@ -66,6 +66,8 @@ void add_edge(Edge *new_edge) {
 void remove_edge(char *source, char *dest) {
     int edge_exists = 0;
     Edge *prev_edge, *curr_edge;
+
+    declare_edges_list();
     curr_edge = edges_list->first_edge;
     prev_edge = curr_edge;
 
@@ -95,35 +97,40 @@ void remove_edges_containing_node(const char *node_id) {
     Edge *prev_edge, *curr_edge;
 
     declare_edges_list();
-
     curr_edge = edges_list->first_edge;
     prev_edge = curr_edge;
 
     while (curr_edge != NULL) {
 
         if (strcmp(curr_edge->source, node_id) == 0 || strcmp(curr_edge->dest, node_id) == 0) {
-            if (prev_edge == curr_edge) {
+
+            if (prev_edge == curr_edge) {  // first element
                 edges_list->first_edge = curr_edge->next;
                 free(curr_edge);
+                curr_edge = edges_list->first_edge;
+                prev_edge = curr_edge;
             } else {
                 prev_edge->next = curr_edge->next;
                 free(curr_edge);
+                curr_edge = prev_edge->next;
             }
-            break;
+        } else {
+            curr_edge = curr_edge->next;
         }
-        prev_edge = curr_edge;
-        curr_edge = curr_edge->next;
     }
 }
+
 
 void create_edge_pos(char *source, char *dest, char *label, float pos_x, float pos_y) {
     declare_current_edge();
     declare_edges_list();
 
+    declare_nodes_list();
+
     if (!node_exists(source)) {
-        printf("ERROR : node %s doesn't exists.\n", source);
+        printf("ERROR : Node %s doesn't exists.\n", source);
     } else if (!node_exists(dest)) {
-        printf("ERROR : node %s doesn't exists.\n", dest);
+        printf("ERROR : Node %s doesn't exists.\n", dest);
     } else {
         // TODO: id
         //char prefix[30] = "";
