@@ -68,6 +68,34 @@ void add_node(Node *new_node) {
     nodes_list->first_node = new_node;
 }
 
+void remove_node(const char *node_id) {
+    int node_exists = 0;
+    Node *prev_node, *curr_node;
+    curr_node = nodes_list->first_node;
+    prev_node = curr_node;
+
+    while (curr_node != NULL) {
+
+        if (strcmp(curr_node->id, node_id) == 0) {
+            node_exists = 1;
+            if (prev_node == curr_node) {
+                nodes_list->first_node = curr_node->next;
+                free(curr_node);
+            } else {
+                prev_node->next = curr_node->next;
+                free(curr_node);
+            }
+            break;
+        }
+        prev_node = curr_node;
+        curr_node = curr_node->next;
+    }
+
+    if (!node_exists) {
+        printf("ERROR : Node %s doesn't exists.\n", node_id);
+    }
+}
+
 void create_node(char *id, float pos_x, float pos_y) {
     declare_current_node();
     declare_nodes_list();

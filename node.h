@@ -34,6 +34,8 @@ void print_nodes_list();
 
 void add_node(Node *new_node);
 
+void remove_node(const char *node_id);
+
 void create_node(char *id, float pos_x, float pos_y);
 
 void set_label(char *label);

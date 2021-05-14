@@ -1,5 +1,6 @@
 #include <stdlib.h>
 #include <stdio.h>
+#include <string.h>
 #include "edge.h"
 
 Edge *current_edge;
@@ -62,6 +63,34 @@ void print_edges_list() {
 void add_edge(Edge *new_edge) {
     new_edge->next = edges_list->first_edge;
     edges_list->first_edge = new_edge;
+}
+
+void remove_edge(char *source, char *dest) {
+    int edge_exists = 0;
+    Edge *prev_edge, *curr_edge;
+    curr_edge = edges_list->first_edge;
+    prev_edge = curr_edge;
+
+    while (curr_edge != NULL) {
+
+        if (strcmp(curr_edge->source, source) == 0 && strcmp(curr_edge->dest, dest) == 0) {
+            edge_exists = 1;
+            if (prev_edge == curr_edge) {
+                edges_list->first_edge = curr_edge->next;
+                free(curr_edge);
+            } else {
+                prev_edge->next = curr_edge->next;
+                free(curr_edge);
+            }
+            break;
+        }
+        prev_edge = curr_edge;
+        curr_edge = curr_edge->next;
+    }
+
+    if (!edge_exists) {
+        printf("ERROR : Edge %s - %s doesn't exists.\n", source, dest);
+    }
 }
 
 void create_edge_pos(char *source, char *dest, char *label, float pos_x, float pos_y) {
