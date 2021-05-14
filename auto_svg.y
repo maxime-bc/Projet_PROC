@@ -53,10 +53,10 @@ Create_Attrs_1:
   | COLOR LABEL_STRING Create_Attrs_1 { set_node_color($2); }
   | BGCOLOR LABEL_STRING Create_Attrs_1 { set_bgcolor($2); }
   | SIZE FLOAT Create_Attrs_1 { set_size($2); }
-  | FINAL Directions Create_Attrs_1 { }
-  | FINAL Create_Attrs_1 { choose_final_direction(); }
-  | INIT Directions Create_Attrs_1 { }
-  | INIT Create_Attrs_1 { choose_initial_direction(); }
+  | FINAL Directions Create_Attrs_1 { set_node_type("final"); }
+  | FINAL Create_Attrs_1 { set_node_type("final"); }
+  | INIT Directions Create_Attrs_1 { set_node_type("initial"); }
+  | INIT Create_Attrs_1 { set_node_type("initial"); }
   ;
 
 Create_Attrs_2:
@@ -66,14 +66,14 @@ Create_Attrs_2:
   ;
 
 Directions:
-    NORTH  {set_initial("south"); } // TODO change because initial is always called
-  | SOUTH { set_initial("south"); }
-  | WEST  { set_initial("west"); }
-  | EAST  { set_initial("east"); }
-  | NORTH_EAST  { set_initial("north-east"); }
-  | NORTH_WEST  { set_initial("north-west"); }
-  | SOUTH_EAST  { set_initial("south-east"); }
-  | SOUTH_WEST  { set_initial("south-west"); }
+    NORTH  { set_node_direction("north"); } // TODO change because initial is always called
+  | SOUTH { set_node_direction("south"); }
+  | WEST  { set_node_direction("west"); }
+  | EAST  { set_node_direction("east"); }
+  | NORTH_EAST  { set_node_direction("north-east"); }
+  | NORTH_WEST  { set_node_direction("north-west"); }
+  | SOUTH_EAST  { set_node_direction("south-east"); }
+  | SOUTH_WEST  { set_node_direction("south-west"); }
   ;
 
 %%

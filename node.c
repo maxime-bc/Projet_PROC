@@ -6,6 +6,8 @@
 
 Node *current_node;
 NodesList *nodes_list;
+const char *INITIAL = "initial";
+const char *FINAL = "final";
 
 void declare_current_node() {
     if (!current_node) {
@@ -28,8 +30,8 @@ void init_current_node() {
     current_node->color = "";
     current_node->bgcolor = "";
     current_node->size = 30;
-    current_node->initial = "west";
-    current_node->fnl = "east";
+    current_node->type = "";
+    current_node->direction = "";
     current_node->next = NULL;
 }
 
@@ -42,16 +44,16 @@ Node *copy_current_node() {
     node_copy->color = current_node->color;
     node_copy->bgcolor = current_node->bgcolor;
     node_copy->size = current_node->size;
-    node_copy->initial = current_node->initial;
-    node_copy->fnl = current_node->fnl;
+    node_copy->type = current_node->type;
+    node_copy->direction = current_node->direction;
     node_copy->next = current_node->next;
     return node_copy;
 }
 
 void print_node(Node *node) {
-    printf("node %s {pos_x=%f, pos_y=%f, label=%s, color=%s, bgcolor=%s, size=%f, initial=%s, final=%s}\n",
-           node->id, node->pos_x, node->pos_y, node->label, node->color, node->bgcolor, node->size, node->initial,
-           node->fnl);
+    printf("node %s {pos_x=%f, pos_y=%f, label=%s, color=%s, bgcolor=%s, size=%f, type=%s, direction=%s}\n",
+           node->id, node->pos_x, node->pos_y, node->label, node->color, node->bgcolor, node->size, node->type,
+           node->direction);
 }
 
 void print_nodes_list() {
@@ -113,6 +115,14 @@ void create_node(char *id, float pos_x, float pos_y) {
 
         if (*current_node->label == '\0') {
             current_node->label = id;
+        }
+
+        if (*current_node->direction == '\0') { // TODO : choose best direction
+            if (strcmp(current_node->type, INITIAL) == 0) {
+                current_node->direction = "west";
+            } else if (strcmp(current_node->type, FINAL) == 0) {
+                current_node->direction = "east";
+            }
         }
 
         Node *node_to_add = copy_current_node();
@@ -210,22 +220,12 @@ void set_size(float size) {
     current_node->size = size;
 }
 
-void set_final(char *fnl) {
+void set_node_type(char *type) {
     declare_current_node();
-    current_node->fnl = fnl;
+    current_node->type = type;
 }
 
-void choose_final_direction() {
+void set_node_direction(char *direction) {
     declare_current_node();
-    current_node->fnl = ""; // #TODO choose best direction
-}
-
-void set_initial(char *initial) {
-    declare_current_node();
-    current_node->initial = initial;
-}
-
-void choose_initial_direction() {
-    declare_current_node();
-    current_node->initial = ""; // #TODO choose best direction
+    current_node->direction = direction;
 }

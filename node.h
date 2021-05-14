@@ -10,8 +10,8 @@ struct Node {
     char *color;
     char *bgcolor;
     float size;
-    char *initial;
-    char *fnl;
+    char *type;
+    char *direction;
     Node *next;
 };
 
@@ -44,22 +44,18 @@ void move_all_nodes(float x_offset, float y_offset);
 
 void move_node(char *node_id, float x_offset, float y_offset);
 
-void rename_node(char* current_id, char* new_id);
+void rename_node(char *current_id, char *new_id);
 
 void set_label(char *label);
 
 void set_node_color(char *color);
 
+void set_node_type(char *type);
+
 void set_bgcolor(char *bgcolor);
 
 void set_size(float size);
 
-void set_final(char *fnl);
-
-void choose_final_direction();
-
-void set_initial(char *initial);
-
-void choose_initial_direction();
+void set_node_direction(char *direction);
 
 #endif
