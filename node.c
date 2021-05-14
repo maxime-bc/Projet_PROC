@@ -49,10 +49,9 @@ Node *copy_current_node() {
 }
 
 void print_node(Node *node) {
-    printf("ID = %s, POS_X = %f, POS_Y = %f, LABEL = %s\n"
-           "COLOR = %s, BGCOLOR = %s, SIZE = %f, INITIAL = %s, FINAL = %s\n\n",
-           node->id, node->pos_x, node->pos_y, node->label, node->color, node->bgcolor,
-           node->size, node->initial, node->fnl);
+    printf("node %s {pos_x=%f, pos_y=%f, label=%s, color=%s, bgcolor=%s, size=%f, initial=%s, final=%s}\n",
+           node->id, node->pos_x, node->pos_y, node->label, node->color, node->bgcolor, node->size, node->initial,
+           node->fnl);
 }
 
 void print_nodes_list() {

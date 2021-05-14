@@ -45,11 +45,8 @@ Edge *copy_current_edge() {
 }
 
 void print_edge(Edge *edge) {
-    printf("ID = %s, SOURCE = %s, DEST = %s\n"
-           "X = %f, Y = %f, LABEL = %s, COLOR = %s, PATH = %s\n\n",
-           edge->id, edge->source, edge->dest, edge->pos_x, edge->pos_y,
-           edge->label, edge->color, edge->path);
-
+    printf("edge %s - %s {pos_x=%f, pos_y=%f, label=%s, color=%s, path=%s}\n",
+           edge->source, edge->dest, edge->pos_x, edge->pos_y, edge->label, edge->color, edge->path);
 }
 
 void print_edges_list() {
