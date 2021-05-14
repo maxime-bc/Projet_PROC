@@ -35,6 +35,8 @@ void add_edge(Edge *new_edge);
 
 void remove_edge(char *source, char *dest);
 
+void remove_edges_containing_node(const char *node_id);
+
 void create_edge_pos(char *source, char *dest, char *label, float pos_x, float pos_y);
 
 void create_edge(char *source, char *dest, char *label);

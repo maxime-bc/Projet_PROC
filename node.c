@@ -2,6 +2,7 @@
 #include <stdio.h>
 #include <memory.h>
 #include "node.h"
+#include "edge.h"
 
 Node *current_node;
 NodesList *nodes_list;
@@ -71,6 +72,8 @@ void add_node(Node *new_node) {
 void remove_node(const char *node_id) {
     int node_exists = 0;
     Node *prev_node, *curr_node;
+
+    remove_edges_containing_node(node_id);
     curr_node = nodes_list->first_node;
     prev_node = curr_node;
 
@@ -100,13 +103,32 @@ void create_node(char *id, float pos_x, float pos_y) {
     declare_current_node();
     declare_nodes_list();
 
-    current_node->id = id;
-    current_node->pos_x = pos_x;
-    current_node->pos_y = pos_y;
+    if (node_exists(id)) {
+        printf("ERROR : Node %s already exists.\n", id);
+    } else {
+        current_node->id = id;
+        current_node->pos_x = pos_x;
+        current_node->pos_y = pos_y;
 
-    Node *node_to_add = copy_current_node();
-    add_node(node_to_add);
-    init_current_node();
+        Node *node_to_add = copy_current_node();
+        add_node(node_to_add);
+        init_current_node();
+    }
+}
+
+int node_exists(char *node_id) {
+    int node_exists = 0;
+    Node *curr_node = nodes_list->first_node;
+
+    while (curr_node != NULL) {
+        if (strcmp(curr_node->id, node_id) == 0) {
+            node_exists = 1;
+            break;
+        }
+        curr_node = curr_node->next;
+    }
+
+    return node_exists;
 }
 
 void set_label(char *label) {

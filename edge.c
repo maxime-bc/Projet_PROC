@@ -2,6 +2,7 @@
 #include <stdio.h>
 #include <string.h>
 #include "edge.h"
+#include "node.h"
 
 Edge *current_edge;
 EdgesList *edges_list;
@@ -93,40 +94,59 @@ void remove_edge(char *source, char *dest) {
     }
 }
 
+void remove_edges_containing_node(const char *node_id) {
+    Edge *prev_edge, *curr_edge;
+    curr_edge = edges_list->first_edge;
+    prev_edge = curr_edge;
+
+    while (curr_edge != NULL) {
+
+        if (strcmp(curr_edge->source, node_id) == 0 || strcmp(curr_edge->dest, node_id) == 0) {
+            if (prev_edge == curr_edge) {
+                edges_list->first_edge = curr_edge->next;
+                free(curr_edge);
+            } else {
+                prev_edge->next = curr_edge->next;
+                free(curr_edge);
+            }
+            break;
+        }
+        prev_edge = curr_edge;
+        curr_edge = curr_edge->next;
+    }
+}
+
 void create_edge_pos(char *source, char *dest, char *label, float pos_x, float pos_y) {
     declare_current_edge();
     declare_edges_list();
 
-    // TODO: id
-    //char prefix[30] = "";
-    //current_edge->id = snprintf(prefix,"%s%s", source, dest);
-    // source + dest + label
-    current_edge->source = source;
-    current_edge->dest = dest;
-    current_edge->label = label;
-    current_edge->pos_x = pos_x;
-    current_edge->pos_y = pos_y;
+    if (!node_exists(source)) {
+        printf("ERROR : node %s doesn't exists.\n", source);
+    } else if (!node_exists(dest)) {
+        printf("ERROR : node %s doesn't exists.\n", dest);
+    } else {
+        // TODO: id
+        //char prefix[30] = "";
+        //current_edge->id = snprintf(prefix,"%s%s", source, dest);
+        // source + dest + label
+        current_edge->source = source;
+        current_edge->dest = dest;
+        current_edge->label = label;
+        current_edge->pos_x = pos_x;
+        current_edge->pos_y = pos_y;
 
-    Edge *edge_to_add = copy_current_edge();
-    add_edge(edge_to_add);
-    init_current_edge();
+        Edge *edge_to_add = copy_current_edge();
+        add_edge(edge_to_add);
+        init_current_edge();
+    }
 }
 
 void create_edge(char *source, char *dest, char *label) {
-    declare_current_edge();
-    declare_edges_list();
-
-    //char prefix[30] = "";
-    //current_edge->id = snprintf(prefix,"%s%s", source, dest);
-    // source + dest + label
-    current_edge->source = source;
-    current_edge->dest = dest;
-    current_edge->label = label;
-
-    Edge *edge_to_add = copy_current_edge();
-    add_edge(edge_to_add);
-    init_current_edge();
+    float pos_x = 0, pos_y = 0;
+    // TODO: calcul des pos
+    create_edge_pos(source, dest, label, pos_x, pos_y);
 }
+
 
 void set_edge_color(char *color) {
     declare_current_edge();

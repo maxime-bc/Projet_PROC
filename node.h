@@ -38,6 +38,8 @@ void remove_node(const char *node_id);
 
 void create_node(char *id, float pos_x, float pos_y);
 
+int node_exists(char *node_id);
+
 void set_label(char *label);
 
 void set_node_color(char *color);
