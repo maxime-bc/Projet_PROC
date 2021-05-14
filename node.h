@@ -44,6 +44,8 @@ void move_all_nodes(float x_offset, float y_offset);
 
 void move_node(char *node_id, float x_offset, float y_offset);
 
+void rename_node(char* current_id, char* new_id);
+
 void set_label(char *label);
 
 void set_node_color(char *color);

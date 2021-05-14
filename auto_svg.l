@@ -33,6 +33,8 @@ FLOAT [+-]?([0-9]*[.])?[0-9]+
 "dump" {return(DUMP);}
 "remove" {return(REMOVE);}
 "move" {return(MOVE);}
+"with" {return(WITH);}
+"rename" {return(RENAME);}
 {ID} {
   yylval.string = strdup(yytext);
   return(ID); 

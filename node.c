@@ -136,6 +136,7 @@ int node_exists(char *node_id) {
     return node_exists;
 }
 
+// TODO : move multiple
 void move_all_nodes(float x_offset, float y_offset) {
     declare_nodes_list();
 
@@ -163,6 +164,28 @@ void move_node(char *node_id, float x_offset, float y_offset) {
             curr_node->pos_y += y_offset;
             curr_node = curr_node->next;
         }
+    }
+}
+
+void rename_node(char *current_id, char *new_id) {
+    declare_nodes_list();
+
+    if (!node_exists(current_id)) {
+        printf("ERROR : node %s doesn't exists.\n", current_id);
+        return;
+    }
+
+    if (node_exists(new_id)) {
+        printf("ERROR : node %s already exists.\n", new_id);
+        return;
+    }
+
+    Node *curr_node = nodes_list->first_node;
+    while (curr_node != NULL) {
+        if (strcmp(curr_node->id, current_id) == 0) {
+            curr_node->id = new_id;
+        }
+        curr_node = curr_node->next;
     }
 }
 
