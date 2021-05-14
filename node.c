@@ -72,6 +72,8 @@ void remove_node(const char *node_id) {
     int node_exists = 0;
     Node *prev_node, *curr_node;
 
+    declare_nodes_list();
+
     remove_edges_containing_node(node_id);
     curr_node = nodes_list->first_node;
     prev_node = curr_node;
@@ -132,6 +134,36 @@ int node_exists(char *node_id) {
     }
 
     return node_exists;
+}
+
+void move_all_nodes(float x_offset, float y_offset) {
+    declare_nodes_list();
+
+    Node *curr_node = nodes_list->first_node;
+
+    while (curr_node != NULL) {
+        curr_node->pos_x += x_offset;
+        curr_node->pos_y += y_offset;
+        curr_node = curr_node->next;
+    }
+}
+
+void move_node(char *node_id, float x_offset, float y_offset) {
+    declare_nodes_list();
+
+    if (!node_exists(node_id)) {
+        printf("ERROR : node %s doesn't exists.\n", node_id);
+        return;
+    }
+
+    Node *curr_node = nodes_list->first_node;
+    while (curr_node != NULL) {
+        if (strcmp(curr_node->id, node_id) == 0) {
+            curr_node->pos_x += x_offset;
+            curr_node->pos_y += y_offset;
+            curr_node = curr_node->next;
+        }
+    }
 }
 
 void set_label(char *label) {

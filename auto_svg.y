@@ -15,7 +15,7 @@ int yyerror(char *s);
    char* string;
 }
 
-%token CREATE NODE EDGE FROM TO AT EOL LABEL COLOR BGCOLOR SIZE INIT FINAL PATH DUMP REMOVE
+%token CREATE NODE EDGE FROM TO AT EOL LABEL COLOR BGCOLOR SIZE INIT FINAL PATH DUMP REMOVE MOVE
 %token NORTH SOUTH EAST WEST NORTH_EAST NORTH_WEST SOUTH_EAST SOUTH_WEST
 %token <string> ID
 %token <string> LABEL_STRING
@@ -35,6 +35,8 @@ Line:
   ;
 
 Command:
+    MOVE FLOAT FLOAT { move_all_nodes($2, $3); }
+  | MOVE ID FLOAT FLOAT { move_node($2, $3, $4); }
   | DUMP { print_nodes_list(); print_edges_list(); }
   | DUMP LABEL_STRING { printf("TODO: dumping into %s\n", $2); }
   | REMOVE NODE ID { remove_node($3); }

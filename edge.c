@@ -93,6 +93,9 @@ void remove_edge(char *source, char *dest) {
 
 void remove_edges_containing_node(const char *node_id) {
     Edge *prev_edge, *curr_edge;
+
+    declare_edges_list();
+
     curr_edge = edges_list->first_edge;
     prev_edge = curr_edge;
 

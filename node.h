@@ -40,6 +40,10 @@ void create_node(char *id, float pos_x, float pos_y);
 
 int node_exists(char *node_id);
 
+void move_all_nodes(float x_offset, float y_offset);
+
+void move_node(char *node_id, float x_offset, float y_offset);
+
 void set_label(char *label);
 
 void set_node_color(char *color);
