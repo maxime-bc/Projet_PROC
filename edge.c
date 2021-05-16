@@ -4,163 +4,162 @@
 #include "edge.h"
 #include "node.h"
 
-Edge *current_edge = NULL;
-EdgesList *edges_list = NULL;
+Edge *CURRENT_EDGE = NULL;
+EdgesList *EDGES_LIST = NULL;
 
-void declare_current_edge() {
-    if (current_edge == NULL) {
-        current_edge = malloc(sizeof(*current_edge));
-        init_current_edge();
+void declareCurrentEdge() {
+    if (CURRENT_EDGE == NULL) {
+        CURRENT_EDGE = malloc(sizeof(*CURRENT_EDGE));
+        initCurrentEdge();
     }
 }
 
-void declare_edges_list() {
-    if (edges_list == NULL) {
-        edges_list = malloc(sizeof(*edges_list));
+void declareEdgesList() {
+    if (EDGES_LIST == NULL) {
+        EDGES_LIST = malloc(sizeof(*EDGES_LIST));
     }
 }
 
-void init_current_edge() {
-    current_edge->id = "";
-    current_edge->source = "";
-    current_edge->dest = "";
-    current_edge->pos_x = 0;
-    current_edge->pos_y = 0;
-    current_edge->label = "";
-    current_edge->color = "";
-    current_edge->path = "";
+void initCurrentEdge() {
+    CURRENT_EDGE->id = "";
+    CURRENT_EDGE->source = "";
+    CURRENT_EDGE->dest = "";
+    CURRENT_EDGE->xPos = 0;
+    CURRENT_EDGE->yPos = 0;
+    CURRENT_EDGE->label = "";
+    CURRENT_EDGE->color = "";
+    CURRENT_EDGE->path = "";
 }
 
-Edge *copy_current_edge() {
-    Edge *edge_copy = malloc(sizeof(*edge_copy));
-    edge_copy->id = current_edge->id;
-    edge_copy->source = current_edge->source;
-    edge_copy->dest = current_edge->dest;
-    edge_copy->pos_x = current_edge->pos_x;
-    edge_copy->pos_y = current_edge->pos_y;
-    edge_copy->label = current_edge->label;
-    edge_copy->color = current_edge->color;
-    edge_copy->path = current_edge->path;
-    return edge_copy;
+Edge *copyCurrentEdge() {
+    Edge *edgeCopy = malloc(sizeof(*edgeCopy));
+    edgeCopy->id = CURRENT_EDGE->id;
+    edgeCopy->source = CURRENT_EDGE->source;
+    edgeCopy->dest = CURRENT_EDGE->dest;
+    edgeCopy->xPos = CURRENT_EDGE->xPos;
+    edgeCopy->yPos = CURRENT_EDGE->yPos;
+    edgeCopy->label = CURRENT_EDGE->label;
+    edgeCopy->color = CURRENT_EDGE->color;
+    edgeCopy->path = CURRENT_EDGE->path;
+    return edgeCopy;
 }
 
-void print_edge(Edge *edge) {
-    printf("edge %s - %s {pos_x=%f, pos_y=%f, label=%s, color=%s, path=%s}\n",
-           edge->source, edge->dest, edge->pos_x, edge->pos_y, edge->label, edge->color, edge->path);
+void printEdge(Edge *edge) {
+    printf("edge %s - %s {xPos=%f, yPos=%f, label=%s, color=%s, path=%s}\n",
+           edge->source, edge->dest, edge->xPos, edge->yPos, edge->label, edge->color, edge->path);
 }
 
-void print_edges_list() {
-    declare_edges_list();
-    Edge *edge = edges_list->first_edge;
+void printEdgesList() {
+    declareEdgesList();
+    Edge *edge = EDGES_LIST->firstEdge;
     while (edge != NULL) {
-        print_edge(edge);
+        printEdge(edge);
         edge = edge->next;
     }
 }
 
-void add_edge(Edge *new_edge) {
-    new_edge->next = edges_list->first_edge;
-    edges_list->first_edge = new_edge;
+void addEdge(Edge *newEdge) {
+    newEdge->next = EDGES_LIST->firstEdge;
+    EDGES_LIST->firstEdge = newEdge;
 }
 
-void remove_edge(char *source, char *dest) {
-    int edge_exists = 0;
-    Edge *prev_edge, *curr_edge;
+void removeEdge(char *source, char *dest) {
+    int exists = 0;
+    Edge *previousEdge, *currentEdge;
 
-    declare_edges_list();
-    curr_edge = edges_list->first_edge;
-    prev_edge = curr_edge;
+    declareEdgesList();
+    currentEdge = EDGES_LIST->firstEdge;
+    previousEdge = currentEdge;
 
-    while (curr_edge != NULL) {
+    while (currentEdge != NULL) {
 
-        if (strcmp(curr_edge->source, source) == 0 && strcmp(curr_edge->dest, dest) == 0) {
-            edge_exists = 1;
-            if (prev_edge == curr_edge) {
-                edges_list->first_edge = curr_edge->next;
-                free(curr_edge);
+        if (strcmp(currentEdge->source, source) == 0 && strcmp(currentEdge->dest, dest) == 0) {
+            exists = 1;
+            if (previousEdge == currentEdge) {
+                EDGES_LIST->firstEdge = currentEdge->next;
+                free(currentEdge);
             } else {
-                prev_edge->next = curr_edge->next;
-                free(curr_edge);
+                previousEdge->next = currentEdge->next;
+                free(currentEdge);
             }
             break;
         }
-        prev_edge = curr_edge;
-        curr_edge = curr_edge->next;
+        previousEdge = currentEdge;
+        currentEdge = currentEdge->next;
     }
 
-    if (!edge_exists) {
+    if (!exists) {
         printf("ERROR : Edge %s - %s doesn't exists.\n", source, dest);
     }
 }
 
-void remove_edges_containing_node(const char *node_id) {
-    Edge *prev_edge, *curr_edge;
+void removeEdgesContainingNode(const char *nodeId) {
+    Edge *previousEdge, *currentEdge;
 
-    declare_edges_list();
-    curr_edge = edges_list->first_edge;
-    prev_edge = curr_edge;
+    declareEdgesList();
+    currentEdge = EDGES_LIST->firstEdge;
+    previousEdge = currentEdge;
 
-    while (curr_edge != NULL) {
+    while (currentEdge != NULL) {
 
-        if (strcmp(curr_edge->source, node_id) == 0 || strcmp(curr_edge->dest, node_id) == 0) {
+        if (strcmp(currentEdge->source, nodeId) == 0 || strcmp(currentEdge->dest, nodeId) == 0) {
 
-            if (prev_edge == curr_edge) {  // first element
-                edges_list->first_edge = curr_edge->next;
-                free(curr_edge);
-                curr_edge = edges_list->first_edge;
-                prev_edge = curr_edge;
+            if (previousEdge == currentEdge) {  // first element
+                EDGES_LIST->firstEdge = currentEdge->next;
+                free(currentEdge);
+                currentEdge = EDGES_LIST->firstEdge;
+                previousEdge = currentEdge;
             } else {
-                prev_edge->next = curr_edge->next;
-                free(curr_edge);
-                curr_edge = prev_edge->next;
+                previousEdge->next = currentEdge->next;
+                free(currentEdge);
+                currentEdge = previousEdge->next;
             }
         } else {
-            curr_edge = curr_edge->next;
+            currentEdge = currentEdge->next;
         }
     }
 }
 
 
-void create_edge_pos(char *source, char *dest, char *label, float pos_x, float pos_y) {
-    declare_current_edge();
-    declare_edges_list();
+void createEdgePos(char *source, char *dest, char *label, float xPos, float yPos) {
+    declareCurrentEdge();
+    declareEdgesList();
 
-    declare_nodes_list();
+    declareNodesList();
 
-    if (!node_exists(source)) {
+    if (!nodeExists(source)) {
         printf("ERROR : Node %s doesn't exists.\n", source);
-    } else if (!node_exists(dest)) {
+    } else if (!nodeExists(dest)) {
         printf("ERROR : Node %s doesn't exists.\n", dest);
     } else {
         // TODO: id
         //char prefix[30] = "";
-        //current_edge->id = snprintf(prefix,"%s%s", source, dest);
+        //CURRENT_EDGE->id = snprintf(prefix,"%s%s", source, dest);
         // source + dest + label
-        current_edge->source = source;
-        current_edge->dest = dest;
-        current_edge->label = label;
-        current_edge->pos_x = pos_x;
-        current_edge->pos_y = pos_y;
+        CURRENT_EDGE->source = source;
+        CURRENT_EDGE->dest = dest;
+        CURRENT_EDGE->label = label;
+        CURRENT_EDGE->xPos = xPos;
+        CURRENT_EDGE->yPos = yPos;
 
-        Edge *edge_to_add = copy_current_edge();
-        add_edge(edge_to_add);
-        init_current_edge();
+        addEdge(copyCurrentEdge());
+        initCurrentEdge();
     }
 }
 
-void create_edge(char *source, char *dest, char *label) {
-    float pos_x = 0, pos_y = 0;
+void createEdge(char *source, char *dest, char *label) {
+    float xPos = 0, yPos = 0;
     // TODO: calcul des pos
-    create_edge_pos(source, dest, label, pos_x, pos_y);
+    createEdgePos(source, dest, label, xPos, yPos);
 }
 
 
-void set_edge_color(char *color) {
-    declare_current_edge();
-    current_edge->color = color;
+void setEdgeColor(char *color) {
+    declareCurrentEdge();
+    CURRENT_EDGE->color = color;
 }
 
-void set_path(char *path) {
-    declare_current_edge();
-    current_edge->path = path;
+void setPath(char *path) {
+    declareCurrentEdge();
+    CURRENT_EDGE->path = path;
 }

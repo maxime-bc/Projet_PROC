@@ -36,50 +36,50 @@ Line:
   ;
 
 Command:
-    MOVE FLOAT FLOAT { move_all_nodes($2, $3); }
-  | MOVE ID FLOAT FLOAT { move_node($2, $3, $4); }
-  | MOVE OPENING_SQ_BRACKET Id_List ENDING_SQ_BRACKET FLOAT FLOAT { move_multiple_nodes_by_id($5, $6); }
-  | RENAME ID WITH ID { rename_node($2, $4); }
-  | DUMP { print_nodes_list(); print_edges_list(); }
+    MOVE FLOAT FLOAT { moveAllNodes($2, $3); }
+  | MOVE ID FLOAT FLOAT { moveNode($2, $3, $4); }
+  | MOVE OPENING_SQ_BRACKET Id_List ENDING_SQ_BRACKET FLOAT FLOAT { moveMultipleNodesById($5, $6); }
+  | RENAME ID WITH ID { renameNode($2, $4); }
+  | DUMP { printNodesList(); printEdgesList(); }
   | DUMP LABEL_STRING { printf("TODO: dumping into %s\n", $2); }
-  | REMOVE NODE ID { remove_node($3); }
-  | REMOVE EDGE FROM ID TO ID { remove_edge($4, $6); }
-  | CREATE NODE ID AT FLOAT FLOAT Create_Attrs_1    { create_node($3, $5, $6); } // demander au prof
-  | CREATE EDGE FROM ID TO ID LABEL LABEL_STRING Create_Attrs_2   { create_edge($4, $6, $8); }
-  | CREATE EDGE FROM ID TO ID LABEL LABEL_STRING AT FLOAT FLOAT Create_Attrs_2 { create_edge_pos($4, $6, $8, $10, $11); }
+  | REMOVE NODE ID { removeNode($3); }
+  | REMOVE EDGE FROM ID TO ID { removeEdge($4, $6); }
+  | CREATE NODE ID AT FLOAT FLOAT Create_Attrs_1    { createNode($3, $5, $6); } // demander au prof
+  | CREATE EDGE FROM ID TO ID LABEL LABEL_STRING Create_Attrs_2   { createEdge($4, $6, $8); }
+  | CREATE EDGE FROM ID TO ID LABEL LABEL_STRING AT FLOAT FLOAT Create_Attrs_2 { createEdgePos($4, $6, $8, $10, $11); }
   ;
 
 Id_List:
-    ID COMMA Id_List { add_id($1); }
-  | ID { add_id($1); }
+    ID COMMA Id_List { addId($1); }
+  | ID { addId($1); }
 
 Create_Attrs_1:
     EOL                                     { }
-  | LABEL LABEL_STRING Create_Attrs_1 { set_label($2); }
-  | COLOR LABEL_STRING Create_Attrs_1 { set_node_color($2); }
-  | BGCOLOR LABEL_STRING Create_Attrs_1 { set_bgcolor($2); }
-  | SIZE FLOAT Create_Attrs_1 { set_size($2); }
-  | FINAL Directions Create_Attrs_1 { set_node_type("final"); }
-  | FINAL Create_Attrs_1 { set_node_type("final"); }
-  | INIT Directions Create_Attrs_1 { set_node_type("initial"); }
-  | INIT Create_Attrs_1 { set_node_type("initial"); }
+  | LABEL LABEL_STRING Create_Attrs_1 { setLabel($2); }
+  | COLOR LABEL_STRING Create_Attrs_1 { setNodeColor($2); }
+  | BGCOLOR LABEL_STRING Create_Attrs_1 { setBgColor($2); }
+  | SIZE FLOAT Create_Attrs_1 { setSize($2); }
+  | FINAL Directions Create_Attrs_1 { setType("final"); }
+  | FINAL Create_Attrs_1 { setType("final"); }
+  | INIT Directions Create_Attrs_1 { setType("initial"); }
+  | INIT Create_Attrs_1 { setType("initial"); }
   ;
 
 Create_Attrs_2:
     EOL                               { }
-  | COLOR LABEL_STRING Create_Attrs_2 { set_edge_color($2); }
-  | PATH LABEL_STRING Create_Attrs_2  { set_path($2); }
+  | COLOR LABEL_STRING Create_Attrs_2 { setEdgeColor($2); }
+  | PATH LABEL_STRING Create_Attrs_2  { setPath($2); }
   ;
 
 Directions:
-    NORTH  { set_node_direction("north"); }
-  | SOUTH { set_node_direction("south"); }
-  | WEST  { set_node_direction("west"); }
-  | EAST  { set_node_direction("east"); }
-  | NORTH_EAST  { set_node_direction("north-east"); }
-  | NORTH_WEST  { set_node_direction("north-west"); }
-  | SOUTH_EAST  { set_node_direction("south-east"); }
-  | SOUTH_WEST  { set_node_direction("south-west"); }
+    NORTH  { setDirection("north"); }
+  | SOUTH { setDirection("south"); }
+  | WEST  { setDirection("west"); }
+  | EAST  { setDirection("east"); }
+  | NORTH_EAST  { setDirection("north-east"); }
+  | NORTH_WEST  { setDirection("north-west"); }
+  | SOUTH_EAST  { setDirection("south-east"); }
+  | SOUTH_WEST  { setDirection("south-west"); }
   ;
 
 %%

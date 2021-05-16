@@ -6,8 +6,8 @@ struct Edge {
     char *id;
     char *source;
     char *dest;
-    float pos_x;
-    float pos_y;
+    float xPos;
+    float yPos;
     char *label;
     char *color;
     char *path;
@@ -16,33 +16,33 @@ struct Edge {
 
 typedef struct EdgesList EdgesList;
 struct EdgesList {
-    Edge *first_edge;
+    Edge *firstEdge;
 };
 
-void declare_current_edge();
+void declareCurrentEdge();
 
-void declare_edges_list();
+void declareEdgesList();
 
-void init_current_edge();
+void initCurrentEdge();
 
-Edge *copy_current_edge();
+Edge *copyCurrentEdge();
 
-void print_edge(Edge *edge);
+void printEdge(Edge *edge);
 
-void print_edges_list();
+void printEdgesList();
 
-void add_edge(Edge *new_edge);
+void addEdge(Edge *newEdge);
 
-void remove_edge(char *source, char *dest);
+void removeEdge(char *source, char *dest);
 
-void remove_edges_containing_node(const char *node_id);
+void removeEdgesContainingNode(const char *nodeId);
 
-void create_edge_pos(char *source, char *dest, char *label, float pos_x, float pos_y);
+void createEdgePos(char *source, char *dest, char *label, float xPos, float yPos);
 
-void create_edge(char *source, char *dest, char *label);
+void createEdge(char *source, char *dest, char *label);
 
-void set_edge_color(char *color);
+void setEdgeColor(char *color);
 
-void set_path(char *path);
+void setPath(char *path);
 
 #endif

@@ -4,11 +4,11 @@
 typedef struct Node Node;
 struct Node {
     char *id;
-    float pos_x;
-    float pos_y;
+    float xPos;
+    float yPos;
     char *label;
     char *color;
-    char *bgcolor;
+    char *bgColor;
     float size;
     char *type;
     char *direction;
@@ -17,65 +17,65 @@ struct Node {
 
 typedef struct NodesList NodesList;
 struct NodesList {
-    Node *first_node;
+    Node *firstNode;
 };
 
 
-typedef struct Identifier Identifier;
-struct Identifier {
+typedef struct Id Id;
+struct Id {
     char *id;
-    Identifier *next;
+    Id *next;
 };
 
 typedef struct IDList IDList;
 struct IDList {
-    Identifier *first_id;
+    Id *firstId;
 };
 
-void declare_ids_list();
+void declareIdsList();
 
-void add_id(char *id);
+void addId(char *id);
 
-void move_multiple_nodes_by_id(float x_offset, float y_offset);
+void moveMultipleNodesById(float xOffset, float yOffset);
 
-void print_ids_list();
+void printIdsList();
 
-void declare_current_node();
+void declareCurrentNode();
 
-void declare_nodes_list();
+void declareNodesList();
 
-void init_current_node(void);
+void initCurrentNode(void);
 
-Node *copy_current_node(void);
+Node *copyCurrentNode(void);
 
-void print_node(Node *node);
+void printNode(Node *node);
 
-void print_nodes_list();
+void printNodesList();
 
-void add_node(Node *new_node);
+void addNode(Node *node);
 
-void remove_node(const char *node_id);
+void removeNode(const char *nodeId);
 
-void create_node(char *id, float pos_x, float pos_y);
+void createNode(char *id, float xPos, float yPos);
 
-int node_exists(char *node_id);
+int nodeExists(char *nodeId);
 
-void move_all_nodes(float x_offset, float y_offset);
+void moveAllNodes(float xOffset, float yOffset);
 
-void move_node(char *node_id, float x_offset, float y_offset);
+void moveNode(char *nodeId, float xOffset, float yOffset);
 
-void rename_node(char *current_id, char *new_id);
+void renameNode(char *currentId, char *newId);
 
-void set_label(char *label);
+void setLabel(char *label);
 
-void set_node_color(char *color);
+void setNodeColor(char *color);
 
-void set_node_type(char *type);
+void setType(char *type);
 
-void set_bgcolor(char *bgcolor);
+void setBgColor(char *bgColor);
 
-void set_size(float size);
+void setSize(float size);
 
-void set_node_direction(char *direction);
+void setDirection(char *direction);
 
 #endif
