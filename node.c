@@ -4,16 +4,16 @@
 #include "node.h"
 #include "edge.h"
 
-Node *current_node = NULL;
-NodesList *nodes_list = NULL;
-IDList *ids_list = NULL;
+Node *CURRENT_NODE = NULL;
+NodesList *NODES_LIST = NULL;
+IDList *IDS_LIST = NULL;
 const char *INITIAL = "initial";
 const char *FINAL = "final";
 
 void declare_ids_list() {
-    if (ids_list == NULL) {
-        ids_list = malloc(sizeof(*ids_list));
-        ids_list->first_id = NULL;
+    if (IDS_LIST == NULL) {
+        IDS_LIST = malloc(sizeof(*IDS_LIST));
+        IDS_LIST->first_id = NULL;
     }
 }
 
@@ -22,12 +22,12 @@ void add_id(char *id) {
 
     Identifier *new_id = malloc(sizeof(*new_id));
     new_id->id = id;
-    new_id->next = ids_list->first_id;
-    ids_list->first_id = new_id;
+    new_id->next = IDS_LIST->first_id;
+    IDS_LIST->first_id = new_id;
 }
 
 void print_ids_list() {
-    Identifier *current_id = ids_list->first_id;
+    Identifier *current_id = IDS_LIST->first_id;
 
     while (current_id != NULL) {
         printf("ID %s\n", current_id->id);
@@ -36,66 +36,69 @@ void print_ids_list() {
 }
 
 void move_multiple_nodes_by_id(float x_offset, float y_offset) {
-    printf("IN move\n");
+    Identifier *current_id = IDS_LIST->first_id;
 
-    print_ids_list();
-
-    printf("Freeing ids\n");
+    while (current_id != NULL) {
+        move_node(current_id->id, x_offset, y_offset);
+        current_id = current_id->next;
+    }
+    IDS_LIST->first_id = NULL; // don't free
+    //free_ids_list();
 }
 
 void free_ids_list() {
-    Identifier *current_id = ids_list->first_id;
+    Identifier *current_id = IDS_LIST->first_id;
 
     while (current_id != NULL) {
-        ids_list->first_id = current_id->next;
+        IDS_LIST->first_id = current_id->next;
         free(current_id);
-        current_id = ids_list->first_id;
+        current_id = IDS_LIST->first_id;
     }
 
-    ids_list->first_id = NULL;
+    //IDS_LIST->first_id = NULL;
 
     printf("Printing remaining ids ??\n");
     print_ids_list();
 }
 
 void declare_current_node() {
-    if (current_node == NULL) {
-        current_node = malloc(sizeof(*current_node));
+    if (CURRENT_NODE == NULL) {
+        CURRENT_NODE = malloc(sizeof(*CURRENT_NODE));
         init_current_node();
     }
 }
 
 void declare_nodes_list() {
-    if (nodes_list == NULL) {
-        nodes_list = malloc(sizeof(*nodes_list));
+    if (NODES_LIST == NULL) {
+        NODES_LIST = malloc(sizeof(*NODES_LIST));
     }
 }
 
 void init_current_node() {
-    current_node->id = "";
-    current_node->pos_x = 0;
-    current_node->pos_y = 0;
-    current_node->label = "";
-    current_node->color = "";
-    current_node->bgcolor = "";
-    current_node->size = 30;
-    current_node->type = "";
-    current_node->direction = "";
-    current_node->next = NULL;
+    CURRENT_NODE->id = "";
+    CURRENT_NODE->pos_x = 0;
+    CURRENT_NODE->pos_y = 0;
+    CURRENT_NODE->label = "";
+    CURRENT_NODE->color = "";
+    CURRENT_NODE->bgcolor = "";
+    CURRENT_NODE->size = 30;
+    CURRENT_NODE->type = "";
+    CURRENT_NODE->direction = "";
+    CURRENT_NODE->next = NULL;
 }
 
 Node *copy_current_node() {
     Node *node_copy = malloc(sizeof(*node_copy));
-    node_copy->id = current_node->id;
-    node_copy->pos_x = current_node->pos_x;
-    node_copy->pos_y = current_node->pos_y;
-    node_copy->label = current_node->label;
-    node_copy->color = current_node->color;
-    node_copy->bgcolor = current_node->bgcolor;
-    node_copy->size = current_node->size;
-    node_copy->type = current_node->type;
-    node_copy->direction = current_node->direction;
-    node_copy->next = current_node->next;
+    node_copy->id = CURRENT_NODE->id;
+    node_copy->pos_x = CURRENT_NODE->pos_x;
+    node_copy->pos_y = CURRENT_NODE->pos_y;
+    node_copy->label = CURRENT_NODE->label;
+    node_copy->color = CURRENT_NODE->color;
+    node_copy->bgcolor = CURRENT_NODE->bgcolor;
+    node_copy->size = CURRENT_NODE->size;
+    node_copy->type = CURRENT_NODE->type;
+    node_copy->direction = CURRENT_NODE->direction;
+    node_copy->next = CURRENT_NODE->next;
     return node_copy;
 }
 
@@ -107,7 +110,7 @@ void print_node(Node *node) {
 
 void print_nodes_list() {
     declare_nodes_list();
-    Node *node = nodes_list->first_node;
+    Node *node = NODES_LIST->first_node;
     while (node != NULL) {
         print_node(node);
         node = node->next;
@@ -115,8 +118,8 @@ void print_nodes_list() {
 }
 
 void add_node(Node *new_node) {
-    new_node->next = nodes_list->first_node;
-    nodes_list->first_node = new_node;
+    new_node->next = NODES_LIST->first_node;
+    NODES_LIST->first_node = new_node;
 }
 
 void remove_node(const char *node_id) {
@@ -126,7 +129,7 @@ void remove_node(const char *node_id) {
     declare_nodes_list();
 
     remove_edges_containing_node(node_id);
-    curr_node = nodes_list->first_node;
+    curr_node = NODES_LIST->first_node;
     prev_node = curr_node;
 
     while (curr_node != NULL) {
@@ -134,7 +137,7 @@ void remove_node(const char *node_id) {
         if (strcmp(curr_node->id, node_id) == 0) {
             node_exists = 1;
             if (prev_node == curr_node) {
-                nodes_list->first_node = curr_node->next;
+                NODES_LIST->first_node = curr_node->next;
                 free(curr_node);
             } else {
                 prev_node->next = curr_node->next;
@@ -158,19 +161,19 @@ void create_node(char *id, float pos_x, float pos_y) {
     if (node_exists(id)) {
         printf("ERROR : Node %s already exists.\n", id);
     } else {
-        current_node->id = id;
-        current_node->pos_x = pos_x;
-        current_node->pos_y = pos_y;
+        CURRENT_NODE->id = id;
+        CURRENT_NODE->pos_x = pos_x;
+        CURRENT_NODE->pos_y = pos_y;
 
-        if (*current_node->label == '\0') {
-            current_node->label = id;
+        if (*CURRENT_NODE->label == '\0') {
+            CURRENT_NODE->label = id;
         }
 
-        if (*current_node->direction == '\0') { // TODO : choose best direction
-            if (strcmp(current_node->type, INITIAL) == 0) {
-                current_node->direction = "west";
-            } else if (strcmp(current_node->type, FINAL) == 0) {
-                current_node->direction = "east";
+        if (*CURRENT_NODE->direction == '\0') { // TODO : choose best direction
+            if (strcmp(CURRENT_NODE->type, INITIAL) == 0) {
+                CURRENT_NODE->direction = "west";
+            } else if (strcmp(CURRENT_NODE->type, FINAL) == 0) {
+                CURRENT_NODE->direction = "east";
             }
         }
 
@@ -182,7 +185,7 @@ void create_node(char *id, float pos_x, float pos_y) {
 
 int node_exists(char *node_id) {
     int node_exists = 0;
-    Node *curr_node = nodes_list->first_node;
+    Node *curr_node = NODES_LIST->first_node;
 
     while (curr_node != NULL) {
         if (strcmp(curr_node->id, node_id) == 0) {
@@ -199,7 +202,7 @@ int node_exists(char *node_id) {
 void move_all_nodes(float x_offset, float y_offset) {
     declare_nodes_list();
 
-    Node *curr_node = nodes_list->first_node;
+    Node *curr_node = NODES_LIST->first_node;
 
     while (curr_node != NULL) {
         curr_node->pos_x += x_offset;
@@ -216,7 +219,7 @@ void move_node(char *node_id, float x_offset, float y_offset) {
         return;
     }
 
-    Node *curr_node = nodes_list->first_node;
+    Node *curr_node = NODES_LIST->first_node;
     while (curr_node != NULL) {
         if (strcmp(curr_node->id, node_id) == 0) {
             curr_node->pos_x += x_offset;
@@ -239,7 +242,7 @@ void rename_node(char *current_id, char *new_id) {
         return;
     }
 
-    Node *curr_node = nodes_list->first_node;
+    Node *curr_node = NODES_LIST->first_node;
     while (curr_node != NULL) {
         if (strcmp(curr_node->id, current_id) == 0) {
             curr_node->id = new_id;
@@ -250,31 +253,31 @@ void rename_node(char *current_id, char *new_id) {
 
 void set_label(char *label) {
     declare_current_node();
-    current_node->label = label;
+    CURRENT_NODE->label = label;
 }
 
 void set_node_color(char *color) {
     declare_current_node();
-    current_node->color = color;
+    CURRENT_NODE->color = color;
 }
 
 void set_bgcolor(char *bgcolor) {
     declare_current_node();
-    current_node->bgcolor = bgcolor;
+    CURRENT_NODE->bgcolor = bgcolor;
 }
 
 void set_size(float size) {
     printf("SET SIZE\n");
     declare_current_node();
-    current_node->size = size;
+    CURRENT_NODE->size = size;
 }
 
 void set_node_type(char *type) {
     declare_current_node();
-    current_node->type = type;
+    CURRENT_NODE->type = type;
 }
 
 void set_node_direction(char *direction) {
     declare_current_node();
-    current_node->direction = direction;
+    CURRENT_NODE->direction = direction;
 }

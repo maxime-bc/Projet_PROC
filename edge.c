@@ -4,18 +4,18 @@
 #include "edge.h"
 #include "node.h"
 
-Edge *current_edge;
-EdgesList *edges_list;
+Edge *current_edge = NULL;
+EdgesList *edges_list = NULL;
 
 void declare_current_edge() {
-    if (!current_edge) {
+    if (current_edge == NULL) {
         current_edge = malloc(sizeof(*current_edge));
         init_current_edge();
     }
 }
 
 void declare_edges_list() {
-    if (!edges_list) {
+    if (edges_list == NULL) {
         edges_list = malloc(sizeof(*edges_list));
     }
 }
