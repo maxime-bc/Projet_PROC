@@ -234,6 +234,11 @@ void renameNode(char *currentId, char *newId) {
     while (currentNode != NULL) {
         if (strcmp(currentNode->id, currentId) == 0) {
             currentNode->id = newId;
+
+            if (strcmp(currentNode->label, currentId) == 0) { // change default label by new id value.
+                currentNode->label = newId;
+            }
+
             renameEdgeNode(currentId, newId);
         }
         currentNode = currentNode->next;

@@ -69,7 +69,8 @@ void renameEdgeNode(char *previousNodeId, char *newNodeId) {
     while (currentEdge != NULL) {
         if (strcmp(currentEdge->source, previousNodeId) == 0) {
             currentEdge->source = newNodeId;
-        } else if (strcmp(currentEdge->dest, previousNodeId) == 0) {
+        }
+        if (strcmp(currentEdge->dest, previousNodeId) == 0) {
             currentEdge->dest = newNodeId;
         }
         currentEdge = currentEdge->next;
