@@ -72,7 +72,7 @@ Create_Attrs_2:
   ;
 
 Directions:
-    NORTH  { set_node_direction("north"); } // TODO change because initial is always called
+    NORTH  { set_node_direction("north"); }
   | SOUTH { set_node_direction("south"); }
   | WEST  { set_node_direction("west"); }
   | EAST  { set_node_direction("east"); }
