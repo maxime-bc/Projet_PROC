@@ -39,14 +39,7 @@ void move_multiple_nodes_by_id(float x_offset, float y_offset) {
     Identifier *current_id = IDS_LIST->first_id;
     while (current_id != NULL) {
         move_node(current_id->id, x_offset, y_offset);
-        current_id = current_id->next;
-    }
-    free_ids_list();
-}
 
-void free_ids_list() {
-    Identifier *current_id = IDS_LIST->first_id;
-    while (current_id != NULL) {
         IDS_LIST->first_id = current_id->next;
         free(current_id);
         current_id = IDS_LIST->first_id;
