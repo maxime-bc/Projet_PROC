@@ -217,7 +217,7 @@ void moveNode(char *nodeId, float xOffset, float yOffset) {
     }
 }
 
-void renameNode(char *currentId, char *newId) { // TODO: rename all edges
+void renameNode(char *currentId, char *newId) {
     declareNodesList();
 
     if (!nodeExists(currentId)) {
@@ -234,6 +234,7 @@ void renameNode(char *currentId, char *newId) { // TODO: rename all edges
     while (currentNode != NULL) {
         if (strcmp(currentNode->id, currentId) == 0) {
             currentNode->id = newId;
+            renameEdgeNode(currentId, newId);
         }
         currentNode = currentNode->next;
     }

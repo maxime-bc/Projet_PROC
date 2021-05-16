@@ -63,6 +63,19 @@ void addEdge(Edge *newEdge) {
     EDGES_LIST->firstEdge = newEdge;
 }
 
+void renameEdgeNode(char *previousNodeId, char *newNodeId) {
+    Edge *currentEdge = EDGES_LIST->firstEdge;
+
+    while (currentEdge != NULL) {
+        if (strcmp(currentEdge->source, previousNodeId) == 0) {
+            currentEdge->source = newNodeId;
+        } else if (strcmp(currentEdge->dest, previousNodeId) == 0) {
+            currentEdge->dest = newNodeId;
+        }
+        currentEdge = currentEdge->next;
+    }
+}
+
 void removeEdge(char *source, char *dest) {
     int exists = 0;
     Edge *previousEdge, *currentEdge;

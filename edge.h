@@ -35,6 +35,8 @@ void addEdge(Edge *newEdge);
 
 void removeEdge(char *source, char *dest);
 
+void renameEdgeNode(char *previousNodeId, char *newNodeId);
+
 void removeEdgesContainingNode(const char *nodeId);
 
 void createEdgePos(char *source, char *dest, char *label, float xPos, float yPos);
