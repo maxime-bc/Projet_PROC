@@ -20,6 +20,28 @@ struct NodesList {
     Node *first_node;
 };
 
+
+typedef struct Identifier Identifier;
+struct Identifier {
+    char *id;
+    Identifier *next;
+};
+
+typedef struct IDList IDList;
+struct IDList {
+    Identifier *first_id;
+};
+
+void declare_ids_list();
+
+void add_id(char *id);
+
+void free_ids_list();
+
+void move_multiple_nodes_by_id(float x_offset, float y_offset);
+
+void print_ids_list();
+
 void declare_current_node();
 
 void declare_nodes_list();

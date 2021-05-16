@@ -4,20 +4,69 @@
 #include "node.h"
 #include "edge.h"
 
-Node *current_node;
-NodesList *nodes_list;
+Node *current_node = NULL;
+NodesList *nodes_list = NULL;
+IDList *ids_list = NULL;
 const char *INITIAL = "initial";
 const char *FINAL = "final";
 
+void declare_ids_list() {
+    if (ids_list == NULL) {
+        ids_list = malloc(sizeof(*ids_list));
+        ids_list->first_id = NULL;
+    }
+}
+
+void add_id(char *id) {
+    declare_ids_list();
+
+    Identifier *new_id = malloc(sizeof(*new_id));
+    new_id->id = id;
+    new_id->next = ids_list->first_id;
+    ids_list->first_id = new_id;
+}
+
+void print_ids_list() {
+    Identifier *current_id = ids_list->first_id;
+
+    while (current_id != NULL) {
+        printf("ID %s\n", current_id->id);
+        current_id = current_id->next;
+    }
+}
+
+void move_multiple_nodes_by_id(float x_offset, float y_offset) {
+    printf("IN move\n");
+
+    print_ids_list();
+
+    printf("Freeing ids\n");
+}
+
+void free_ids_list() {
+    Identifier *current_id = ids_list->first_id;
+
+    while (current_id != NULL) {
+        ids_list->first_id = current_id->next;
+        free(current_id);
+        current_id = ids_list->first_id;
+    }
+
+    ids_list->first_id = NULL;
+
+    printf("Printing remaining ids ??\n");
+    print_ids_list();
+}
+
 void declare_current_node() {
-    if (!current_node) {
+    if (current_node == NULL) {
         current_node = malloc(sizeof(*current_node));
         init_current_node();
     }
 }
 
 void declare_nodes_list() {
-    if (!nodes_list) {
+    if (nodes_list == NULL) {
         nodes_list = malloc(sizeof(*nodes_list));
     }
 }
@@ -172,8 +221,8 @@ void move_node(char *node_id, float x_offset, float y_offset) {
         if (strcmp(curr_node->id, node_id) == 0) {
             curr_node->pos_x += x_offset;
             curr_node->pos_y += y_offset;
-            curr_node = curr_node->next;
         }
+        curr_node = curr_node->next;
     }
 }
 

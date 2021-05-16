@@ -16,6 +16,7 @@ int yyerror(char *s);
 }
 
 %token CREATE NODE EDGE FROM TO AT EOL LABEL COLOR BGCOLOR SIZE INIT FINAL PATH DUMP REMOVE MOVE WITH RENAME
+%token OPENING_SQ_BRACKET ENDING_SQ_BRACKET COMMA
 %token NORTH SOUTH EAST WEST NORTH_EAST NORTH_WEST SOUTH_EAST SOUTH_WEST
 %token <string> ID
 %token <string> LABEL_STRING
@@ -37,6 +38,7 @@ Line:
 Command:
     MOVE FLOAT FLOAT { move_all_nodes($2, $3); }
   | MOVE ID FLOAT FLOAT { move_node($2, $3, $4); }
+  | MOVE OPENING_SQ_BRACKET Id_List ENDING_SQ_BRACKET FLOAT FLOAT { move_multiple_nodes_by_id($5, $6); }
   | RENAME ID WITH ID { rename_node($2, $4); }
   | DUMP { print_nodes_list(); print_edges_list(); }
   | DUMP LABEL_STRING { printf("TODO: dumping into %s\n", $2); }
@@ -46,6 +48,10 @@ Command:
   | CREATE EDGE FROM ID TO ID LABEL LABEL_STRING Create_Attrs_2   { create_edge($4, $6, $8); }
   | CREATE EDGE FROM ID TO ID LABEL LABEL_STRING AT FLOAT FLOAT Create_Attrs_2 { create_edge_pos($4, $6, $8, $10, $11); }
   ;
+
+Id_List:
+    ID COMMA Id_List { add_id($1); }
+  | ID { add_id($1); }
 
 Create_Attrs_1:
     EOL                                     { }

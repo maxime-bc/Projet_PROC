@@ -35,6 +35,9 @@ FLOAT [+-]?([0-9]*[.])?[0-9]+
 "move" {return(MOVE);}
 "with" {return(WITH);}
 "rename" {return(RENAME);}
+"[" { return(OPENING_SQ_BRACKET); }
+"]" { return(ENDING_SQ_BRACKET); }
+"," { return(COMMA); }
 {ID} {
   yylval.string = strdup(yytext);
   return(ID); 
