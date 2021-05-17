@@ -9,4 +9,4 @@ all: $(BIN).y $(BIN).l
 	./$(BIN).bin
 
 clean:
-	rm -fv $(BIN).bin $(BIN).tab.h $(BIN).tab.c lex.yy.c lex.yy.o $(BIN).tab.o lex.backup $(BIN).dot $(BIN).png $(BIN).output node.o edge.o svg.o *~
+	rm -fv $(BIN).bin $(BIN).tab.h $(BIN).tab.c lex.yy.c $(BIN).dot $(BIN).png *~
