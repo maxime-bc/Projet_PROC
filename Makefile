@@ -1,15 +1,11 @@
+CC = g++
 BIN= auto_svg
 
 all: $(BIN).y $(BIN).l
 	bison -dg $(BIN).y
 	dot -Tpng $(BIN).dot -o $(BIN).png
 	flex -vT $(BIN).l
-	$(CC) -c lex.yy.c -o lex.yy.o
-	$(CC) -c edge.c -o edge.o
-	$(CC) -c node.c -o node.o
-	$(CC) -c svg.c -o svg.o
-	$(CC) -c $(BIN).tab.c -o $(BIN).tab.o
-	$(CC) -o $(BIN).bin lex.yy.o $(BIN).tab.o edge.o node.o svg.o -ll -lm
+	$(CC) lex.yy.c $(BIN).tab.c test.cpp -o $(BIN).bin
 	./$(BIN).bin
 
 clean:
