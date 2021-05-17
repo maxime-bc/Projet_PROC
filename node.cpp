@@ -1,6 +1,7 @@
 #include <iostream>
 #include <string>
 #include <list>
+#include <utility>
 
 #include "node.h"
 
@@ -8,7 +9,6 @@ std::list<Node> NODES;
 Node CURRENT_NODE = {};
 
 void createNode(char *id, float xPos, float yPos) {
-    std::string str(id);
 
     if (nodeExists(id)) {
         std::cout << "ERROR : Node " << id << " already exists." << std::endl;
@@ -43,22 +43,19 @@ void printNodes(const std::list<Node> &nodes) {
     for (const auto &node : nodes) {
         std::cout << "node " << node.id << " {xPos=" << node.xPos << ", yPos=" << node.yPos << ", label=" << node.label
                   << ", color=" << node.color << ", backgroundColor=" << node.backgroundColor << ", size=" << node.size
-                  << ", type=" << node.type << ", direction=" << node.direction << "}\n";
+                  << ", type=" << node.type << ", direction=" << node.direction << "}" << std::endl;
     }
 }
 
 void setLabel(char *label) {
-    std::string str(label);
     CURRENT_NODE.label = label;
 }
 
 void setNodeColor(char *color) {
-    std::string str(color);
     CURRENT_NODE.color = color;
 }
 
 void setBgColor(char *backgroundColor) {
-    std::string str(backgroundColor);
     CURRENT_NODE.backgroundColor = backgroundColor;
 }
 
@@ -66,12 +63,10 @@ void setSize(float size) {
     CURRENT_NODE.size = size;
 }
 
-void setType(char *type) {
-    std::string str(type);
-    CURRENT_NODE.type = type;
+void setType(std::string type) {
+    CURRENT_NODE.type = std::move(type);
 }
 
-void setDirection(char *direction) {
-    std::string str(direction);
-    CURRENT_NODE.direction = direction;
+void setDirection(std::string direction) {
+    CURRENT_NODE.direction = std::move(direction);
 }

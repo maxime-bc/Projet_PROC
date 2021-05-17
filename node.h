@@ -1,5 +1,5 @@
-#ifndef PROJET_PROC_NODE_H
-#define PROJET_PROC_NODE_H
+#ifndef NODE_H
+#define NODE_H
 
 #include <list>
 #include <string>
@@ -30,8 +30,8 @@ void setBgColor(char *backgroundColor);
 
 void setSize(float size);
 
-void setType(char *type);
+void setType(std::string type);
 
-void setDirection(char *direction);
+void setDirection(std::string direction);
 
-#endif //PROJET_PROC_NODE_H
+#endif //NODE_H

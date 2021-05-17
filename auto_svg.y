@@ -1,6 +1,7 @@
 %{
 #include <iostream>
 #include "node.h"
+#include "edge.h"
 
 void yyerror(const char *s){
     fprintf(stderr, "error: %s\n", s);
@@ -42,6 +43,8 @@ Line:
 
 Command:
     CREATE NODE ID AT FLOAT FLOAT Create_Attrs_1 { createNode($3, $5, $6); } // demander au prof
+  | CREATE EDGE FROM ID TO ID LABEL LABEL_STRING Create_Attrs_2   { createEdge($4, $6, $8); }
+  | CREATE EDGE FROM ID TO ID LABEL LABEL_STRING AT FLOAT FLOAT Create_Attrs_2 { createEdgeWithPositions($4, $6, $8, $10, $11); }
   ;
 
 Create_Attrs_1:
@@ -50,6 +53,27 @@ Create_Attrs_1:
   | COLOR LABEL_STRING Create_Attrs_1 { setNodeColor($2); }
   | BGCOLOR LABEL_STRING Create_Attrs_1 { setBgColor($2); }
   | SIZE FLOAT Create_Attrs_1 { setSize($2); }
+  | FINAL Directions Create_Attrs_1 { setType("final"); }
+  | FINAL Create_Attrs_1 { setType("final"); }
+  | INIT Directions Create_Attrs_1 { setType("initial"); }
+  | INIT Create_Attrs_1 { setType("initial"); }
+  ;
+
+Create_Attrs_2:
+    EOL                               { }
+  | COLOR LABEL_STRING Create_Attrs_2 { setEdgeColor($2); }
+  | PATH LABEL_STRING Create_Attrs_2  { setPath($2); }
+  ;
+
+Directions:
+    NORTH  { setDirection("north"); }
+  | SOUTH { setDirection("south"); }
+  | WEST  { setDirection("west"); }
+  | EAST  { setDirection("east"); }
+  | NORTH_EAST  { setDirection("north-east"); }
+  | NORTH_WEST  { setDirection("north-west"); }
+  | SOUTH_EAST  { setDirection("south-east"); }
+  | SOUTH_WEST  { setDirection("south-west"); }
   ;
 
 %%
