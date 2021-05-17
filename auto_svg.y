@@ -5,6 +5,7 @@
 #include <math.h>
 #include "node.h"
 #include "edge.h"
+#include "svg.h"
 
 int yylex();
 int yyerror(char *s);
@@ -41,7 +42,7 @@ Command:
   | MOVE OPENING_SQ_BRACKET Id_List ENDING_SQ_BRACKET FLOAT FLOAT { moveMultipleNodesById($5, $6); }
   | RENAME ID WITH ID { renameNode($2, $4); }
   | DUMP { printNodesList(); printEdgesList(); }
-  | DUMP LABEL_STRING { printf("TODO: dumping into %s\n", $2); }
+  | DUMP LABEL_STRING { dumpSVG($2); }
   | REMOVE NODE ID { removeNode($3); }
   | REMOVE EDGE FROM ID TO ID { removeEdge($4, $6); }
   | CREATE NODE ID AT FLOAT FLOAT Create_Attrs_1    { createNode($3, $5, $6); } // demander au prof

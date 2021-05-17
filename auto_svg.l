@@ -47,7 +47,7 @@ FLOAT [+-]?([0-9]*[.])?[0-9]+
   return(FLOAT); 
 }
 {LABEL_STRING} { 
-  yylval.string = strdup(yytext);
+  yylval.string = strdup(yytext); //TODO: free strdup ?
   return(LABEL_STRING); 
 }
 "\n" {return EOL;}
