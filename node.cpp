@@ -4,6 +4,7 @@
 #include <utility>
 
 #include "node.h"
+#include "edge.h"
 
 std::list<Node> NODES;
 Node CURRENT_NODE = {};
@@ -23,8 +24,22 @@ void createNode(char *id, float xPos, float yPos) {
     NODES.push_back(newNode);
 
     CURRENT_NODE = {};
+}
 
-    printNodes(NODES);
+void removeNode(char *id) {
+    if (!nodeExists(id)) {
+        std::cout << "ERROR : Node " << id << " doesn't exists." << std::endl;
+    }
+
+    removeEdgesContainingNode(id);
+
+    for (auto node = NODES.begin(); node != NODES.end();) {
+        if (node->id == id) {
+            NODES.erase(node);
+            break;
+        } else
+            node++;
+    }
 }
 
 bool nodeExists(const std::string &nodeId) {
@@ -39,8 +54,8 @@ bool nodeExists(const std::string &nodeId) {
     return exists;
 }
 
-void printNodes(const std::list<Node> &nodes) {
-    for (const auto &node : nodes) {
+void printNodes() {
+    for (const auto &node : NODES) {
         std::cout << "node " << node.id << " {xPos=" << node.xPos << ", yPos=" << node.yPos << ", label=" << node.label
                   << ", color=" << node.color << ", backgroundColor=" << node.backgroundColor << ", size=" << node.size
                   << ", type=" << node.type << ", direction=" << node.direction << "}" << std::endl;

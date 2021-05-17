@@ -16,7 +16,11 @@ void createEdgeWithPositions(char *source, char *dest, char *label, float xPos, 
 
 void createEdge(char *source, char *dest, char *label);
 
-void printEdges(const std::list<Edge> &edges);
+void removeEdge(char *source, char *dest);
+
+void removeEdgesContainingNode(const std::string &nodeId);
+
+void printEdges();
 
 void setEdgeColor(char *color);
 

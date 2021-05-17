@@ -26,8 +26,6 @@ void createEdgeWithPositions(char *source, char *dest, char *label, float xPos, 
         EDGES.push_back(newEdge);
 
         CURRENT_EDGE = {};
-
-        printEdges(EDGES);
     }
 }
 
@@ -38,8 +36,34 @@ void createEdge(char *source, char *dest, char *label) {
     createEdgeWithPositions(source, dest, label, xPos, yPos);
 }
 
-void printEdges(const std::list<Edge> &edges) {
-    for (const auto &edge : edges) {
+void removeEdge(char *source, char *dest) {
+    bool removed = false;
+
+    for (auto edge = EDGES.begin(); edge != EDGES.end();) {
+        if (edge->dest == dest && edge->source == source) {
+            EDGES.erase(edge);
+            removed = true;
+            break;
+        } else
+            edge++;
+    }
+
+    if (!removed) {
+        std::cout << "ERROR : Edge " << source << " - " << dest << " wasn't found." << std::endl;
+    }
+}
+
+void removeEdgesContainingNode(const std::string &nodeId) {
+    for (auto edge = EDGES.begin(); edge != EDGES.end();) {
+        if (edge->source == nodeId || edge->dest == nodeId) {
+            edge = EDGES.erase(edge);
+        } else
+            edge++;
+    }
+}
+
+void printEdges() {
+    for (const auto &edge : EDGES) {
         std::cout << "edge " << edge.source << " - " << edge.dest << " {xPos=" << edge.xPos << ", yPos=" << edge.yPos
                   << ", label=" << edge.label << ", color=" << edge.color << ", path=" << edge.path << "}" << std::endl;
     }

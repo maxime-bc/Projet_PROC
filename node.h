@@ -18,9 +18,11 @@ struct Node {
 
 void createNode(char *id, float xPos, float yPos);
 
+void removeNode(char *id);
+
 bool nodeExists(const std::string& nodeId);
 
-void printNodes(const std::list<Node> &nodes);
+void printNodes();
 
 void setLabel(char *label);
 
