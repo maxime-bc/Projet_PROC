@@ -1,6 +1,6 @@
 %{
 #include <iostream>
-#include "test.h"
+#include "node.h"
 
 void yyerror(const char *s){
     fprintf(stderr, "error: %s\n", s);
@@ -20,8 +20,11 @@ extern "C"{
    char* string;
 }
 
-%token CREATE NODE AT EOL
+%token CREATE NODE EDGE FROM TO AT EOL LABEL COLOR BGCOLOR SIZE INIT FINAL PATH DUMP REMOVE MOVE WITH RENAME
+%token OPENING_SQ_BRACKET ENDING_SQ_BRACKET COMMA
+%token NORTH SOUTH EAST WEST NORTH_EAST NORTH_WEST SOUTH_EAST SOUTH_WEST
 %token <string> ID
+%token <string> LABEL_STRING
 %token <number> FLOAT
 
 %start S
@@ -38,7 +41,15 @@ Line:
   ;
 
 Command:
-    CREATE NODE ID AT FLOAT FLOAT    { testPrint(); } // demander au prof
+    CREATE NODE ID AT FLOAT FLOAT Create_Attrs_1 { createNode($3, $5, $6); } // demander au prof
+  ;
+
+Create_Attrs_1:
+    EOL                                     { }
+  | LABEL LABEL_STRING Create_Attrs_1 { setLabel($2); }
+  | COLOR LABEL_STRING Create_Attrs_1 { setNodeColor($2); }
+  | BGCOLOR LABEL_STRING Create_Attrs_1 { setBgColor($2); }
+  | SIZE FLOAT Create_Attrs_1 { setSize($2); }
   ;
 
 %%
