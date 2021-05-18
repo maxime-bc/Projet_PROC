@@ -16,24 +16,32 @@ struct Node {
     std::string direction = "";
 };
 
-void createNode(char *id, float xPos, float yPos);
+void createNode(const std::string& nodeId, float xPos, float yPos);
 
-void removeNode(char *id);
+void removeNode(const std::string& id);
 
 bool nodeExists(const std::string& nodeId);
 
+void moveAllNodes(float xPos, float yPos);
+
+void moveNode(const std::string &nodeId, float xPos, float yPos);
+
+void moveMultipleNodesById(float xPos, float yPos);
+
+void addId(const std::string &id);
+
 void printNodes();
 
-void setLabel(char *label);
+void setLabel(const std::string &label);
 
-void setNodeColor(char *color);
+void setNodeColor(const std::string &color);
 
-void setBgColor(char *backgroundColor);
+void setBackgroundColor(const std::string &backgroundColor);
 
 void setSize(float size);
 
-void setType(std::string type);
+void setType(const std::string &type);
 
-void setDirection(std::string direction);
+void setDirection(const std::string &direction);
 
 #endif //NODE_H

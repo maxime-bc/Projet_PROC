@@ -42,19 +42,27 @@ Line:
   ;
 
 Command:
-    DUMP { printNodes(); printEdges(); }
+    MOVE FLOAT FLOAT { moveAllNodes($2, $3); }
+  | MOVE ID FLOAT FLOAT { moveNode($2, $3, $4); }
+  | MOVE OPENING_SQ_BRACKET Id_List ENDING_SQ_BRACKET FLOAT FLOAT { moveMultipleNodesById($5, $6); }
+  | DUMP ID {  }
+  | DUMP { printNodes(); printEdges(); }
   | REMOVE NODE ID { removeNode($3); }
   | REMOVE EDGE FROM ID TO ID { removeEdge($4, $6); }
   | CREATE NODE ID AT FLOAT FLOAT Create_Attrs_1 { createNode($3, $5, $6); } // demander au prof
   | CREATE EDGE FROM ID TO ID LABEL LABEL_STRING Create_Attrs_2   { createEdge($4, $6, $8); }
-  | CREATE EDGE FROM ID TO ID LABEL LABEL_STRING AT FLOAT FLOAT Create_Attrs_2 { createEdgeWithPositions($4, $6, $8, $10, $11); }
+  | CREATE EDGE FROM ID TO ID LABEL LABEL_STRING AT FLOAT FLOAT Create_Attrs_2 { createEdgeWithPosition($4, $6, $8, $10, $11); }
   ;
+
+Id_List:
+    ID COMMA Id_List { addId($1); }
+  | ID { addId($1); }
 
 Create_Attrs_1:
     EOL                                     { }
   | LABEL LABEL_STRING Create_Attrs_1 { setLabel($2); }
   | COLOR LABEL_STRING Create_Attrs_1 { setNodeColor($2); }
-  | BGCOLOR LABEL_STRING Create_Attrs_1 { setBgColor($2); }
+  | BGCOLOR LABEL_STRING Create_Attrs_1 { setBackgroundColor($2); }
   | SIZE FLOAT Create_Attrs_1 { setSize($2); }
   | FINAL Directions Create_Attrs_1 { setType("final"); }
   | FINAL Create_Attrs_1 { setType("final"); }

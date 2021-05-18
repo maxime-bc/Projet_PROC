@@ -12,18 +12,19 @@ struct Edge {
     std::string path = "";
 };
 
-void createEdgeWithPositions(char *source, char *dest, char *label, float xPos, float yPos);
+void createEdgeWithPosition(const std::string &source, const std::string &dest, const std::string &label, float xPos,
+                            float yPos);
 
-void createEdge(char *source, char *dest, char *label);
+void createEdge(const std::string &source, const std::string &dest, const std::string &label);
 
-void removeEdge(char *source, char *dest);
+void removeEdge(const std::string &source, const std::string &dest);
 
 void removeEdgesContainingNode(const std::string &nodeId);
 
 void printEdges();
 
-void setEdgeColor(char *color);
+void setEdgeColor(const std::string &color);
 
-void setPath(char *path);
+void setPath(const std::string &path);
 
 #endif //EDGE_H

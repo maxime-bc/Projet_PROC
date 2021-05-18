@@ -9,7 +9,8 @@ std::list<Edge> EDGES;
 Edge CURRENT_EDGE = {};
 
 
-void createEdgeWithPositions(char *source, char *dest, char *label, float xPos, float yPos) {
+void createEdgeWithPosition(const std::string &source, const std::string &dest, const std::string &label, float xPos,
+                            float yPos) {
 
     if (!nodeExists(source)) {
         std::cout << "ERROR : Node " << source << " doesn't exists." << std::endl;
@@ -30,13 +31,13 @@ void createEdgeWithPositions(char *source, char *dest, char *label, float xPos, 
 }
 
 
-void createEdge(char *source, char *dest, char *label) {
+void createEdge(const std::string &source, const std::string &dest, const std::string &label) {
     float xPos = 0;
     float yPos = 0;
-    createEdgeWithPositions(source, dest, label, xPos, yPos);
+    createEdgeWithPosition(source, dest, label, xPos, yPos);
 }
 
-void removeEdge(char *source, char *dest) {
+void removeEdge(const std::string &source, const std::string &dest) {
     bool removed = false;
 
     for (auto edge = EDGES.begin(); edge != EDGES.end();) {
@@ -69,10 +70,10 @@ void printEdges() {
     }
 }
 
-void setEdgeColor(char *color) {
+void setEdgeColor(const std::string &color) {
     CURRENT_EDGE.color = color;
 }
 
-void setPath(char *path) {
+void setPath(const std::string &path) {
     CURRENT_EDGE.path = path;
 }
