@@ -14,20 +14,24 @@ void createEdgeWithPosition(const std::string &source, const std::string &dest, 
 
     if (!nodeExists(source)) {
         std::cout << "ERROR : Node " << source << " doesn't exists." << std::endl;
-    } else if (!nodeExists(dest)) {
-        std::cout << "ERROR : Node " << dest << " doesn't exists." << std::endl;
-    } else {
-        CURRENT_EDGE.source = source;
-        CURRENT_EDGE.dest = dest;
-        CURRENT_EDGE.label = label;
-        CURRENT_EDGE.xPos = xPos;
-        CURRENT_EDGE.yPos = yPos;
-
-        Edge newEdge = CURRENT_EDGE;
-        EDGES.push_back(newEdge);
-
-        CURRENT_EDGE = {};
+        return;
     }
+
+    if (!nodeExists(dest)) {
+        std::cout << "ERROR : Node " << dest << " doesn't exists." << std::endl;
+        return;
+    }
+
+    CURRENT_EDGE.source = source;
+    CURRENT_EDGE.dest = dest;
+    CURRENT_EDGE.label = label;
+    CURRENT_EDGE.xPos = xPos;
+    CURRENT_EDGE.yPos = yPos;
+
+    Edge newEdge = CURRENT_EDGE;
+    EDGES.push_back(newEdge);
+
+    CURRENT_EDGE = {};
 }
 
 
@@ -58,8 +62,9 @@ void removeEdgesContainingNode(const std::string &nodeId) {
     for (auto edge = EDGES.begin(); edge != EDGES.end();) {
         if (edge->source == nodeId || edge->dest == nodeId) {
             edge = EDGES.erase(edge);
-        } else
+        } else {
             edge++;
+        }
     }
 }
 

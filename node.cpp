@@ -20,6 +20,19 @@ void createNode(const std::string &nodeId, float xPos, float yPos) {
     CURRENT_NODE.xPos = xPos;
     CURRENT_NODE.yPos = yPos;
 
+    // Set default attributes
+    if (CURRENT_NODE.label.empty()) {
+        CURRENT_NODE.label = nodeId;
+    }
+
+    if (CURRENT_NODE.direction.empty()) {
+        if (CURRENT_NODE.type == "initial") {
+            CURRENT_NODE.direction = "west";
+        } else if (CURRENT_NODE.type == "final") {
+            CURRENT_NODE.direction = "east";
+        }
+    }
+
     Node newNode = CURRENT_NODE;
     NODES.push_back(newNode);
 
@@ -34,7 +47,7 @@ void removeNode(const std::string &id) {
 
     removeEdgesContainingNode(id);
 
-    for (std::_List_iterator<Node> node = NODES.begin(); node != NODES.end();) {
+    for (auto node = NODES.begin(); node != NODES.end();) {
         if (node->id == id) {
             NODES.erase(node);
             break;
