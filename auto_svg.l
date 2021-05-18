@@ -4,6 +4,12 @@
         int yylex(void);
     }
   #include "auto_svg.tab.h"
+
+  void topntail(char *str) {
+      size_t len = strlen(str);
+      memmove(str, str+1, len-2);
+      str[len-2] = 0;
+  }
 %}
 
 LABEL_STRING \"[^\"\\<\>]*\"
@@ -50,7 +56,9 @@ FLOAT [+-]?([0-9]*[.])?[0-9]+
   return(FLOAT);
 }
 {LABEL_STRING} {
-  yylval.string = strdup(yytext); //TODO: free strdup ?
+  char *str_dup = strdup(yytext);
+  topntail(str_dup);
+  yylval.string = str_dup;
   return(LABEL_STRING);
 }
 "\n" {return EOL;}
