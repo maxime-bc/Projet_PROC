@@ -10,11 +10,13 @@ struct Node {
     float yPos = 0;
     std::string label;
     std::string color = "black";
-    std::string backgroundColor = "white";
+    std::string backgroundColor = "none";
     float size = 30;
     std::string type;
     std::string direction;
 };
+
+extern std::list<Node> NODES;
 
 void createNode(const std::string &nodeId, float xPos, float yPos);
 

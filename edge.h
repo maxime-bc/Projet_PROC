@@ -11,6 +11,8 @@ struct Edge {
     std::string path;
 };
 
+extern std::list<Edge> EDGES;
+
 void createEdgeWithPosition(const std::string &source, const std::string &dest, const std::string &label, float xPos,
                             float yPos);
 
