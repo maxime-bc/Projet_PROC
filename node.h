@@ -5,22 +5,24 @@
 #include <string>
 
 struct Node {
-    std::string id = "";
+    std::string id;
     float xPos = 0;
     float yPos = 0;
-    std::string label = "";
+    std::string label;
     std::string color = "black";
     std::string backgroundColor = "white";
     float size = 30;
-    std::string type = "";
-    std::string direction = "";
+    std::string type;
+    std::string direction;
 };
 
-void createNode(const std::string& nodeId, float xPos, float yPos);
+void createNode(const std::string &nodeId, float xPos, float yPos);
 
-void removeNode(const std::string& id);
+void removeNode(const std::string &id);
 
-bool nodeExists(const std::string& nodeId);
+bool nodeExists(const std::string &nodeId);
+
+void renameNode(const std::string &currentNodeId, const std::string &newNodeId);
 
 void moveAllNodes(float xPos, float yPos);
 

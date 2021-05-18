@@ -55,6 +55,32 @@ bool nodeExists(const std::string &nodeId) {
     return exists;
 }
 
+void renameNode(const std::string &currentNodeId, const std::string &newNodeId) {
+
+    if (!nodeExists(currentNodeId)) {
+        std::cout << "ERROR : Node " << currentNodeId << " doesn't exists." << std::endl;
+        return;
+    }
+
+    if (nodeExists(newNodeId)) {
+        std::cout << "ERROR : Node " << newNodeId << " already exists." << std::endl;
+        return;
+    }
+
+    renameEdgeNode(currentNodeId, newNodeId);
+
+    for (auto &node : NODES) {
+        if (node.id == currentNodeId) {
+            node.id = newNodeId;
+
+            if (node.label == currentNodeId) { // change default label by new id value.
+                node.label = newNodeId;
+            }
+            break;
+        }
+    }
+}
+
 void printNodes() {
     for (const Node &node : NODES) {
         std::cout << "node " << node.id << " {xPos=" << node.xPos << ", yPos=" << node.yPos << ", label=" << node.label

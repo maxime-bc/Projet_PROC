@@ -63,6 +63,18 @@ void removeEdgesContainingNode(const std::string &nodeId) {
     }
 }
 
+void renameEdgeNode(const std::string &currentNodeId, const std::string &newNodeId) {
+    for (auto &edge : EDGES) {
+        if (edge.source == currentNodeId) {
+            edge.source = newNodeId;
+        }
+
+        if (edge.dest == currentNodeId) {
+            edge.dest = newNodeId;
+        }
+    }
+}
+
 void printEdges() {
     for (const auto &edge : EDGES) {
         std::cout << "edge " << edge.source << " - " << edge.dest << " {xPos=" << edge.xPos << ", yPos=" << edge.yPos

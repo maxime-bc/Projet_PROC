@@ -45,6 +45,7 @@ Command:
     MOVE FLOAT FLOAT { moveAllNodes($2, $3); }
   | MOVE ID FLOAT FLOAT { moveNode($2, $3, $4); }
   | MOVE OPENING_SQ_BRACKET Id_List ENDING_SQ_BRACKET FLOAT FLOAT { moveMultipleNodesById($5, $6); }
+  | RENAME ID WITH ID { renameNode($2, $4); }
   | DUMP LABEL_STRING {  }
   | DUMP { printNodes(); printEdges(); }
   | REMOVE NODE ID { removeNode($3); }
