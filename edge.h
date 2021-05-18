@@ -1,7 +1,6 @@
 #ifndef EDGE_H
 #define EDGE_H
 
-typedef struct Edge Edge;
 struct Edge {
     std::string source;
     std::string dest;

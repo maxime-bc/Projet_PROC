@@ -2,6 +2,7 @@
 #include <iostream>
 #include "node.h"
 #include "edge.h"
+#include "svg.h"
 
 void yyerror(const char *s){
     fprintf(stderr, "error: %s\n", s);
@@ -46,7 +47,7 @@ Command:
   | MOVE ID FLOAT FLOAT { moveNode($2, $3, $4); }
   | MOVE OPENING_SQ_BRACKET Id_List ENDING_SQ_BRACKET FLOAT FLOAT { moveMultipleNodesById($5, $6); }
   | RENAME ID WITH ID { renameNode($2, $4); }
-  | DUMP LABEL_STRING {  }
+  | DUMP LABEL_STRING { dumpSVG($2); }
   | DUMP { printNodes(); printEdges(); }
   | REMOVE NODE ID { removeNode($3); }
   | REMOVE EDGE FROM ID TO ID { removeEdge($4, $6); }
