@@ -21,7 +21,7 @@ extern std::list<Node> NODES;
 
 void createNode(const std::string &nodeId, float xPos, float yPos);
 
-void removeNode(const std::string &id);
+void removeNode(const std::string &nodeId);
 
 bool nodeExists(const std::string &nodeId);
 
@@ -38,6 +38,8 @@ void moveMultipleNodesById(float xPos, float yPos);
 void addId(const std::string &id);
 
 void printNodes();
+
+int getNodeIndex(const std::string &nodeId);
 
 void setLabel(const std::string &label);
 

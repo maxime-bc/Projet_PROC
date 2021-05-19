@@ -1,6 +1,7 @@
 #include <iostream>
 #include <string>
 #include <list>
+#include <tuple>
 
 #include "node.h"
 #include "edge.h"
@@ -42,21 +43,32 @@ void createNode(const std::string &nodeId, float xPos, float yPos) {
     CURRENT_NODE = {};
 }
 
-void removeNode(const std::string &id) {
-    if (!nodeExists(id)) {
-        std::cout << "ERROR : Node " << id << " doesn't exists." << std::endl;
+void removeNode(const std::string &nodeId) {
+    if (!nodeExists(nodeId)) {
+        std::cout << "ERROR : Node " << nodeId << " doesn't exists." << std::endl;
         return;
     }
 
-    removeEdgesContainingNode(id);
+    removeEdgesContainingNode(nodeId);
 
     for (auto node = NODES.begin(); node != NODES.end();) {
-        if (node->id == id) {
+        if (node->id == nodeId) {
             NODES.erase(node);
             break;
         } else
             node++;
     }
+}
+
+int getNodeIndex(const std::string &nodeId) {
+    int index = 0;
+    for (const Node &node : NODES) {
+        if (node.id == nodeId) {
+            return index;
+        }
+        index += 1;
+    }
+    return -1;
 }
 
 bool nodeExists(const std::string &nodeId) {

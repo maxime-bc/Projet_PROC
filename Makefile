@@ -5,7 +5,7 @@ all: $(BIN).y $(BIN).l
 	bison -dg $(BIN).y
 	dot -Tpng $(BIN).dot -o $(BIN).png
 	flex -vT $(BIN).l
-	$(CC) lex.yy.c $(BIN).tab.c node.cpp edge.cpp svg.cpp -o $(BIN).bin
+	$(CC) -std=c++17 lex.yy.c $(BIN).tab.c node.cpp edge.cpp svg.cpp -o $(BIN).bin
 	./$(BIN).bin
 
 clean:
