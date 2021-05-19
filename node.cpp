@@ -147,7 +147,7 @@ void editNode(const std::string &nodeId) {
             if (!CURRENT_NODE.backgroundColor.empty()) {
                 node->backgroundColor = CURRENT_NODE.backgroundColor;
             }
-            // TODO: fix update final and initial
+
             if (!CURRENT_NODE.initial.empty()) {
                 node->initial = CURRENT_NODE.initial;
             }
@@ -205,7 +205,7 @@ void setType(const std::string &type, const std::string &direction) {
         if (direction.empty()) {
             CURRENT_NODE.final = "east";
         } else {
-            CURRENT_NODE.initial = direction;
+            CURRENT_NODE.final = direction;
         }
     }
 }
