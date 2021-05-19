@@ -4,16 +4,17 @@
 #include <list>
 #include <string>
 
-struct Node {
+class Node { //TODO: change class, needs initial and final attribute
+public:
     std::string id;
     float xPos = 0;
     float yPos = 0;
     std::string label;
-    std::string color = "black";
-    std::string backgroundColor = "none";
-    float size = 30;
-    std::string type;
-    std::string direction;
+    std::string color;
+    std::string backgroundColor;
+    float size = -1;
+    std::string initial;
+    std::string final;
 };
 
 extern std::list<Node> NODES;
@@ -27,6 +28,8 @@ bool nodeExists(const std::string &nodeId);
 void renameNode(const std::string &currentNodeId, const std::string &newNodeId);
 
 void moveAllNodes(float xPos, float yPos);
+
+void editNode(const std::string &nodeId);
 
 void moveNode(const std::string &nodeId, float xPos, float yPos);
 
@@ -44,8 +47,6 @@ void setBackgroundColor(const std::string &backgroundColor);
 
 void setSize(float size);
 
-void setType(const std::string &type);
-
-void setDirection(const std::string &direction);
+void setType(const std::string &type, const std::string &direction);
 
 #endif //NODE_H

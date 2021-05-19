@@ -1,7 +1,8 @@
 #ifndef EDGE_H
 #define EDGE_H
 
-struct Edge {
+class Edge {
+public:
     std::string source;
     std::string dest;
     float xPos = 0;

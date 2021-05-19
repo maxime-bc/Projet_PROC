@@ -1,5 +1,4 @@
 %{
-#include <iostream>
 #include "node.h"
 #include "edge.h"
 #include "svg.h"
@@ -20,9 +19,12 @@ extern "C"{
 %union{
    float number;
    char* string;
+   const char* c_string;
 }
 
-%token CREATE NODE EDGE FROM TO AT EOL LABEL COLOR BGCOLOR SIZE INIT FINAL PATH DUMP REMOVE MOVE WITH RENAME
+%type <c_string> Directions
+
+%token CREATE NODE EDGE FROM TO AT EOL LABEL COLOR BGCOLOR SIZE INIT FINAL PATH DUMP REMOVE MOVE WITH RENAME EDIT
 %token OPENING_SQ_BRACKET ENDING_SQ_BRACKET COMMA
 %token NORTH SOUTH EAST WEST NORTH_EAST NORTH_WEST SOUTH_EAST SOUTH_WEST
 %token <string> ID
@@ -49,6 +51,7 @@ Command:
   | RENAME ID WITH ID { renameNode($2, $4); }
   | DUMP LABEL_STRING { dumpSVG($2); }
   | DUMP { printNodes(); printEdges(); }
+  | EDIT ID WITH Create_Attrs_1 { editNode($2); }
   | REMOVE NODE ID { removeNode($3); }
   | REMOVE EDGE FROM ID TO ID { removeEdge($4, $6); }
   | CREATE NODE ID AT FLOAT FLOAT Create_Attrs_1 { createNode($3, $5, $6); } // demander au prof
@@ -66,10 +69,10 @@ Create_Attrs_1:
   | COLOR LABEL_STRING Create_Attrs_1 { setNodeColor($2); }
   | BGCOLOR LABEL_STRING Create_Attrs_1 { setBackgroundColor($2); }
   | SIZE FLOAT Create_Attrs_1 { setSize($2); }
-  | FINAL Directions Create_Attrs_1 { setType("final"); }
-  | FINAL Create_Attrs_1 { setType("final"); }
-  | INIT Directions Create_Attrs_1 { setType("initial"); }
-  | INIT Create_Attrs_1 { setType("initial"); }
+  | FINAL Directions Create_Attrs_1 { setType("final", $2); }
+  | FINAL Create_Attrs_1 { setType("final", ""); }
+  | INIT Directions Create_Attrs_1 { setType("initial", $2); }
+  | INIT Create_Attrs_1 { setType("initial", ""); }
   ;
 
 Create_Attrs_2:
@@ -79,14 +82,14 @@ Create_Attrs_2:
   ;
 
 Directions:
-    NORTH  { setDirection("north"); }
-  | SOUTH { setDirection("south"); }
-  | WEST  { setDirection("west"); }
-  | EAST  { setDirection("east"); }
-  | NORTH_EAST  { setDirection("north-east"); }
-  | NORTH_WEST  { setDirection("north-west"); }
-  | SOUTH_EAST  { setDirection("south-east"); }
-  | SOUTH_WEST  { setDirection("south-west"); }
+    NORTH  { $$ = "north"; }
+  | SOUTH { $$ = "south"; }
+  | WEST  { $$ = "west"; }
+  | EAST  { $$ = "east"; }
+  | NORTH_EAST  { $$ = "north-east"; }
+  | NORTH_WEST  { $$ = "north-west"; }
+  | SOUTH_EAST  { $$ = "south-east"; }
+  | SOUTH_WEST  { $$ = "south-west"; }
   ;
 
 %%

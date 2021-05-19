@@ -47,6 +47,7 @@ FLOAT [+-]?([0-9]*[.])?[0-9]+
 "[" { return(OPENING_SQ_BRACKET); }
 "]" { return(ENDING_SQ_BRACKET); }
 "," { return(COMMA); }
+"edit" { return(EDIT); }
 {ID} {
   yylval.string = strdup(yytext);
   return(ID);

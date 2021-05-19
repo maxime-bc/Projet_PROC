@@ -1,7 +1,6 @@
 #include <iostream>
 #include <string>
 #include <list>
-#include <utility>
 
 #include "node.h"
 #include "edge.h"
@@ -25,12 +24,16 @@ void createNode(const std::string &nodeId, float xPos, float yPos) {
         CURRENT_NODE.label = nodeId;
     }
 
-    if (CURRENT_NODE.direction.empty()) {
-        if (CURRENT_NODE.type == "initial") {
-            CURRENT_NODE.direction = "west";
-        } else if (CURRENT_NODE.type == "final") {
-            CURRENT_NODE.direction = "east";
-        }
+    if (CURRENT_NODE.color.empty()) {
+        CURRENT_NODE.color = "black";
+    }
+
+    if (CURRENT_NODE.backgroundColor.empty()) {
+        CURRENT_NODE.backgroundColor = "none";
+    }
+
+    if (CURRENT_NODE.size < 0) {
+        CURRENT_NODE.size = 30;
     }
 
     Node newNode = CURRENT_NODE;
@@ -98,7 +101,7 @@ void printNodes() {
     for (const Node &node : NODES) {
         std::cout << "node " << node.id << " {xPos=" << node.xPos << ", yPos=" << node.yPos << ", label=" << node.label
                   << ", color=" << node.color << ", backgroundColor=" << node.backgroundColor << ", size=" << node.size
-                  << ", type=" << node.type << ", direction=" << node.direction << "}" << std::endl;
+                  << ", initial=" << node.initial << ", final=" << node.final << "}" << std::endl;
     }
 }
 
@@ -122,6 +125,46 @@ void moveNode(const std::string &nodeId, float xPos, float yPos) {
             break;
         }
     }
+}
+
+void editNode(const std::string &nodeId) {
+
+    if (!nodeExists(nodeId)) {
+        std::cout << "ERROR : Node " << nodeId << " doesn't exists." << std::endl;
+        return;
+    }
+
+    for (auto node = NODES.begin(); node != NODES.end();) {
+        if (node->id == nodeId) {
+            if (!CURRENT_NODE.label.empty()) {
+                node->label = CURRENT_NODE.label;
+            }
+
+            if (!CURRENT_NODE.color.empty()) {
+                node->color = CURRENT_NODE.color;
+            }
+
+            if (!CURRENT_NODE.backgroundColor.empty()) {
+                node->backgroundColor = CURRENT_NODE.backgroundColor;
+            }
+            // TODO: fix update final and initial
+            if (!CURRENT_NODE.initial.empty()) {
+                node->initial = CURRENT_NODE.initial;
+            }
+
+            if (!CURRENT_NODE.final.empty()) {
+                node->final = CURRENT_NODE.final;
+            }
+
+            if (CURRENT_NODE.size >= 0) {
+                node->size = CURRENT_NODE.size;
+            }
+            break;
+        } else
+            node++;
+    }
+
+    CURRENT_NODE = {};
 }
 
 void moveMultipleNodesById(float xPos, float yPos) {
@@ -151,10 +194,18 @@ void setSize(float size) {
     CURRENT_NODE.size = size;
 }
 
-void setType(const std::string &type) {
-    CURRENT_NODE.type = type;
-}
-
-void setDirection(const std::string &direction) {
-    CURRENT_NODE.direction = direction;
+void setType(const std::string &type, const std::string &direction) {
+    if (type == "initial") {
+        if (direction.empty()) {
+            CURRENT_NODE.initial = "west";
+        } else {
+            CURRENT_NODE.initial = direction;
+        }
+    } else if (type == "final") {
+        if (direction.empty()) {
+            CURRENT_NODE.final = "east";
+        } else {
+            CURRENT_NODE.initial = direction;
+        }
+    }
 }
