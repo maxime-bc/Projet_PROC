@@ -52,6 +52,7 @@ Command:
   | DUMP LABEL_STRING { dumpSVG($2); }
   | DUMP { printNodes(); printEdges(); }
   | EDIT ID WITH Create_Attrs_1 { editNode($2); }
+  | EDIT EDGE FROM ID TO ID WITH Create_Attrs_2 { editEdge($4, $6); }
   | REMOVE NODE ID { removeNode($3); }
   | REMOVE EDGE FROM ID TO ID { removeEdge($4, $6); }
   | CREATE NODE ID AT FLOAT FLOAT Create_Attrs_1 { createNode($3, $5, $6); } // demander au prof

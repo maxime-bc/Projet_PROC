@@ -42,6 +42,7 @@ void createEdge(const std::string &source, const std::string &dest, const std::s
 }
 
 void removeEdge(const std::string &source, const std::string &dest) {
+    // TODO: update this function with an iterator
     bool removed = false;
 
     for (auto edge = EDGES.begin(); edge != EDGES.end();) {
@@ -78,6 +79,40 @@ void renameEdgeNode(const std::string &currentNodeId, const std::string &newNode
             edge.dest = newNodeId;
         }
     }
+}
+
+// TODO: only one edge from the same source - dest ?
+int getEdgeIndex(const std::string &source, const std::string &dest) {
+    int index = 0;
+    for (const Edge &edge : EDGES) {
+        if (edge.source == source && edge.dest == dest) {
+            return index;
+        }
+        index += 1;
+    }
+    return -1;
+}
+
+void editEdge(const std::string &source, const std::string &dest) {
+
+    int edgePos = getEdgeIndex(source, dest);
+    if (edgePos == -1) {
+        std::cout << "ERROR : Edge " << source << " - " << dest << " wasn't found." << std::endl;
+        return;
+    }
+
+    auto edgesIterator = EDGES.begin();
+    std::advance(edgesIterator, getEdgeIndex(source, dest));;
+
+    if (!CURRENT_EDGE.color.empty()) {
+        edgesIterator->color = CURRENT_EDGE.color;
+    }
+
+    if (!CURRENT_EDGE.path.empty()) {
+        edgesIterator->path = CURRENT_EDGE.path;
+    }
+
+    CURRENT_EDGE = {};
 }
 
 void printEdges() {

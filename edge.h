@@ -23,6 +23,10 @@ void removeEdge(const std::string &source, const std::string &dest);
 
 void removeEdgesContainingNode(const std::string &nodeId);
 
+int getEdgeIndex(const std::string &source, const std::string &dest);
+
+void editEdge(const std::string& source, const std::string& dest);
+
 void renameEdgeNode(const std::string &currentNodeId, const std::string &newNodeId);
 
 void printEdges();

@@ -35,13 +35,13 @@ std::string generateEdgesSVG() {
     std::stringstream edgesSVG;
 
     for (auto &edge : EDGES) {
-        auto tmp1 = NODES.begin();
-        std::advance(tmp1, getNodeIndex(edge.source));
-        Node sourceNode = *tmp1;
+        auto nodesIterator = NODES.begin();
+        std::advance(nodesIterator, getNodeIndex(edge.source));
+        Node sourceNode = *nodesIterator;
 
-        auto tmp2 = NODES.begin();
-        std::advance(tmp2, getNodeIndex(edge.dest));
-        Node destNode = *tmp2;
+        auto edgesIterator = NODES.begin();
+        std::advance(edgesIterator, getNodeIndex(edge.dest));
+        Node destNode = *edgesIterator;
 
         auto[curvePath, cx1, cy1] = generateCurvedArrowBetweenPoints(sourceNode.xPos, sourceNode.yPos, destNode.xPos,
                                                                      destNode.yPos);

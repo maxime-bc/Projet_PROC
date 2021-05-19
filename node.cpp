@@ -146,6 +146,7 @@ void editNode(const std::string &nodeId) {
         return;
     }
 
+    // TODO: change iteration method
     for (auto node = NODES.begin(); node != NODES.end();) {
         if (node->id == nodeId) {
             if (!CURRENT_NODE.label.empty()) {
