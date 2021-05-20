@@ -42,21 +42,16 @@ void createEdge(const std::string &source, const std::string &dest, const std::s
 }
 
 void removeEdge(const std::string &source, const std::string &dest) {
-    // TODO: update this function with an iterator
-    bool removed = false;
 
-    for (auto edge = EDGES.begin(); edge != EDGES.end();) {
-        if (edge->dest == dest && edge->source == source) {
-            EDGES.erase(edge);
-            removed = true;
-            break;
-        } else
-            edge++;
+    int edgePos = getEdgeIndex(source, dest);
+    if (edgePos == -1) {
+        std::cout << "ERROR : Edge " << source << " - " << dest << " doesn't exists." << std::endl;
+        return;
     }
 
-    if (!removed) {
-        std::cout << "ERROR : Edge " << source << " - " << dest << " wasn't found." << std::endl;
-    }
+    auto edgesIterator = EDGES.begin();
+    std::advance(edgesIterator, getEdgeIndex(source, dest));
+    EDGES.erase(edgesIterator);
 }
 
 void removeEdgesContainingNode(const std::string &nodeId) {
@@ -97,12 +92,12 @@ void editEdge(const std::string &source, const std::string &dest) {
 
     int edgePos = getEdgeIndex(source, dest);
     if (edgePos == -1) {
-        std::cout << "ERROR : Edge " << source << " - " << dest << " wasn't found." << std::endl;
+        std::cout << "ERROR : Edge " << source << " - " << dest << " doesn't exists." << std::endl;
         return;
     }
 
     auto edgesIterator = EDGES.begin();
-    std::advance(edgesIterator, getEdgeIndex(source, dest));;
+    std::advance(edgesIterator, getEdgeIndex(source, dest));
 
     if (!CURRENT_EDGE.color.empty()) {
         edgesIterator->color = CURRENT_EDGE.color;
