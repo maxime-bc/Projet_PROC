@@ -4,7 +4,7 @@
 #include <list>
 #include <string>
 
-class Node { //TODO: change class, needs initial and final attribute
+class Node {
 public:
     std::string id;
     float xPos = 0;

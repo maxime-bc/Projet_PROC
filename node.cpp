@@ -141,40 +141,37 @@ void moveNode(const std::string &nodeId, float xPos, float yPos) {
 
 void editNode(const std::string &nodeId) {
 
-    if (!nodeExists(nodeId)) {
+    int nodePos = getNodeIndex(nodeId);
+    if (nodePos == -1) {
         std::cout << "ERROR : Node " << nodeId << " doesn't exists." << std::endl;
         return;
     }
 
-    // TODO: change iteration method
-    for (auto node = NODES.begin(); node != NODES.end();) {
-        if (node->id == nodeId) {
-            if (!CURRENT_NODE.label.empty()) {
-                node->label = CURRENT_NODE.label;
-            }
+    auto nodesIterator = NODES.begin();
+    std::advance(nodesIterator, nodePos);
 
-            if (!CURRENT_NODE.color.empty()) {
-                node->color = CURRENT_NODE.color;
-            }
+    if (!CURRENT_NODE.label.empty()) {
+        nodesIterator->label = CURRENT_NODE.label;
+    }
 
-            if (!CURRENT_NODE.backgroundColor.empty()) {
-                node->backgroundColor = CURRENT_NODE.backgroundColor;
-            }
+    if (!CURRENT_NODE.color.empty()) {
+        nodesIterator->color = CURRENT_NODE.color;
+    }
 
-            if (!CURRENT_NODE.initial.empty()) {
-                node->initial = CURRENT_NODE.initial;
-            }
+    if (!CURRENT_NODE.backgroundColor.empty()) {
+        nodesIterator->backgroundColor = CURRENT_NODE.backgroundColor;
+    }
 
-            if (!CURRENT_NODE.final.empty()) {
-                node->final = CURRENT_NODE.final;
-            }
+    if (!CURRENT_NODE.initial.empty()) {
+        nodesIterator->initial = CURRENT_NODE.initial;
+    }
 
-            if (CURRENT_NODE.size >= 0) {
-                node->size = CURRENT_NODE.size;
-            }
-            break;
-        } else
-            node++;
+    if (!CURRENT_NODE.final.empty()) {
+        nodesIterator->final = CURRENT_NODE.final;
+    }
+
+    if (CURRENT_NODE.size >= 0) {
+        nodesIterator->size = CURRENT_NODE.size;
     }
 
     CURRENT_NODE = {};

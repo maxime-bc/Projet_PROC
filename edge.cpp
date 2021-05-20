@@ -97,7 +97,7 @@ void editEdge(const std::string &source, const std::string &dest) {
     }
 
     auto edgesIterator = EDGES.begin();
-    std::advance(edgesIterator, getEdgeIndex(source, dest));
+    std::advance(edgesIterator, edgePos);
 
     if (!CURRENT_EDGE.color.empty()) {
         edgesIterator->color = CURRENT_EDGE.color;
