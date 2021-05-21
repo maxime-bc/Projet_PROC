@@ -92,6 +92,7 @@ int getEdgeIndex(const std::string &source, const std::string &dest) {
     return -1;
 }
 
+
 void editEdge(const std::string &source, const std::string &dest) {
 
     int edgePos = getEdgeIndex(source, dest);

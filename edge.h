@@ -1,7 +1,10 @@
 #ifndef EDGE_H
 #define EDGE_H
 
+#include <list>
+
 class Edge {
+// TODO : create a toString method ?
 public:
     std::string source;
     std::string dest;
@@ -25,7 +28,7 @@ void removeEdgesContainingNode(const std::string &nodeId);
 
 int getEdgeIndex(const std::string &source, const std::string &dest);
 
-void editEdge(const std::string& source, const std::string& dest);
+void editEdge(const std::string &source, const std::string &dest);
 
 void renameEdgeNode(const std::string &currentNodeId, const std::string &newNodeId);
 

@@ -2,6 +2,8 @@
 #include "node.h"
 #include "edge.h"
 #include "svg.h"
+#include "automaton.h"
+#include <iostream>
 
 void yyerror(const char *s){
     fprintf(stderr, "error: %s\n", s);
@@ -25,7 +27,7 @@ extern "C"{
 %type <c_string> Directions
 
 %token CREATE NODE EDGE FROM TO AT EOL LABEL COLOR BGCOLOR SIZE INIT FINAL PATH DUMP REMOVE MOVE WITH RENAME EDIT
-%token OPENING_SQ_BRACKET ENDING_SQ_BRACKET COMMA
+%token OPENING_SQ_BRACKET ENDING_SQ_BRACKET COMMA IS COMPLETE CLEAR
 %token NORTH SOUTH EAST WEST NORTH_EAST NORTH_WEST SOUTH_EAST SOUTH_WEST
 %token <string> ID
 %token <string> LABEL_STRING
@@ -58,6 +60,8 @@ Command:
   | CREATE NODE ID AT FLOAT FLOAT Create_Attrs_1 { createNode($3, $5, $6); } // demander au prof
   | CREATE EDGE FROM ID TO ID LABEL LABEL_STRING Create_Attrs_2   { createEdge($4, $6, $8); }
   | CREATE EDGE FROM ID TO ID LABEL LABEL_STRING AT FLOAT FLOAT Create_Attrs_2 { createEdgeWithPosition($4, $6, $8, $10, $11); }
+  | IS COMPLETE { if(isComplete()) { std::cout << "true" << std::endl; } else { std::cout << "false" << std::endl; } }
+  | CLEAR { NODES={}; EDGES={}; }
   ;
 
 Id_List:

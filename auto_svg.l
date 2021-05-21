@@ -12,7 +12,7 @@
   }
 %}
 
-LABEL_STRING \"[^\"\\<\>]*\"
+LABEL_STRING \"[^\"\\<\>,]*\"
 ID  [a-zA-Z][a-zA-Z0-9_]{0,14}
 FLOAT [+-]?([0-9]*[.])?[0-9]+
 %option caseless
@@ -48,6 +48,9 @@ FLOAT [+-]?([0-9]*[.])?[0-9]+
 "]" { return(ENDING_SQ_BRACKET); }
 "," { return(COMMA); }
 "edit" { return(EDIT); }
+"is" { return(IS); }
+"complete" { return(COMPLETE); }
+"clear" { return(CLEAR); }
 {ID} {
   yylval.string = strdup(yytext);
   return(ID);
