@@ -12,13 +12,18 @@ Edge CURRENT_EDGE = {};
 void createEdgeWithPosition(const std::string &source, const std::string &dest, const std::string &label, float xPos,
                             float yPos) {
 
-    if (!nodeExists(source)) {
+    if (getNodeIndex(source) == -1) {
         std::cout << "ERROR : Node " << source << " doesn't exists." << std::endl;
         return;
     }
 
-    if (!nodeExists(dest)) {
+    if (getNodeIndex(dest) == -1) {
         std::cout << "ERROR : Node " << dest << " doesn't exists." << std::endl;
+        return;
+    }
+
+    if (getEdgeIndex(source, dest) != -1) {
+        std::cout << "ERROR : Edge " << source << " - " << dest << " already exists." << std::endl;
         return;
     }
 
@@ -76,7 +81,6 @@ void renameEdgeNode(const std::string &currentNodeId, const std::string &newNode
     }
 }
 
-// TODO: only one edge from the same source - dest ?
 int getEdgeIndex(const std::string &source, const std::string &dest) {
     int index = 0;
     for (const Edge &edge : EDGES) {

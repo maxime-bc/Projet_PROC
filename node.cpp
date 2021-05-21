@@ -1,7 +1,6 @@
 #include <iostream>
 #include <string>
 #include <list>
-#include <tuple>
 
 #include "node.h"
 #include "edge.h"
@@ -11,7 +10,7 @@ Node CURRENT_NODE = {};
 std::list<std::string> IDS_LIST;
 
 void createNode(const std::string &nodeId, float xPos, float yPos) {
-    if (nodeExists(nodeId)) {
+    if (getNodeIndex(nodeId) != -1) {
         std::cout << "ERROR : Node " << nodeId << " already exists." << std::endl;
         return;
     }
@@ -44,20 +43,18 @@ void createNode(const std::string &nodeId, float xPos, float yPos) {
 }
 
 void removeNode(const std::string &nodeId) {
-    if (!nodeExists(nodeId)) {
+    int nodePos = getNodeIndex(nodeId);
+
+    if (nodePos == -1) {
         std::cout << "ERROR : Node " << nodeId << " doesn't exists." << std::endl;
         return;
     }
 
     removeEdgesContainingNode(nodeId);
 
-    for (auto node = NODES.begin(); node != NODES.end();) {
-        if (node->id == nodeId) {
-            NODES.erase(node);
-            break;
-        } else
-            node++;
-    }
+    auto nodesIterator = NODES.begin();
+    std::advance(nodesIterator, nodePos);
+    NODES.erase(nodesIterator);
 }
 
 int getNodeIndex(const std::string &nodeId) {
@@ -71,41 +68,27 @@ int getNodeIndex(const std::string &nodeId) {
     return -1;
 }
 
-bool nodeExists(const std::string &nodeId) {
-    bool exists = false;
-
-    for (const Node &node : NODES) {
-        if (node.id == nodeId) {
-            exists = true;
-            break;
-        }
-    }
-    return exists;
-}
-
 void renameNode(const std::string &currentNodeId, const std::string &newNodeId) {
+    int currentNodePos = getNodeIndex(currentNodeId);
 
-    if (!nodeExists(currentNodeId)) {
+    if (currentNodePos == -1) {
         std::cout << "ERROR : Node " << currentNodeId << " doesn't exists." << std::endl;
         return;
     }
 
-    if (nodeExists(newNodeId)) {
+    if (getNodeIndex(newNodeId) != -1) {
         std::cout << "ERROR : Node " << newNodeId << " already exists." << std::endl;
         return;
     }
 
     renameEdgeNode(currentNodeId, newNodeId);
 
-    for (auto &node : NODES) {
-        if (node.id == currentNodeId) {
-            node.id = newNodeId;
+    auto nodesIterator = NODES.begin();
+    std::advance(nodesIterator, currentNodePos);
 
-            if (node.label == currentNodeId) { // change default label by new id value.
-                node.label = newNodeId;
-            }
-            break;
-        }
+    nodesIterator->id = newNodeId;
+    if (nodesIterator->label == currentNodeId) { // change default label by new id value.
+        nodesIterator->label = newNodeId;
     }
 }
 
@@ -125,18 +108,17 @@ void moveAllNodes(float xPos, float yPos) {
 }
 
 void moveNode(const std::string &nodeId, float xPos, float yPos) {
-    if (!nodeExists(nodeId)) {
+
+    int nodePos = getNodeIndex(nodeId);
+    if (nodePos == -1) {
         std::cout << "ERROR : Node " << nodeId << " doesn't exists." << std::endl;
         return;
     }
 
-    for (auto &node : NODES) {
-        if (node.id == nodeId) {
-            node.xPos += xPos;
-            node.yPos += yPos;
-            break;
-        }
-    }
+    auto nodesIterator = NODES.begin();
+    std::advance(nodesIterator, nodePos);
+    nodesIterator->xPos += xPos;
+    nodesIterator->yPos += yPos;
 }
 
 void editNode(const std::string &nodeId) {

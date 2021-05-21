@@ -23,8 +23,6 @@ void createNode(const std::string &nodeId, float xPos, float yPos);
 
 void removeNode(const std::string &nodeId);
 
-bool nodeExists(const std::string &nodeId);
-
 void renameNode(const std::string &currentNodeId, const std::string &newNodeId);
 
 void moveAllNodes(float xPos, float yPos);

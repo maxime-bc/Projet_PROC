@@ -3,7 +3,6 @@
 #include <string>
 #include <fstream>
 #include <sstream>
-#include <cmath>
 #include <tuple>
 #include "svg.h"
 #include "node.h"
