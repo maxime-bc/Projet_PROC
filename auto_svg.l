@@ -12,7 +12,7 @@
   }
 %}
 
-LABEL_STRING \"[^\"\\<\>,]*\"
+LABEL_STRING \"[^\"\\<\>]*\"
 ID  [a-zA-Z][a-zA-Z0-9_]{0,14}
 FLOAT [+-]?([0-9]*[.])?[0-9]+
 %option caseless
