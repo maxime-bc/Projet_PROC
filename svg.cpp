@@ -108,24 +108,20 @@ std::string generateEdges() {
         double lx, ly;
 
         if (edge.source == edge.dest) { // create an arc
-
-//            std::stringstream arc;
-//            arc << "M " << x + 5 << " " << y << " A 15 20 0 1 1 " << x - 5 << " " << y;
-//            return std::make_tuple(arc.str(), x + radius, y + 0.5 * radius); // TODO : choose better pos
-
             std::stringstream path;
             path << "M " << sourceNode.xPos + 5 << " " << sourceNode.yPos + sourceNode.size << " A 15 20 0 1 1 "
-                 << sourceNode.xPos - 5
-                 << " " << sourceNode.yPos + sourceNode.size;
+                 << sourceNode.xPos - 5 << " " << sourceNode.yPos + sourceNode.size;
+
             curvePath = path.str();
             lx = sourceNode.xPos + sourceNode.size;
-            ly = sourceNode.yPos + 0.5 * sourceNode.size;
+            ly = sourceNode.yPos + sourceNode.size + 0.5 * sourceNode.size;
         } else {
+            std::tuple<std::string, double, double> curveAndLabelPos;
             auto[sx1, sy1, sx2, sy2] = getSegmentEndpointsBetweenTwoCircles(sourceNode.xPos, sourceNode.yPos,
                                                                             sourceNode.size, destNode.xPos,
                                                                             destNode.yPos, destNode.size);
-            std::tuple<std::string, double, double> curveAndLabelPos;
             curveAndLabelPos = generateCurvedArrowBetweenPoints(sx1, sy1, sx2, sy2);
+
             curvePath = std::get<0>(curveAndLabelPos);
             lx = std::get<1>(curveAndLabelPos);
             ly = std::get<2>(curveAndLabelPos);
