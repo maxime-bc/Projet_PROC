@@ -40,9 +40,7 @@ bool isNodeComplete(const Node &node, const std::set<std::string> &alphabet) {
     for (auto edge = EDGES.begin(); edge != EDGES.end();) {
         if (edge->source == node.id) {
             std::list<std::string> letters = split(edge->label, ',');
-            for (const auto &letter : letters) {
-                nodeLetters.insert(letter);
-            }
+            nodeLetters.insert(letters.begin(), letters.end());
         }
         edge++;
     }
@@ -58,24 +56,12 @@ bool isNodeComplete(const Node &node, const std::set<std::string> &alphabet) {
 
 void completeNode(const Node &node, const std::string &wellId, const std::set<std::string> &alphabet) {
 
-    std::set<std::string> nodeLetters;
-    std::set<std::string> lettersToAdd;
-
-    std::cout << "node " << node.id << std::endl;
+    std::set<std::string> nodeLetters, lettersToAdd;
 
     for (const auto &edge:  EDGES) {
         if (edge.source == node.id) {
             std::list<std::string> letters = split(edge.label, ',');
-
-            std::cout << "letters" << std::endl;
-            for (const auto &l : letters) {
-                std::cout << l << std::endl;
-            }
-            std::cout << "end letter" << std::endl;
-
-            for (const auto &letter : letters) {
-                nodeLetters.insert(letter);
-            }
+            nodeLetters.insert(letters.begin(), letters.end());
         }
     }
 
@@ -85,13 +71,6 @@ void completeNode(const Node &node, const std::string &wellId, const std::set<st
             lettersToAdd.insert(letter);
         }
     }
-
-
-    std::cout << "letterToAdd" << std::endl;
-    for (const auto &l : lettersToAdd) {
-        std::cout << l << std::endl;
-    }
-    std::cout << "end letterToAdd" << std::endl;
 
     createEdge(node.id, wellId, joinSet(lettersToAdd, ','));
 }
@@ -116,6 +95,10 @@ std::string joinSet(const std::set<std::string> &set, char separator) {
     for (auto const &e : set) {
         s += e;
         s += separator;
+    }
+
+    if (!s.empty()) {
+        s.pop_back();
     }
     return s;
 }
