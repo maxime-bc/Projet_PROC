@@ -58,6 +58,7 @@ Command:
   | CREATE EDGE FROM ID TO ID LABEL LABEL_STRING AT FLOAT FLOAT Create_Attrs_2 { createEdgeWithPosition($4, $6, $8, $10, $11); }
   | IS COMPLETE { if(isComplete()) { std::cout << "true" << std::endl; } else { std::cout << "false" << std::endl; } }
   | SHOW COMPLETE LABEL_STRING { isComplete($3); }
+  | COMPLETE WITH ID AT FLOAT FLOAT { complete($3, $5, $6); }
   | CLEAR { NODES={}; EDGES={}; }
   ;
 

@@ -11,6 +11,12 @@ std::set<std::string> getAlphabet();
 
 bool isComplete(const std::string &color = "");
 
-bool isNodeComplete(const Node &node, const std::set<std::string> &labels);
+void completeNode(const Node &node, const std::string &wellId, const std::set<std::string> &alphabet);
+
+bool isNodeComplete(const Node &node, const std::set<std::string> &alphabet);
+
+std::string joinSet(const std::set<std::string> &set, char separator);
+
+void complete(const std::string &wellId, float xPos, float yPos);
 
 #endif //AUTOMATON_H

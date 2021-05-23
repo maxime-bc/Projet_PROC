@@ -41,6 +41,7 @@ void createEdgeWithPosition(const std::string &source, const std::string &dest, 
 
 
 void createEdge(const std::string &source, const std::string &dest, const std::string &label) {
+    // TODO : delete this function ?? + handle label pos ??
     float xPos = 0;
     float yPos = 0;
     createEdgeWithPosition(source, dest, label, xPos, yPos);
