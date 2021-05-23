@@ -9,8 +9,6 @@ std::list<Node> NODES;
 Node CURRENT_NODE = {};
 std::list<std::string> IDS_LIST;
 
-//TODO: handle path attribute
-
 void createNode(const std::string &nodeId, float xPos, float yPos) {
     if (getNodeIndex(nodeId) != -1) {
         std::cout << "ERROR : Node " << nodeId << " already exists." << std::endl;

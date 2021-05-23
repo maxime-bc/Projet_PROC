@@ -37,17 +37,13 @@ extern "C"{
 %%
 
 S:
-    Line                 { }
-  | S Line               { }
-  ;
-
-Line:
-    EOL                   { }
-  | Command               { }
+    Command                 { }
+  | S Command               { }
   ;
 
 Command:
-    MOVE FLOAT FLOAT { moveAllNodes($2, $3); }
+    EOL { }
+  | MOVE FLOAT FLOAT { moveAllNodes($2, $3); }
   | MOVE ID FLOAT FLOAT { moveNode($2, $3, $4); }
   | MOVE OPENING_SQ_BRACKET Id_List ENDING_SQ_BRACKET FLOAT FLOAT { moveMultipleNodesById($5, $6); }
   | RENAME ID WITH ID { renameNode($2, $4); }
@@ -57,7 +53,7 @@ Command:
   | EDIT EDGE FROM ID TO ID WITH Create_Attrs_2 { editEdge($4, $6); }
   | REMOVE NODE ID { removeNode($3); }
   | REMOVE EDGE FROM ID TO ID { removeEdge($4, $6); }
-  | CREATE NODE ID AT FLOAT FLOAT Create_Attrs_1 { createNode($3, $5, $6); } // demander au prof
+  | CREATE NODE ID AT FLOAT FLOAT Create_Attrs_1 { createNode($3, $5, $6); }
   | CREATE EDGE FROM ID TO ID LABEL LABEL_STRING Create_Attrs_2   { createEdge($4, $6, $8); }
   | CREATE EDGE FROM ID TO ID LABEL LABEL_STRING AT FLOAT FLOAT Create_Attrs_2 { createEdgeWithPosition($4, $6, $8, $10, $11); }
   | IS COMPLETE { if(isComplete()) { std::cout << "true" << std::endl; } else { std::cout << "false" << std::endl; } }

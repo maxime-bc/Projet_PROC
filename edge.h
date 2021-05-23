@@ -4,7 +4,6 @@
 #include <list>
 
 class Edge {
-// TODO : create a toString method ?
 public:
     std::string source;
     std::string dest;

@@ -107,7 +107,15 @@ std::string generateEdges() {
         std::string curvePath;
         double lx, ly;
 
-        if (edge.source == edge.dest) { // create an arc
+        if (!edge.path.empty()) {
+            std::cout << " path " << std::endl;
+
+            curvePath = edge.path;
+
+            lx = 0;
+            ly = 0; //TODO
+
+        } else if (edge.source == edge.dest) { // create an arc
             std::stringstream path;
             path << "M " << sourceNode.xPos + 5 << " " << sourceNode.yPos + sourceNode.size << " A 15 20 0 1 1 "
                  << sourceNode.xPos - 5 << " " << sourceNode.yPos + sourceNode.size;
