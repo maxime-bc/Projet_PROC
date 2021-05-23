@@ -27,7 +27,7 @@ extern "C"{
 %type <c_string> Directions
 
 %token CREATE NODE EDGE FROM TO AT EOL LABEL COLOR BGCOLOR SIZE INIT FINAL PATH DUMP REMOVE MOVE WITH RENAME EDIT
-%token OPENING_SQ_BRACKET ENDING_SQ_BRACKET COMMA IS COMPLETE CLEAR
+%token OPENING_SQ_BRACKET ENDING_SQ_BRACKET COMMA IS COMPLETE CLEAR SHOW
 %token NORTH SOUTH EAST WEST NORTH_EAST NORTH_WEST SOUTH_EAST SOUTH_WEST
 %token <string> ID
 %token <string> LABEL_STRING
@@ -57,6 +57,7 @@ Command:
   | CREATE EDGE FROM ID TO ID LABEL LABEL_STRING Create_Attrs_2   { createEdge($4, $6, $8); }
   | CREATE EDGE FROM ID TO ID LABEL LABEL_STRING AT FLOAT FLOAT Create_Attrs_2 { createEdgeWithPosition($4, $6, $8, $10, $11); }
   | IS COMPLETE { if(isComplete()) { std::cout << "true" << std::endl; } else { std::cout << "false" << std::endl; } }
+  | SHOW COMPLETE LABEL_STRING { isComplete($3); }
   | CLEAR { NODES={}; EDGES={}; }
   ;
 

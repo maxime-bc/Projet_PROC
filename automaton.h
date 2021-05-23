@@ -9,7 +9,7 @@ std::list<std::string> split(std::string const &str, char delimiter);
 
 std::set<std::string> getAlphabet();
 
-bool isComplete();
+bool isComplete(const std::string &color = "");
 
 bool isNodeComplete(const Node &node, const std::set<std::string> &labels);
 

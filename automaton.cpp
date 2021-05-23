@@ -23,10 +23,10 @@ std::set<std::string> getAlphabet() {
 
     std::set<std::string> alphabet;
     for (const Edge &edge : EDGES) {
-        std::list<std::string> tmp = split(edge.label, ',');
+        std::list<std::string> letters = split(edge.label, ',');
 
-        for (const auto &v : tmp) {
-            alphabet.insert(v);
+        for (const auto &letter : letters) {
+            alphabet.insert(letter);
         }
     }
     return alphabet;
@@ -37,9 +37,9 @@ bool isNodeComplete(const Node &node, const std::set<std::string> &labels) {
     std::set<std::string> allLabels;
     for (auto edge = EDGES.begin(); edge != EDGES.end();) {
         if (edge->source == node.id) {
-            std::list<std::string> tmp = split(edge->label, ',');
-            for (const auto &v : tmp) {
-                allLabels.insert(v);
+            std::list<std::string> letters = split(edge->label, ',');
+            for (const auto &letter : letters) {
+                allLabels.insert(letter);
             }
         }
         edge++;
@@ -54,17 +54,20 @@ bool isNodeComplete(const Node &node, const std::set<std::string> &labels) {
     return true;
 }
 
-bool isComplete() {
+bool isComplete(const std::string &color) {
     std::set<std::string> alphabet = getAlphabet();
 
     if (NODES.empty() || EDGES.empty()) {
         return false;
     }
 
-    for (const auto &node : NODES) {
-        if (!isNodeComplete(node, alphabet)) {
-            return false;
+    bool isComplete = false;
+
+    for (auto &node : NODES) {
+        isComplete = isNodeComplete(node, alphabet);
+        if (!isComplete && !color.empty()) {
+            node.backgroundColor = color;
         }
     }
-    return true;
+    return isComplete;
 }
