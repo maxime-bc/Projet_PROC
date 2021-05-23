@@ -5,7 +5,6 @@
 #include "edge.h"
 #include "node.h"
 #include <algorithm>
-#include <iterator>
 #include <set>
 
 std::list<std::string> split(std::string const &str, char delimiter) {
@@ -45,13 +44,10 @@ bool isNodeComplete(const Node &node, const std::set<std::string> &alphabet) {
         edge++;
     }
 
-    for (const auto &letter : alphabet) {
+    return std::all_of(alphabet.begin(), alphabet.end(), [&nodeLetters](const std::string &letter) {
         auto it = std::find(nodeLetters.begin(), nodeLetters.end(), letter);
-        if (it == nodeLetters.end()) {
-            return false;
-        }
-    }
-    return true;
+        return !(it == nodeLetters.end());
+    });
 }
 
 void completeNode(const Node &node, const std::string &wellId, const std::set<std::string> &alphabet) {
