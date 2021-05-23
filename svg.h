@@ -4,6 +4,9 @@
 #include <string>
 #include "node.h"
 
+std::tuple<double, double, double, double>
+getSegmentEndpointsBetweenTwoCircles(double x1, double y1, double r1, double x2, double y2, double r2);
+
 std::tuple<double, double> getPositionByDegree(double x, double y, double radius, double degree);
 
 std::string generateNodeSVG(const Node &node);

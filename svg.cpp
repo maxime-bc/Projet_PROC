@@ -10,11 +10,19 @@
 #include "edge.h"
 
 
+std::tuple<double, double, double, double>
+getSegmentEndpointsBetweenTwoCircles(double x1, double y1, double r1, double x2, double y2, double r2) {
+    double sx1 = x1 + (((x2 - x1) * r1) / sqrt(pow(x2 - x1, 2) + pow(y2 - y1, 2)));
+    double sy1 = y1 + (((y2 - y1) * r1) / sqrt(pow(x2 - x1, 2) + pow(y2 - y1, 2)));
+    double sx2 = x2 - (((x2 - x1) * r2) / sqrt(pow(x2 - x1, 2) + pow(y2 - y1, 2)));
+    double sy2 = y2 - (((y2 - y1) * r2) / sqrt(pow(x2 - x1, 2) + pow(y2 - y1, 2)));
+    return std::make_tuple(sx1, sy1, sx2, sy2);
+}
+
 std::tuple<double, double> getPositionByDegree(double x, double y, double radius, double degree) {
     double theta = M_PI * degree / 180;
     return std::make_tuple(x + radius * cos(theta), y - radius * sin(theta));
 }
-
 
 std::string
 generateArrow(double xPos, double yPos, double size, const std::string &type, const std::string &direction) {
@@ -55,23 +63,6 @@ generateArrow(double xPos, double yPos, double size, const std::string &type, co
     }
 
     arrowLine << "<path d='" << curvePath << "' fill='none' stroke='red' marker-end='url(#head)'/>\n";
-
-    //M 0 0 L 6 0 Z
-    // <path d='" << curvePath << "' stroke='black' fill='none'/>
-
-//    if (type == "initial") {
-//        // <path d="M 70 300 l -8 -8 l 0 16 Z" />
-//        arrowTriangle << "M " << std::get<0>(startPosition) << " " << std::get<1>(startPosition) << " l -8 -8 l 0 16 Z";
-//        // TODO Initial, triangle towards start pos
-//        int a = 1;
-//
-//    } else if (type == "final") {
-//        // TODO final, triangle towards end pos
-//        arrowTriangle << "M " << std::get<0>(endPosition) << " " << std::get<1>(endPosition) << " l -8 -8 l 0 16 Z";
-//        int a = 1;
-//    }
-    //<path fill="none" stroke="black" d="M 70 300 l -30 0" />
-
     return arrowLine.str();
 }
 
@@ -144,11 +135,28 @@ std::string generateEdgesSVG() {
             edgesSVG << generateEdgeLabelTextSVG(cx1 + 2 * sourceNode.size, cy1 + 2 * sourceNode.size, edge.label);
 
         } else {
-            auto[curvePath, cx1, cy1] = generateCurvedArrowBetweenPoints(sourceNode.xPos, sourceNode.yPos,
-                                                                         destNode.xPos,
-                                                                         destNode.yPos);
-            edgesSVG << "<path d='" << curvePath << "' stroke='black' fill='none' marker-end='url(#head)'/>\n";
-            edgesSVG << generateEdgeLabelTextSVG(cx1, cy1, edge.label);
+
+            if (sourceNode.xPos == destNode.xPos || sourceNode.yPos == destNode.yPos) {
+                auto[sx1, sy1, sx2, sy2] = getSegmentEndpointsBetweenTwoCircles(sourceNode.xPos, sourceNode.yPos,
+                                                                                sourceNode.size, destNode.xPos,
+                                                                                destNode.yPos, destNode.size);
+
+
+                auto[curvePath, cx1, cy1] = generateCurvedArrowBetweenPoints(sx1, sy1, sx2, sy2, 0);
+                edgesSVG << "<path d='" << curvePath << "' stroke='black' fill='none' marker-end='url(#head)'/>\n";
+                edgesSVG << generateEdgeLabelTextSVG(cx1, cy1, edge.label);
+
+            } else {
+
+                auto[sx1, sy1, sx2, sy2] = getSegmentEndpointsBetweenTwoCircles(sourceNode.xPos, sourceNode.yPos,
+                                                                                sourceNode.size, destNode.xPos,
+                                                                                destNode.yPos, destNode.size);
+
+
+                auto[curvePath, cx1, cy1] = generateCurvedArrowBetweenPoints(sx1, sy1, sx2, sy2);
+                edgesSVG << "<path d='" << curvePath << "' stroke='black' fill='none' marker-end='url(#head)'/>\n";
+                edgesSVG << generateEdgeLabelTextSVG(cx1, cy1, edge.label);
+            }
         }
     }
 
