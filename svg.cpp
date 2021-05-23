@@ -54,25 +54,6 @@ generateArrow(double xPos, double yPos, double size, const std::string &type, co
     return std::get<0>(arrowPath);
 }
 
-std::tuple<double, double> polarToCartesian(double centerX, double centerY, double radius, double angleInDegrees) {
-    double angleInRadians = (angleInDegrees - 90) * M_PI / 180;
-    return std::make_tuple(centerX + (radius * cos(angleInRadians)), centerY + (radius * sin(angleInRadians)));
-}
-
-std::tuple<std::string, double, double>
-generateArc(double x, double y, double radius, double startAngle, double endAngle) {
-    std::stringstream arc;
-    auto[startX, startY] = polarToCartesian(x, y, radius, endAngle);
-    auto[endX, endY] = polarToCartesian(x, y, radius, startAngle);
-
-    int largeArcFlag = endAngle - startAngle <= 180 ? 0 : 1;
-
-    arc << "M " << startX << " " << startY << " A " << radius << " " << radius << " 0 " << largeArcFlag << " 0 "
-        << endX << " " << endY;
-    return std::make_tuple(arc.str(), startX, startY); // TODO : choose better pos
-}
-
-
 std::string generateAutomatonSVG() {
     std::stringstream nodesCircles, nodesLabels, initialStates, finalStates, global;
 
@@ -127,22 +108,24 @@ std::string generateEdges() {
         double lx, ly;
 
         if (edge.source == edge.dest) { // create an arc
-            auto[path, cx1, cy1] = generateArc(sourceNode.xPos + sourceNode.size,
-                                               sourceNode.yPos + sourceNode.size, sourceNode.size, 0,
-                                               270); // TODO: change radius parameter ?
-            curvePath = path;
-            lx = cx1 + 2 * sourceNode.size;
-            ly = cy1 + 2 * sourceNode.size;
+
+//            std::stringstream arc;
+//            arc << "M " << x + 5 << " " << y << " A 15 20 0 1 1 " << x - 5 << " " << y;
+//            return std::make_tuple(arc.str(), x + radius, y + 0.5 * radius); // TODO : choose better pos
+
+            std::stringstream path;
+            path << "M " << sourceNode.xPos + 5 << " " << sourceNode.yPos + sourceNode.size << " A 15 20 0 1 1 "
+                 << sourceNode.xPos - 5
+                 << " " << sourceNode.yPos + sourceNode.size;
+            curvePath = path.str();
+            lx = sourceNode.xPos + sourceNode.size;
+            ly = sourceNode.yPos + 0.5 * sourceNode.size;
         } else {
             auto[sx1, sy1, sx2, sy2] = getSegmentEndpointsBetweenTwoCircles(sourceNode.xPos, sourceNode.yPos,
                                                                             sourceNode.size, destNode.xPos,
                                                                             destNode.yPos, destNode.size);
             std::tuple<std::string, double, double> curveAndLabelPos;
-            if (sourceNode.xPos == destNode.xPos || sourceNode.yPos == destNode.yPos) { // lines
-                curveAndLabelPos = generateCurvedArrowBetweenPoints(sx1, sy1, sx2, sy2, 0);
-            } else {
-                curveAndLabelPos = generateCurvedArrowBetweenPoints(sx1, sy1, sx2, sy2);
-            }
+            curveAndLabelPos = generateCurvedArrowBetweenPoints(sx1, sy1, sx2, sy2);
             curvePath = std::get<0>(curveAndLabelPos);
             lx = std::get<1>(curveAndLabelPos);
             ly = std::get<2>(curveAndLabelPos);
