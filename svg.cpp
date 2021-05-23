@@ -34,8 +34,7 @@ generateArrow(double xPos, double yPos, double size, const std::string &type, co
                                                        {"south-west", 225},
                                                        {"south",      270},
                                                        {"south-east", 315}};
-    std::stringstream arrowLine;
-    std::stringstream arrowTriangle;
+
     double degree = directionToDegree.at(direction);
     std::tuple<double, double> startPosition = getPositionByDegree(xPos, yPos, size, degree);
     std::tuple<double, double> endPosition = getPositionByDegree(std::get<0>(startPosition), std::get<1>(startPosition),
@@ -57,13 +56,10 @@ generateArrow(double xPos, double yPos, double size, const std::string &type, co
                                                                                      std::get<1>(startPosition),
                                                                                      std::get<0>(endPosition),
                                                                                      std::get<1>(endPosition), 0);
-
         curvePath = std::get<0>(a);
 
     }
-
-    arrowLine << "<path d='" << curvePath << "' fill='none' stroke='red' marker-end='url(#head)'/>\n";
-    return arrowLine.str();
+    return curvePath;
 }
 
 std::tuple<double, double> polarToCartesian(double centerX, double centerY, double radius, double angleInDegrees) {
@@ -85,37 +81,46 @@ generateArc(double x, double y, double radius, double startAngle, double endAngl
 }
 
 
-std::string generateNodeSVG(const Node &node) {
-    std::stringstream nodeSVG;
-    nodeSVG << "<circle cx='" << node.xPos << "' cy='" << node.yPos << "' r='" << node.size << "' stroke='"
-            << node.color << "' stroke-width='2' fill='" << node.backgroundColor << "'/>\n";
+std::string generateSVG() {
+    std::stringstream nodesCircles, nodesLabels, initialStates, finalStates, global;
 
-    std::string arrowLine;
-    if (!node.initial.empty()) {
-        nodeSVG << generateArrow(node.xPos, node.yPos, node.size, "initial", node.initial);
-    }
-    if (!node.final.empty()) {
-        nodeSVG << generateArrow(node.xPos, node.yPos, node.size, "final", node.final);
-    }
-    return nodeSVG.str();
-}
+    nodesCircles << "<!-- nodes -->\n<g stroke-width='2'>\n";
+    nodesLabels << "<!-- label for nodes -->\n<g dominant-baseline='middle' text-anchor='middle' fill='black'>\n";
+    initialStates << "<!-- initial states -->\n<g fill='none' stroke='red' marker-end='url(#head)'>\n";
+    finalStates << "<!-- final states -->\n<g fill='none' stroke='red' marker-end='url(#head)'>\n";
 
-std::string generateSVGNodeLabel(const Node &node) { // TODO : change return type of all functions to stringstream ??
-    std::stringstream nodeLabelSVG;
-    nodeLabelSVG << "<text x='" << node.xPos << "' y='" << node.yPos
-                 << "' dominant-baseline='middle' text-anchor='middle' fill='black'>" << node.label << "</text>\n";
-    return nodeLabelSVG.str();
+    for (auto &node : NODES) {
+        nodesCircles << "<circle cx='" << node.xPos << "' cy='" << node.yPos << "' r='" << node.size << "' stroke='"
+                     << node.color << "' fill='" << node.backgroundColor << "'/>\n";
+
+        nodesLabels << "<text x='" << node.xPos << "' y='" << node.yPos << "'>" << node.label << "</text>\n";
+
+        if (!node.initial.empty()) {
+            std::string path = generateArrow(node.xPos, node.yPos, node.size, "initial", node.initial);
+            initialStates << "<path d='" << path << "'/>\n";
+        }
+        if (!node.final.empty()) {
+            std::string path = generateArrow(node.xPos, node.yPos, node.size, "final", node.final);
+            finalStates << "<path d='" << path << "'/>\n";
+        }
+    }
+
+    global << nodesCircles.str() << "</g>\n" << nodesLabels.str() << "</g>\n" << initialStates.str() << "</g>\n"
+           << finalStates.str() << "</g>\n" + generateEdgesSVG();
+    return global.str();
 }
 
 std::string generateEdgeLabelTextSVG(double x, double y, const std::string &label) {
     std::stringstream edgeLabelTextSVG;
-    edgeLabelTextSVG << "<text x='" << x << "' y='" << y << "' fill='black' text-anchor='middle'>" << label
+    edgeLabelTextSVG << "<text x='" << x << "' y='" << y << "'>" << label
                      << "</text>\n";
     return edgeLabelTextSVG.str();
 };
 
 std::string generateEdgesSVG() {
-    std::stringstream edgesSVG;
+    std::stringstream edges, labels;
+    edges << "<!-- edges -->\n<g stroke='black' fill='none' marker-end='url(#head)'>\n";
+    labels << "<!-- label for edges -->\n<g fill='black' text-anchor='middle'>\n";
 
     for (auto &edge : EDGES) {
         auto nodesIterator = NODES.begin();
@@ -127,12 +132,11 @@ std::string generateEdgesSVG() {
         Node destNode = *nodesIterator;
 
         if (edge.source == edge.dest) { // create an arc
-            std::cout << "creating arc for " << edge.source << " " << edge.dest << std::endl;
             auto[curvePath, cx1, cy1] = generateArc(sourceNode.xPos + sourceNode.size,
                                                     sourceNode.yPos + sourceNode.size, sourceNode.size, 0,
                                                     270); // TODO: change radius parameter ?
-            edgesSVG << "<path d='" << curvePath << "' stroke='black' fill='none' marker-end='url(#head)'/>\n";
-            edgesSVG << generateEdgeLabelTextSVG(cx1 + 2 * sourceNode.size, cy1 + 2 * sourceNode.size, edge.label);
+            edges << "<path d='" << curvePath << "' />\n";
+            labels << generateEdgeLabelTextSVG(cx1 + 2 * sourceNode.size, cy1 + 2 * sourceNode.size, edge.label);
 
         } else {
 
@@ -143,8 +147,8 @@ std::string generateEdgesSVG() {
 
 
                 auto[curvePath, cx1, cy1] = generateCurvedArrowBetweenPoints(sx1, sy1, sx2, sy2, 0);
-                edgesSVG << "<path d='" << curvePath << "' stroke='black' fill='none' marker-end='url(#head)'/>\n";
-                edgesSVG << generateEdgeLabelTextSVG(cx1, cy1, edge.label);
+                edges << "<path d='" << curvePath << "'/>\n";
+                labels << generateEdgeLabelTextSVG(cx1, cy1, edge.label);
 
             } else {
 
@@ -154,28 +158,21 @@ std::string generateEdgesSVG() {
 
 
                 auto[curvePath, cx1, cy1] = generateCurvedArrowBetweenPoints(sx1, sy1, sx2, sy2);
-                edgesSVG << "<path d='" << curvePath << "' stroke='black' fill='none' marker-end='url(#head)'/>\n";
-                edgesSVG << generateEdgeLabelTextSVG(cx1, cy1, edge.label);
+                edges << "<path d='" << curvePath << "'/>\n";
+                labels << generateEdgeLabelTextSVG(cx1, cy1, edge.label);
             }
         }
     }
 
-    return edgesSVG.str();
+    edges << "</g>\n";
+    labels << "</g>\n";
+    return edges.str() + labels.str();
 }
 
 std::tuple<std::string, double, double>
 generateCurvedArrowBetweenPoints(float x1, float y1, float x2, float y2, double offset) {
     std::stringstream curve;
     // offset is the distance of control point from mid-point of line
-
-    // straight line
-//    if (x1 == x2 || y1 == y2) { // TODO : move into another function
-//        // TODO : compute the number of edges for each nodes, if number for node
-//        curve << "M" << x1 << " " << y1 << " " << x2 << " " << y2 << " Z";
-//        return curve.str();
-//    }
-
-    // edge source == dest, curve to the same point
 
     // mid-point of line:
     double mpx = (x2 + x1) * 0.5;
@@ -198,22 +195,15 @@ generateCurvedArrowBetweenPoints(float x1, float y1, float x2, float y2, double 
 void dumpSVG(const std::string &outputFile) {
 
     std::stringstream svgContent, svgNodes, svgNodesLabels;
+    std::list<std::string> nodesPaths, nodesIOArrowsPaths;
+
     svgContent << "<svg xmlns='http://www.w3.org/2000/svg' xmlns:xlink='http://www.w3.org/1999/xlink' "
                   "width='800' height='600' viewBox='0 0 800 600'>\n\n"
                   "<rect x='0' y='0' width='800' height='600' fill='none' stroke='black' "
                   "stroke-width='2'/>\n"
                   "<defs>\n<marker id='head' orient='auto' markerWidth='10' markerHeight='10'\n"
-                  "refX='10' refY='5'>\n<path d='M 0 0 V 10 L 10 5 Z' fill='black' />\n</marker>\n</defs>\n\n";
-
-    for (auto &node : NODES) {
-        svgNodes << generateNodeSVG(node);
-        svgNodesLabels << generateSVGNodeLabel(node);
-    }
-
-    svgContent << "<!-- nodes -->\n" << svgNodes.str()
-               << "\n<!-- nodes labels -->\n" << svgNodesLabels.str()
-               << "\n<!-- edges -->\n" << generateEdgesSVG()
-               << "\n</svg>";
+                  "refX='10' refY='5'>\n<path d='M 0 0 V 10 L 10 5 Z' fill='black' />\n</marker>\n</defs>\n\n"
+               << generateSVG() << "</svg>";
 
     std::ofstream fileStream;
     fileStream.open(outputFile);

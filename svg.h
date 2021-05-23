@@ -9,9 +9,7 @@ getSegmentEndpointsBetweenTwoCircles(double x1, double y1, double r1, double x2,
 
 std::tuple<double, double> getPositionByDegree(double x, double y, double radius, double degree);
 
-std::string generateNodeSVG(const Node &node);
-
-std::string generateSVGNodeLabel(const Node &node);
+std::string generateSVG();
 
 std::string generateArrow(double xPos, double yPos, double size, const std::string &type, const std::string &direction);
 
