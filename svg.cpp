@@ -39,27 +39,19 @@ generateArrow(double xPos, double yPos, double size, const std::string &type, co
     std::tuple<double, double> startPosition = getPositionByDegree(xPos, yPos, size, degree);
     std::tuple<double, double> endPosition = getPositionByDegree(std::get<0>(startPosition), std::get<1>(startPosition),
                                                                  size, degree);
-
-    std::string curvePath;
+    std::tuple<std::string, double, double> arrowPath;
     if (type == "initial") {
-
-
-        std::tuple<std::string, double, double> a = generateCurvedArrowBetweenPoints(std::get<0>(endPosition),
-                                                                                     std::get<1>(endPosition),
-                                                                                     std::get<0>(startPosition),
-                                                                                     std::get<1>(startPosition), 0);
-        curvePath = std::get<0>(a);
-
-
+        arrowPath = generateCurvedArrowBetweenPoints(std::get<0>(endPosition),
+                                                     std::get<1>(endPosition),
+                                                     std::get<0>(startPosition),
+                                                     std::get<1>(startPosition), 0);
     } else if (type == "final") {
-        std::tuple<std::string, double, double> a = generateCurvedArrowBetweenPoints(std::get<0>(startPosition),
-                                                                                     std::get<1>(startPosition),
-                                                                                     std::get<0>(endPosition),
-                                                                                     std::get<1>(endPosition), 0);
-        curvePath = std::get<0>(a);
-
+        arrowPath = generateCurvedArrowBetweenPoints(std::get<0>(startPosition),
+                                                     std::get<1>(startPosition),
+                                                     std::get<0>(endPosition),
+                                                     std::get<1>(endPosition), 0);
     }
-    return curvePath;
+    return std::get<0>(arrowPath);
 }
 
 std::tuple<double, double> polarToCartesian(double centerX, double centerY, double radius, double angleInDegrees) {
@@ -73,7 +65,7 @@ generateArc(double x, double y, double radius, double startAngle, double endAngl
     auto[startX, startY] = polarToCartesian(x, y, radius, endAngle);
     auto[endX, endY] = polarToCartesian(x, y, radius, startAngle);
 
-    double largeArcFlag = endAngle - startAngle <= 180 ? 0 : 1;
+    int largeArcFlag = endAngle - startAngle <= 180 ? 0 : 1;
 
     arc << "M " << startX << " " << startY << " A " << radius << " " << radius << " 0 " << largeArcFlag << " 0 "
         << endX << " " << endY;
@@ -81,7 +73,7 @@ generateArc(double x, double y, double radius, double startAngle, double endAngl
 }
 
 
-std::string generateSVG() {
+std::string generateAutomatonSVG() {
     std::stringstream nodesCircles, nodesLabels, initialStates, finalStates, global;
 
     nodesCircles << "<!-- nodes -->\n<g stroke-width='2'>\n";
@@ -106,18 +98,18 @@ std::string generateSVG() {
     }
 
     global << nodesCircles.str() << "</g>\n" << nodesLabels.str() << "</g>\n" << initialStates.str() << "</g>\n"
-           << finalStates.str() << "</g>\n" + generateEdgesSVG();
+           << finalStates.str() << "</g>\n" + generateEdges();
     return global.str();
 }
 
-std::string generateEdgeLabelTextSVG(double x, double y, const std::string &label) {
+std::string generateEdgeLabels(double x, double y, const std::string &label) {
     std::stringstream edgeLabelTextSVG;
     edgeLabelTextSVG << "<text x='" << x << "' y='" << y << "'>" << label
                      << "</text>\n";
     return edgeLabelTextSVG.str();
-};
+}
 
-std::string generateEdgesSVG() {
+std::string generateEdges() {
     std::stringstream edges, labels;
     edges << "<!-- edges -->\n<g stroke='black' fill='none' marker-end='url(#head)'>\n";
     labels << "<!-- label for edges -->\n<g fill='black' text-anchor='middle'>\n";
@@ -131,37 +123,32 @@ std::string generateEdgesSVG() {
         std::advance(nodesIterator, getNodeIndex(edge.dest));
         Node destNode = *nodesIterator;
 
+        std::string curvePath;
+        double lx, ly;
+
         if (edge.source == edge.dest) { // create an arc
-            auto[curvePath, cx1, cy1] = generateArc(sourceNode.xPos + sourceNode.size,
-                                                    sourceNode.yPos + sourceNode.size, sourceNode.size, 0,
-                                                    270); // TODO: change radius parameter ?
-            edges << "<path d='" << curvePath << "' />\n";
-            labels << generateEdgeLabelTextSVG(cx1 + 2 * sourceNode.size, cy1 + 2 * sourceNode.size, edge.label);
-
+            auto[path, cx1, cy1] = generateArc(sourceNode.xPos + sourceNode.size,
+                                               sourceNode.yPos + sourceNode.size, sourceNode.size, 0,
+                                               270); // TODO: change radius parameter ?
+            curvePath = path;
+            lx = cx1 + 2 * sourceNode.size;
+            ly = cy1 + 2 * sourceNode.size;
         } else {
-
-            if (sourceNode.xPos == destNode.xPos || sourceNode.yPos == destNode.yPos) {
-                auto[sx1, sy1, sx2, sy2] = getSegmentEndpointsBetweenTwoCircles(sourceNode.xPos, sourceNode.yPos,
-                                                                                sourceNode.size, destNode.xPos,
-                                                                                destNode.yPos, destNode.size);
-
-
-                auto[curvePath, cx1, cy1] = generateCurvedArrowBetweenPoints(sx1, sy1, sx2, sy2, 0);
-                edges << "<path d='" << curvePath << "'/>\n";
-                labels << generateEdgeLabelTextSVG(cx1, cy1, edge.label);
-
+            auto[sx1, sy1, sx2, sy2] = getSegmentEndpointsBetweenTwoCircles(sourceNode.xPos, sourceNode.yPos,
+                                                                            sourceNode.size, destNode.xPos,
+                                                                            destNode.yPos, destNode.size);
+            std::tuple<std::string, double, double> curveAndLabelPos;
+            if (sourceNode.xPos == destNode.xPos || sourceNode.yPos == destNode.yPos) { // lines
+                curveAndLabelPos = generateCurvedArrowBetweenPoints(sx1, sy1, sx2, sy2, 0);
             } else {
-
-                auto[sx1, sy1, sx2, sy2] = getSegmentEndpointsBetweenTwoCircles(sourceNode.xPos, sourceNode.yPos,
-                                                                                sourceNode.size, destNode.xPos,
-                                                                                destNode.yPos, destNode.size);
-
-
-                auto[curvePath, cx1, cy1] = generateCurvedArrowBetweenPoints(sx1, sy1, sx2, sy2);
-                edges << "<path d='" << curvePath << "'/>\n";
-                labels << generateEdgeLabelTextSVG(cx1, cy1, edge.label);
+                curveAndLabelPos = generateCurvedArrowBetweenPoints(sx1, sy1, sx2, sy2);
             }
+            curvePath = std::get<0>(curveAndLabelPos);
+            lx = std::get<1>(curveAndLabelPos);
+            ly = std::get<2>(curveAndLabelPos);
         }
+        edges << "<path d='" << curvePath << "'/>\n";
+        labels << generateEdgeLabels(lx, ly, edge.label);
     }
 
     edges << "</g>\n";
@@ -170,24 +157,13 @@ std::string generateEdgesSVG() {
 }
 
 std::tuple<std::string, double, double>
-generateCurvedArrowBetweenPoints(float x1, float y1, float x2, float y2, double offset) {
+generateCurvedArrowBetweenPoints(double x1, double y1, double x2, double y2, double offset) {
     std::stringstream curve;
-    // offset is the distance of control point from mid-point of line
-
-    // mid-point of line:
     double mpx = (x2 + x1) * 0.5;
     double mpy = (y1 + y2) * 0.5;
-
-    // angle of perpendicular to line:
     double theta = std::atan2(y2 - y1, x2 - x1) - M_PI / 2;
-
-
-    // location of control point:
     double cx1 = mpx + offset * cos(theta);
     double cy1 = mpy + offset * sin(theta);
-
-    // construct the command to draw a quadratic curve
-
     curve << "M" << x1 << " " << y1 << " Q " << cx1 << " " << cy1 << " " << x2 << " " << y2;
     return std::make_tuple(curve.str(), cx1, cy1);
 }
@@ -203,7 +179,7 @@ void dumpSVG(const std::string &outputFile) {
                   "stroke-width='2'/>\n"
                   "<defs>\n<marker id='head' orient='auto' markerWidth='10' markerHeight='10'\n"
                   "refX='10' refY='5'>\n<path d='M 0 0 V 10 L 10 5 Z' fill='black' />\n</marker>\n</defs>\n\n"
-               << generateSVG() << "</svg>";
+               << generateAutomatonSVG() << "</svg>";
 
     std::ofstream fileStream;
     fileStream.open(outputFile);
