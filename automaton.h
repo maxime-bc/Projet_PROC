@@ -19,4 +19,10 @@ std::string joinSet(const std::set<std::string> &set, char separator);
 
 void complete(const std::string &wellId, float xPos, float yPos);
 
+int countInitialStates();
+
+bool isNodeDeterministic(const Node &node, const std::set<std::string> &alphabet);
+
+bool isDeterministic();
+
 #endif //AUTOMATON_H

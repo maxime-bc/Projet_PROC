@@ -114,3 +114,35 @@ create edge from a4 to p label "a,b"
 create edge from a5 to p label "a,b,c,d"
 dump "test.svg"
 
+# automate non-déterministe
+create node q0 at 100 100 initial
+create node q1 at 200 100
+create node q2 at 300 100
+create node q3 at 400 100
+create node q4 at 500 100 final
+create edge from q0 to q0 label "a,b"
+create edge from q0 to q1 label "a"
+create edge from q1 to q2 label "a"
+create edge from q2 to q3 label "b"
+create edge from q3 to q4 label "b"
+create edge from q4 to q4 label "a,b"
+dump "test.svg"
+is deterministic
+
+# automate déterministe
+create node q0 at 100 100 initial
+create node q1 at 200 100
+create node q2 at 300 100
+create node q3 at 400 100
+create node q4 at 500 100 final
+create edge from q0 to q0 label "b"
+create edge from q0 to q1 label "a"
+create edge from q1 to q2 label "a"
+create edge from q2 to q3 label "b"
+create edge from q3 to q4 label "b"
+create edge from q4 to q4 label "a,b"
+create edge from q1 to q0 label "b"
+create edge from q2 to q2 label "a"
+create edge from q3 to q1 label "a"
+dump "test.svg"
+is deterministic

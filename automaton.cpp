@@ -108,3 +108,42 @@ void complete(const std::string &wellId, float xPos, float yPos) {
         completeNode(node, wellId, alphabet);
     }
 }
+
+int countInitialStates() {
+    int initialStates = 0;
+    for (const auto &node : NODES_LIST) {
+        if (!node.initial.empty()) {
+            initialStates += 1;
+        }
+    }
+    return initialStates;
+}
+
+bool isNodeDeterministic(const Node &node, const std::set<std::string> &alphabet) {
+
+    std::list<std::string> nodeLetters;
+    for (const auto &edge:  EDGES_LIST) {
+        if (edge.source == node.id) {
+            std::list<std::string> letters = split(edge.label, ',');
+            nodeLetters.splice(nodeLetters.end(), letters);
+        }
+    }
+
+    for (const auto &letter : alphabet) {
+        if (std::count(nodeLetters.begin(), nodeLetters.end(), letter) > 1) {
+            return false;
+        }
+    }
+    return true;
+}
+
+bool isDeterministic() {
+    std::set<std::string> alphabet = getAlphabet();
+    if (countInitialStates() > 1) {
+        return false;
+    }
+
+    return std::all_of(NODES_LIST.begin(), NODES_LIST.end(), [&alphabet](const Node &node) {
+        return isNodeDeterministic(node, alphabet);
+    });
+}
