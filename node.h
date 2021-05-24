@@ -39,7 +39,7 @@ void printNodes();
 
 int getNodeIndex(const std::string &nodeId);
 
-void setLabel(const std::string &label);
+void setNodeLabel(const std::string &label);
 
 void setNodeColor(const std::string &color);
 

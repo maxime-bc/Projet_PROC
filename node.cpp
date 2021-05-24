@@ -170,7 +170,7 @@ void addId(const std::string &id) {
     IDS_LIST.emplace_back(id);
 }
 
-void setLabel(const std::string &label) {
+void setNodeLabel(const std::string &label) {
     CURRENT_NODE.label = label;
 }
 

@@ -24,6 +24,11 @@ std::tuple<double, double> getPositionByDegree(double x, double y, double radius
     return std::make_tuple(x + radius * cos(theta), y - radius * sin(theta));
 }
 
+std::tuple<double, double> getSegmentCenter(double x1, double y1, double x2, double y2) {
+    return std::make_tuple((x1 + x2) / 2, (y1 + y2) / 2);
+}
+
+
 std::string
 generateArrow(double xPos, double yPos, double size, const std::string &type, const std::string &direction) {
     std::map<std::string, double> directionToDegree = {{"east",       0},
@@ -92,7 +97,7 @@ std::string generateEdgeLabels(double x, double y, const std::string &label) {
 
 std::string generateEdges() {
     std::stringstream edges, labels;
-    edges << "<!-- edges -->\n<g stroke='black' fill='none' marker-end='url(#head)'>\n";
+    edges << "<!-- edges -->\n<g fill='none' marker-end='url(#head)'>\n";
     labels << "<!-- label for edges -->\n<g fill='black' text-anchor='middle'>\n";
 
     for (auto &edge : EDGES) {
@@ -134,7 +139,15 @@ std::string generateEdges() {
             lx = std::get<1>(curveAndLabelPos);
             ly = std::get<2>(curveAndLabelPos);
         }
-        edges << "<path d='" << curvePath << "'/>\n";
+        edges << "<path d='" << curvePath << "' stroke='" << edge.color << "'/>\n";
+
+        if (edge.xPos != -1 && edge.yPos != -1) {
+            std::cout << "custom label placement !!" << std::endl;
+            std::tuple<double, double> points = getSegmentCenter(sourceNode.xPos, sourceNode.yPos, destNode.xPos,
+                                                                 destNode.yPos);
+            lx = std::get<0>(points) += edge.xPos;
+            ly = std::get<1>(points) += edge.yPos;
+        }
         labels << generateEdgeLabels(lx, ly, edge.label);
     }
 

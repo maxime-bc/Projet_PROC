@@ -55,7 +55,7 @@ Command:
   | REMOVE EDGE FROM ID TO ID { removeEdge($4, $6); }
   | CREATE NODE ID AT FLOAT FLOAT Create_Attrs_1 { createNode($3, $5, $6); }
   | CREATE EDGE FROM ID TO ID LABEL LABEL_STRING Create_Attrs_2   { createEdge($4, $6, $8); }
-  | CREATE EDGE FROM ID TO ID LABEL LABEL_STRING AT FLOAT FLOAT Create_Attrs_2 { createEdgeWithPosition($4, $6, $8, $10, $11); }
+  | CREATE EDGE FROM ID TO ID LABEL LABEL_STRING AT FLOAT FLOAT Create_Attrs_2 { createEdge($4, $6, $8, $10, $11); }
   | IS COMPLETE { if(isComplete()) { std::cout << "true" << std::endl; } else { std::cout << "false" << std::endl; } }
   | SHOW COMPLETE LABEL_STRING { isComplete($3); }
   | COMPLETE WITH ID AT FLOAT FLOAT { complete($3, $5, $6); }
@@ -68,7 +68,7 @@ Id_List:
 
 Create_Attrs_1:
     EOL                                     { }
-  | LABEL LABEL_STRING Create_Attrs_1 { setLabel($2); }
+  | LABEL LABEL_STRING Create_Attrs_1 { setNodeLabel($2); }
   | COLOR LABEL_STRING Create_Attrs_1 { setNodeColor($2); }
   | BGCOLOR LABEL_STRING Create_Attrs_1 { setBackgroundColor($2); }
   | SIZE FLOAT Create_Attrs_1 { setSize($2); }
@@ -80,6 +80,8 @@ Create_Attrs_1:
 
 Create_Attrs_2:
     EOL                               { }
+  | LABEL LABEL_STRING Create_Attrs_2 { setEdgeLabel($2); }
+  | LABEL LABEL_STRING AT FLOAT FLOAT Create_Attrs_2 { setEdgeLabelWithPos($2, $4, $5); }
   | COLOR LABEL_STRING Create_Attrs_2 { setEdgeColor($2); }
   | PATH LABEL_STRING Create_Attrs_2  { setPath($2); }
   ;

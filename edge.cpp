@@ -9,8 +9,8 @@ std::list<Edge> EDGES;
 Edge CURRENT_EDGE = {};
 
 
-void createEdgeWithPosition(const std::string &source, const std::string &dest, const std::string &label, float xPos,
-                            float yPos) {
+void createEdge(const std::string &source, const std::string &dest, const std::string &label, float xPos,
+                float yPos) {
 
     if (getNodeIndex(source) == -1) {
         std::cout << "ERROR : Node " << source << " doesn't exists." << std::endl;
@@ -37,14 +37,6 @@ void createEdgeWithPosition(const std::string &source, const std::string &dest, 
     EDGES.push_back(newEdge);
 
     CURRENT_EDGE = {};
-}
-
-
-void createEdge(const std::string &source, const std::string &dest, const std::string &label) {
-    // TODO : delete this function ?? + handle label pos ??
-    float xPos = 0;
-    float yPos = 0;
-    createEdgeWithPosition(source, dest, label, xPos, yPos);
 }
 
 void removeEdge(const std::string &source, const std::string &dest) {
@@ -113,6 +105,18 @@ void editEdge(const std::string &source, const std::string &dest) {
         edgesIterator->path = CURRENT_EDGE.path;
     }
 
+    if (!CURRENT_EDGE.label.empty()) {
+        edgesIterator->label = CURRENT_EDGE.label;
+    }
+
+    if (CURRENT_EDGE.xPos != -1) {
+        edgesIterator->xPos = CURRENT_EDGE.xPos;
+    }
+
+    if (CURRENT_EDGE.yPos != -1) {
+        edgesIterator->yPos = CURRENT_EDGE.yPos;
+    }
+
     CURRENT_EDGE = {};
 }
 
@@ -129,4 +133,14 @@ void setEdgeColor(const std::string &color) {
 
 void setPath(const std::string &path) {
     CURRENT_EDGE.path = path;
+}
+
+void setEdgeLabel(const std::string &label) {
+    CURRENT_EDGE.label = label;
+}
+
+void setEdgeLabelWithPos(const std::string &label, float x, float y) {
+    CURRENT_EDGE.label = label;
+    CURRENT_EDGE.xPos = x;
+    CURRENT_EDGE.yPos = y;
 }
