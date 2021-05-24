@@ -19,9 +19,6 @@ extern std::list<Edge> EDGES;
 void createEdge(const std::string &source, const std::string &dest, const std::string &label, float xPos = 0,
                 float yPos = 0);
 
-void createEdgeWithPos(const std::string &source, const std::string &dest, const std::string &label, float xPos,
-                       float yPos);
-
 void removeEdge(const std::string &source, const std::string &dest);
 
 void removeEdgesContainingNode(const std::string &nodeId);
