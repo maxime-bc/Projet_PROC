@@ -119,31 +119,37 @@ int countInitialStates() {
     return initialStates;
 }
 
-bool isNodeDeterministic(const Node &node, const std::set<std::string> &alphabet) {
+bool isNodeDeterministic(const Node &node, const std::set<std::string> &alphabet, const std::string &color) {
 
-    std::list<std::string> nodeLetters;
-    for (const auto &edge:  EDGES_LIST) {
-        if (edge.source == node.id) {
-            std::list<std::string> letters = split(edge.label, ',');
-            nodeLetters.splice(nodeLetters.end(), letters);
-        }
-    }
+    bool isDeterministic = true;
 
-    for (const auto &letter : alphabet) {
-        if (std::count(nodeLetters.begin(), nodeLetters.end(), letter) > 1) {
-            return false;
+    std::list<std::string> viewedLetters;
+    for (auto edge = EDGES_LIST.begin(); edge != EDGES_LIST.end();) {
+        if (edge->source == node.id) {
+            std::list<std::string> letters = split(edge->label, ',');
+            for (const auto &letter : letters) {
+                if (std::find(std::begin(viewedLetters), std::end(viewedLetters), letter) != std::end(viewedLetters)) {
+                    if (!color.empty()) {
+                        edge->color = color;
+                    }
+                    isDeterministic = false;;
+                } else {
+                    viewedLetters.push_back(letter);
+                }
+            }
         }
+        edge++;
     }
-    return true;
+    return isDeterministic;
 }
 
-bool isDeterministic() {
+bool isDeterministic(const std::string &color) {
     std::set<std::string> alphabet = getAlphabet();
     if (countInitialStates() > 1) {
         return false;
     }
 
-    return std::all_of(NODES_LIST.begin(), NODES_LIST.end(), [&alphabet](const Node &node) {
-        return isNodeDeterministic(node, alphabet);
+    return std::all_of(NODES_LIST.begin(), NODES_LIST.end(), [&alphabet, &color](const Node &node) {
+        return isNodeDeterministic(node, alphabet, color);
     });
 }

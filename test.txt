@@ -128,6 +128,8 @@ create edge from q3 to q4 label "b"
 create edge from q4 to q4 label "a,b"
 dump "test.svg"
 is deterministic
+show deterministic "blue"
+dump "test.svg"
 
 # automate déterministe
 create node q0 at 100 100 initial

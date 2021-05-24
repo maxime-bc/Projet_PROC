@@ -60,6 +60,7 @@ Command:
   | SHOW COMPLETE LABEL_STRING { isComplete($3); }
   | COMPLETE WITH ID AT FLOAT FLOAT { complete($3, $5, $6); }
   | IS DETERMINISTIC {  if(isDeterministic()) { std::cout << "true" << std::endl; } else { std::cout << "false" << std::endl; } }
+  | SHOW DETERMINISTIC LABEL_STRING { isDeterministic($3); }
   | CLEAR ALL { EDGES_LIST.clear(); NODES_LIST.clear(); }
   | CLEAR EDGES { EDGES_LIST.clear(); }
   ;

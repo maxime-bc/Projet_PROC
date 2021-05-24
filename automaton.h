@@ -21,8 +21,8 @@ void complete(const std::string &wellId, float xPos, float yPos);
 
 int countInitialStates();
 
-bool isNodeDeterministic(const Node &node, const std::set<std::string> &alphabet);
+bool isNodeDeterministic(const Node &node, const std::set<std::string> &alphabet, const std::string &color);
 
-bool isDeterministic();
+bool isDeterministic(const std::string &color = "");
 
 #endif //AUTOMATON_H
