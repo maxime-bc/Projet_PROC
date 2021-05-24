@@ -1,0 +1,116 @@
+create node a1 at 100 100 label "1"
+create node a1 at 100 100 label "2" --> ERROR : Node a1 already exists.
+create node a2 at 100 100 label "2"
+create edge from a1 to a3 label "a,b" --> ERROR : Node a3 doesn't exists.
+create edge from a3 to a1 label "a,b" --> ERROR : Node a3 doesn't exists.
+create edge from a3 to a4 label "a,b" --> ERROR : Node a3 doesn't exists.
+create edge from a1 to a2 label "a,b"
+create edge from a1 to a2 label "a,b" --> ERROR : Edge a1 - a2 already exists.
+create edge from a1 to a1 label "a,b"
+create edge from a1 to a1 label "a,b" --> ERROR : Edge a1 - a1 already exists.
+
+rename a1 with a2 --> ERROR : Node a2 already exists.
+rename a1 with a3
+create node a1 at 100 100 label "1"
+create edge from a3 to a2 label "a,b" --> ERROR : Edge a3 - a2 already exists.
+create edge from a3 to a3 label "a,b" --> ERROR : Edge a3 - a3 already exists.
+
+remove node a1
+remove edge from a3 to a2
+remove edge from a3 to a2 --> ERROR : Edge a3 - a2 doesn't exists.
+remove node a3
+remove node a3 --> ERROR : Node a3 doesn't exists.
+
+move 100 100
+move a1 100 100 --> ERROR : Node a1 doesn't exists.
+move a2 100 100
+move [a1,a2,a3] 100 100 --> ERROR : Node a3 doesn't exists.
+                            ERROR : Node a1 doesn't exists.
+                            a2 a bougé de 100 100
+
+edit a1 with label "a1" color "red" bgcolor "yellow" initial west final west size 100 --> ERROR : Node a1 doesn't exists.
+edit a2 with label "a1" color "red" bgcolor "yellow" initial west final west size 100
+dump
+node a2 {xPos=400, yPos=400, label=a1, color=red, backgroundColor=yellow, size=100, initial=west, final=west}
+edit a2 with label "1" color "black" bgcolor "white" initial south final north size 30
+dump
+node a2 {xPos=400, yPos=400, label=1, color=black, backgroundColor=white, size=30, initial=south, final=north}
+create node a1 at 100 100
+create edge from a1 to a2 label "a,b"
+dump
+...
+edge a1 - a2 {xPos=0, yPos=0, label=a,b, color=black, path=}
+edit edge from a1 to a3 with label "a,b,c" at 10 10 --> ERROR : Edge a1 - a3 doesn't exists.
+edit edge from a1 to a2 with label "a,b,c" at 10 10 color="blue"
+dump
+...
+edge a1 - a2 {xPos=10, yPos=10, label=a,b,c, color=blue, path=}
+dump "test.svg"
+
+clear edges
+dump
+node a2 {xPos=400, yPos=400, label=1, color=black, backgroundColor=white, size=30, initial=south, final=north}
+node a1 {xPos=100, yPos=100, label=a1, color=black, backgroundColor=red, size=30, initial=, final=}
+clear all
+dump
+
+# automates entiers
+
+# not complete
+CREATE NODE un AT 100 300 INITIAL north
+create node deux at 200 300  FINAL north
+create node trois at 200 200 FINAL north
+CREATE EDGE FROM un to deux LABEL "a"
+CREATE EDGE FROM deux to trois LABEL "b"
+CREATE EDGE FROM trois to deux LABEL "b"
+dump "test.svg"
+IS COMPLETE
+COMPLETE WITH p AT 500 500
+IS COMPLETE
+
+# not complete
+create node i at 100 300 initial
+create node a1 at 200 200 label "1"
+create node a0 at 200 300 label "0"
+create node f at 300 300 final
+create edge from i to a0 label "a"
+create edge from a0 to a1 label "b"
+create edge from a1 to a0 label "b"
+create edge from a0 to a0 label "a"
+create edge from a0 to f label "a"
+dump "test.svg"
+
+# not complete
+create node a1 at 100 300 label "1" initial
+create node a2 at 200 200 label "2"
+create node a4 at 200 300 label "4"
+create node a5 at 300 300 label "5" final
+create edge from a1 to a2 label "a"
+create edge from a1 to a4 label "b"
+create edge from a2 to a2 label "a,b"
+create edge from a2 to a5 label "c,d"
+create edge from a4 to a5 label "c,d"
+dump "test.svg"
+is complete
+show complete "red"
+dump "test.svg"
+complete with p at 200 420
+dump "test.svg"
+
+# complete
+create node a1 at 80 300 label "1" initial
+create node a2 at 200 180 label "2"
+create node a4 at 200 300 label "4"
+create node a5 at 320 300 label "5" final
+create node p at 200 420 label "P"
+create edge from a1 to a2 label "a"
+create edge from a1 to a4 label "b"
+create edge from a2 to a2 label "a,b"
+create edge from a2 to a5 label "c,d"
+create edge from a4 to a5 label "c,d"
+create edge from a1 to p label "c,d"
+create edge from p to p label "a,b,c,d"
+create edge from a4 to p label "a,b"
+create edge from a5 to p label "a,b,c,d"
+dump "test.svg"
+
