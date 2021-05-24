@@ -5,7 +5,7 @@
 #include "node.h"
 #include "edge.h"
 
-std::list<Node> NODES;
+std::list<Node> NODES_LIST;
 Node CURRENT_NODE = {};
 std::list<std::string> IDS_LIST;
 
@@ -37,7 +37,7 @@ void createNode(const std::string &nodeId, float xPos, float yPos) {
     }
 
     Node newNode = CURRENT_NODE;
-    NODES.push_back(newNode);
+    NODES_LIST.push_back(newNode);
 
     CURRENT_NODE = {};
 }
@@ -52,14 +52,14 @@ void removeNode(const std::string &nodeId) {
 
     removeEdgesContainingNode(nodeId);
 
-    auto nodesIterator = NODES.begin();
+    auto nodesIterator = NODES_LIST.begin();
     std::advance(nodesIterator, nodePos);
-    NODES.erase(nodesIterator);
+    NODES_LIST.erase(nodesIterator);
 }
 
 int getNodeIndex(const std::string &nodeId) {
     int index = 0;
-    for (const Node &node : NODES) {
+    for (const Node &node : NODES_LIST) {
         if (node.id == nodeId) {
             return index;
         }
@@ -83,7 +83,7 @@ void renameNode(const std::string &currentNodeId, const std::string &newNodeId) 
 
     renameEdgeNode(currentNodeId, newNodeId);
 
-    auto nodesIterator = NODES.begin();
+    auto nodesIterator = NODES_LIST.begin();
     std::advance(nodesIterator, currentNodePos);
 
     nodesIterator->id = newNodeId;
@@ -93,7 +93,7 @@ void renameNode(const std::string &currentNodeId, const std::string &newNodeId) 
 }
 
 void printNodes() {
-    for (const Node &node : NODES) {
+    for (const Node &node : NODES_LIST) {
         std::cout << "node " << node.id << " {xPos=" << node.xPos << ", yPos=" << node.yPos << ", label=" << node.label
                   << ", color=" << node.color << ", backgroundColor=" << node.backgroundColor << ", size=" << node.size
                   << ", initial=" << node.initial << ", final=" << node.final << "}" << std::endl;
@@ -101,7 +101,7 @@ void printNodes() {
 }
 
 void moveAllNodes(float xPos, float yPos) {
-    for (auto &node : NODES) {
+    for (auto &node : NODES_LIST) {
         node.xPos += xPos;
         node.yPos += yPos;
     }
@@ -115,7 +115,7 @@ void moveNode(const std::string &nodeId, float xPos, float yPos) {
         return;
     }
 
-    auto nodesIterator = NODES.begin();
+    auto nodesIterator = NODES_LIST.begin();
     std::advance(nodesIterator, nodePos);
     nodesIterator->xPos += xPos;
     nodesIterator->yPos += yPos;
@@ -129,7 +129,7 @@ void editNode(const std::string &nodeId) {
         return;
     }
 
-    auto nodesIterator = NODES.begin();
+    auto nodesIterator = NODES_LIST.begin();
     std::advance(nodesIterator, nodePos);
 
     if (!CURRENT_NODE.label.empty()) {

@@ -14,7 +14,7 @@ public:
     std::string path;
 };
 
-extern std::list<Edge> EDGES;
+extern std::list<Edge> EDGES_LIST;
 
 void createEdge(const std::string &source, const std::string &dest, const std::string &label, float xPos = 0,
                 float yPos = 0);

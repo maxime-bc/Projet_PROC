@@ -67,7 +67,7 @@ std::string generateAutomatonSVG() {
     initialStates << "<!-- initial states -->\n<g fill='none' stroke='red' marker-end='url(#head)'>\n";
     finalStates << "<!-- final states -->\n<g fill='none' stroke='red' marker-end='url(#head)'>\n";
 
-    for (auto &node : NODES) {
+    for (auto &node : NODES_LIST) {
         nodesCircles << "<circle cx='" << node.xPos << "' cy='" << node.yPos << "' r='" << node.size << "' stroke='"
                      << node.color << "' fill='" << node.backgroundColor << "'/>\n";
 
@@ -100,12 +100,12 @@ std::string generateEdges() {
     edges << "<!-- edges -->\n<g fill='none' marker-end='url(#head)'>\n";
     labels << "<!-- label for edges -->\n<g fill='black' text-anchor='middle'>\n";
 
-    for (auto &edge : EDGES) {
-        auto nodesIterator = NODES.begin();
+    for (auto &edge : EDGES_LIST) {
+        auto nodesIterator = NODES_LIST.begin();
         std::advance(nodesIterator, getNodeIndex(edge.source));
         Node sourceNode = *nodesIterator;
 
-        nodesIterator = NODES.begin();
+        nodesIterator = NODES_LIST.begin();
         std::advance(nodesIterator, getNodeIndex(edge.dest));
         Node destNode = *nodesIterator;
 

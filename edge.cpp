@@ -5,7 +5,7 @@
 #include "edge.h"
 #include "node.h"
 
-std::list<Edge> EDGES;
+std::list<Edge> EDGES_LIST;
 Edge CURRENT_EDGE = {};
 
 
@@ -34,7 +34,7 @@ void createEdge(const std::string &source, const std::string &dest, const std::s
     CURRENT_EDGE.yPos = yPos;
 
     Edge newEdge = CURRENT_EDGE;
-    EDGES.push_back(newEdge);
+    EDGES_LIST.push_back(newEdge);
 
     CURRENT_EDGE = {};
 }
@@ -47,15 +47,15 @@ void removeEdge(const std::string &source, const std::string &dest) {
         return;
     }
 
-    auto edgesIterator = EDGES.begin();
+    auto edgesIterator = EDGES_LIST.begin();
     std::advance(edgesIterator, getEdgeIndex(source, dest));
-    EDGES.erase(edgesIterator);
+    EDGES_LIST.erase(edgesIterator);
 }
 
 void removeEdgesContainingNode(const std::string &nodeId) {
-    for (auto edge = EDGES.begin(); edge != EDGES.end();) {
+    for (auto edge = EDGES_LIST.begin(); edge != EDGES_LIST.end();) {
         if (edge->source == nodeId || edge->dest == nodeId) {
-            edge = EDGES.erase(edge);
+            edge = EDGES_LIST.erase(edge);
         } else {
             edge++;
         }
@@ -63,7 +63,7 @@ void removeEdgesContainingNode(const std::string &nodeId) {
 }
 
 void renameEdgeNode(const std::string &currentNodeId, const std::string &newNodeId) {
-    for (auto &edge : EDGES) {
+    for (auto &edge : EDGES_LIST) {
         if (edge.source == currentNodeId) {
             edge.source = newNodeId;
         }
@@ -76,7 +76,7 @@ void renameEdgeNode(const std::string &currentNodeId, const std::string &newNode
 
 int getEdgeIndex(const std::string &source, const std::string &dest) {
     int index = 0;
-    for (const Edge &edge : EDGES) {
+    for (const Edge &edge : EDGES_LIST) {
         if (edge.source == source && edge.dest == dest) {
             return index;
         }
@@ -94,7 +94,7 @@ void editEdge(const std::string &source, const std::string &dest) {
         return;
     }
 
-    auto edgesIterator = EDGES.begin();
+    auto edgesIterator = EDGES_LIST.begin();
     std::advance(edgesIterator, edgePos);
 
     if (!CURRENT_EDGE.color.empty()) {
@@ -121,7 +121,7 @@ void editEdge(const std::string &source, const std::string &dest) {
 }
 
 void printEdges() {
-    for (const auto &edge : EDGES) {
+    for (const auto &edge : EDGES_LIST) {
         std::cout << "edge " << edge.source << " - " << edge.dest << " {xPos=" << edge.xPos << ", yPos=" << edge.yPos
                   << ", label=" << edge.label << ", color=" << edge.color << ", path=" << edge.path << "}" << std::endl;
     }

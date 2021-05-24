@@ -22,7 +22,7 @@ std::list<std::string> split(std::string const &str, char delimiter) {
 std::set<std::string> getAlphabet() {
 
     std::set<std::string> alphabet;
-    for (const Edge &edge : EDGES) {
+    for (const Edge &edge : EDGES_LIST) {
         std::list<std::string> letters = split(edge.label, ',');
 
         for (const auto &letter : letters) {
@@ -36,7 +36,7 @@ bool isNodeComplete(const Node &node, const std::set<std::string> &alphabet) {
 
     std::set<std::string> nodeLetters;
 
-    for (auto edge = EDGES.begin(); edge != EDGES.end();) {
+    for (auto edge = EDGES_LIST.begin(); edge != EDGES_LIST.end();) {
         if (edge->source == node.id) {
             std::list<std::string> letters = split(edge->label, ',');
             nodeLetters.insert(letters.begin(), letters.end());
@@ -54,7 +54,7 @@ void completeNode(const Node &node, const std::string &wellId, const std::set<st
 
     std::set<std::string> nodeLetters, lettersToAdd;
 
-    for (const auto &edge:  EDGES) {
+    for (const auto &edge:  EDGES_LIST) {
         if (edge.source == node.id) {
             std::list<std::string> letters = split(edge.label, ',');
             nodeLetters.insert(letters.begin(), letters.end());
@@ -76,7 +76,7 @@ bool isComplete(const std::string &color) {
     std::set<std::string> alphabet = getAlphabet();
     bool isComplete = false;
 
-    for (auto &node : NODES) {
+    for (auto &node : NODES_LIST) {
         isComplete = isNodeComplete(node, alphabet);
         if (!isComplete && !color.empty()) {
             node.backgroundColor = color;
@@ -104,7 +104,7 @@ void complete(const std::string &wellId, float xPos, float yPos) {
     std::set<std::string> alphabet = getAlphabet();
     createNode(wellId, xPos, yPos);
 
-    for (const auto &node : NODES) {
+    for (const auto &node : NODES_LIST) {
         completeNode(node, wellId, alphabet);
     }
 }

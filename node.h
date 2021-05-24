@@ -17,7 +17,7 @@ public:
     std::string final;
 };
 
-extern std::list<Node> NODES;
+extern std::list<Node> NODES_LIST;
 
 void createNode(const std::string &nodeId, float xPos, float yPos);
 

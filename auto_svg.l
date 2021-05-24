@@ -52,6 +52,8 @@ FLOAT [+-]?([0-9]*[.])?[0-9]+
 "complete" { return(COMPLETE); }
 "clear" { return(CLEAR); }
 "show" { return(SHOW); }
+"all" { return(ALL); }
+"edges" { return(EDGES); }
 {ID} {
   yylval.string = strdup(yytext);
   return(ID);
