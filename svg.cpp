@@ -113,13 +113,7 @@ std::string generateEdges() {
         double lx, ly;
 
         if (!edge.path.empty()) {
-            std::cout << " path " << std::endl;
-
             curvePath = edge.path;
-
-            lx = 0;
-            ly = 0; //TODO
-
         } else if (edge.source == edge.dest) { // create an arc
             std::stringstream path;
             path << "M " << sourceNode.xPos + 5 << " " << sourceNode.yPos + sourceNode.size << " A 15 20 0 1 1 "
@@ -141,7 +135,7 @@ std::string generateEdges() {
         }
         edges << "<path d='" << curvePath << "' stroke='" << edge.color << "'/>\n";
 
-        if (edge.xPos != 0 && edge.yPos != 0) {
+        if (edge.xPos != 0 && edge.yPos != 0 || !edge.path.empty()) {
             std::tuple<double, double> points = getCenter(sourceNode.xPos, sourceNode.yPos, destNode.xPos,
                                                           destNode.yPos);
             lx = std::get<0>(points) += edge.xPos;
