@@ -137,6 +137,8 @@ void setPath(const std::string &path) {
 
 void setEdgeLabel(const std::string &label) {
     CURRENT_EDGE.label = label;
+    CURRENT_EDGE.xPos = 0;
+    CURRENT_EDGE.yPos = 0;
 }
 
 void setEdgeLabelWithPos(const std::string &label, float x, float y) {

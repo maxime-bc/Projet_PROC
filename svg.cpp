@@ -24,7 +24,7 @@ std::tuple<double, double> getPositionByDegree(double x, double y, double radius
     return std::make_tuple(x + radius * cos(theta), y - radius * sin(theta));
 }
 
-std::tuple<double, double> getSegmentCenter(double x1, double y1, double x2, double y2) {
+std::tuple<double, double> getCenter(double x1, double y1, double x2, double y2) {
     return std::make_tuple((x1 + x2) / 2, (y1 + y2) / 2);
 }
 
@@ -141,10 +141,9 @@ std::string generateEdges() {
         }
         edges << "<path d='" << curvePath << "' stroke='" << edge.color << "'/>\n";
 
-        if (edge.xPos != -1 && edge.yPos != -1) {
-            std::cout << "custom label placement !!" << std::endl;
-            std::tuple<double, double> points = getSegmentCenter(sourceNode.xPos, sourceNode.yPos, destNode.xPos,
-                                                                 destNode.yPos);
+        if (edge.xPos != 0 && edge.yPos != 0) {
+            std::tuple<double, double> points = getCenter(sourceNode.xPos, sourceNode.yPos, destNode.xPos,
+                                                          destNode.yPos);
             lx = std::get<0>(points) += edge.xPos;
             ly = std::get<1>(points) += edge.yPos;
         }
