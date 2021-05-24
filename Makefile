@@ -1,4 +1,4 @@
-CC = g++
+CC = c++
 BIN= auto_svg
 
 all: $(BIN).y $(BIN).l
