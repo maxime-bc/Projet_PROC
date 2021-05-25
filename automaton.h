@@ -25,4 +25,10 @@ bool isNodeDeterministic(const Node &node, const std::set<std::string> &alphabet
 
 bool isDeterministic(const std::string &color = "");
 
+bool traverse(const Node &node, std::string &wordCopy);
+
+bool isAccepted(const std::string &word);
+
+Node getInitialState();
+
 #endif //AUTOMATON_H

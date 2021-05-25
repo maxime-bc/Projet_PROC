@@ -27,7 +27,7 @@ extern "C"{
 %type <c_string> Directions
 
 %token CREATE NODE EDGE FROM TO AT EOL LABEL COLOR BGCOLOR SIZE INIT FINAL PATH DUMP REMOVE MOVE WITH RENAME EDIT
-%token OPENING_SQ_BRACKET ENDING_SQ_BRACKET COMMA IS COMPLETE CLEAR SHOW ALL EDGES DETERMINISTIC
+%token OPENING_SQ_BRACKET ENDING_SQ_BRACKET COMMA IS COMPLETE CLEAR SHOW ALL EDGES DETERMINISTIC ACCEPTED
 %token NORTH SOUTH EAST WEST NORTH_EAST NORTH_WEST SOUTH_EAST SOUTH_WEST
 %token <string> ID
 %token <string> LABEL_STRING
@@ -61,6 +61,7 @@ Command:
   | COMPLETE WITH ID AT FLOAT FLOAT { complete($3, $5, $6); }
   | IS DETERMINISTIC {  if(isDeterministic()) { std::cout << "true" << std::endl; } else { std::cout << "false" << std::endl; } }
   | SHOW DETERMINISTIC LABEL_STRING { isDeterministic($3); }
+  | IS ACCEPTED LABEL_STRING { if(isAccepted($3)) { std::cout << "true" << std::endl; } else { std::cout << "false" << std::endl; } }
   | CLEAR ALL { EDGES_LIST.clear(); NODES_LIST.clear(); }
   | CLEAR EDGES { EDGES_LIST.clear(); }
   ;

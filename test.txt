@@ -130,6 +130,7 @@ dump "test.svg"
 is deterministic
 show deterministic "blue"
 dump "test.svg"
+is accepted "aabb"
 
 # automate déterministe
 create node q0 at 100 100 initial
@@ -148,3 +149,4 @@ create edge from q2 to q2 label "a"
 create edge from q3 to q1 label "a"
 dump "test.svg"
 is deterministic
+is accepted "aabb"

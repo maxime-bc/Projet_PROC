@@ -55,6 +55,7 @@ FLOAT [+-]?([0-9]*[.])?[0-9]+
 "all" { return(ALL); }
 "edges" { return(EDGES); }
 "deterministic" { return(DETERMINISTIC); }
+"accepted" { return(ACCEPTED); }
 {ID} {
   yylval.string = strdup(yytext);
   return(ID);

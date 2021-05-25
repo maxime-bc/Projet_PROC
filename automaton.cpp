@@ -143,6 +143,49 @@ bool isNodeDeterministic(const Node &node, const std::set<std::string> &alphabet
     return isDeterministic;
 }
 
+Node getInitialState() {
+
+    int index = 0;
+    for (const Node &node : NODES_LIST) {
+        if (!node.initial.empty()) {
+            break;
+        }
+        index += 1;
+    }
+
+    auto initialState = NODES_LIST.begin();
+    std::advance(initialState, index);
+    return initialState.operator*();
+}
+
+bool traverse(const Node &node, std::string &word) {
+
+    Node currentNode = node;
+    int strIndex = 0;
+
+    while (strIndex < word.length()) {
+
+        for (const auto &edge : EDGES_LIST) {
+            if (edge.source == currentNode.id) {
+                std::list<std::string> letters = split(edge.label, ',');
+
+                if (std::any_of(letters.cbegin(), letters.cend(),
+                                [&word, &strIndex](const std::string &x) { return x.at(0) == word.at(strIndex); })) {
+                    int index = getNodeIndex(edge.dest);
+                    auto destNode = NODES_LIST.begin();
+                    std::advance(destNode, index);
+
+                    strIndex++;
+                    currentNode = destNode.operator*();
+                }
+
+            }
+
+        }
+    }
+    return !currentNode.final.empty();
+}
+
 bool isDeterministic(const std::string &color) {
     std::set<std::string> alphabet = getAlphabet();
     if (countInitialStates() > 1) {
@@ -152,4 +195,19 @@ bool isDeterministic(const std::string &color) {
     return std::all_of(NODES_LIST.begin(), NODES_LIST.end(), [&alphabet, &color](const Node &node) {
         return isNodeDeterministic(node, alphabet, color);
     });
+}
+
+bool isAccepted(const std::string &word) {
+    std::string wordCopy = word;
+
+    if (!isDeterministic()) {
+        std::cout << "ERROR : automaton is not deterministic." << std::endl;
+        return false;
+    }
+
+    Node initialState = getInitialState();
+    bool isAccepted = traverse(initialState, wordCopy);
+
+    return isAccepted;
+
 }

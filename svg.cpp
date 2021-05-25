@@ -135,7 +135,7 @@ std::string generateEdges() {
         }
         edges << "<path d='" << curvePath << "' stroke='" << edge.color << "'/>\n";
 
-        if (edge.xPos != 0 && edge.yPos != 0 || !edge.path.empty()) {
+        if ((edge.xPos != 0 && edge.yPos != 0) || !edge.path.empty()) {
             std::tuple<double, double> points = getCenter(sourceNode.xPos, sourceNode.yPos, destNode.xPos,
                                                           destNode.yPos);
             lx = std::get<0>(points) += edge.xPos;
