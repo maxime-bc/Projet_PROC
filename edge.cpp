@@ -14,16 +14,19 @@ void createEdge(const std::string &source, const std::string &dest, const std::s
 
     if (getNodeIndex(source) == -1) {
         std::cout << "ERROR : Node " << source << " doesn't exists." << std::endl;
+        CURRENT_EDGE = {};
         return;
     }
 
     if (getNodeIndex(dest) == -1) {
         std::cout << "ERROR : Node " << dest << " doesn't exists." << std::endl;
+        CURRENT_EDGE = {};
         return;
     }
 
     if (getEdgeIndex(source, dest) != -1) {
         std::cout << "ERROR : Edge " << source << " - " << dest << " already exists." << std::endl;
+        CURRENT_EDGE = {};
         return;
     }
 
@@ -91,6 +94,7 @@ void editEdge(const std::string &source, const std::string &dest) {
     int edgePos = getEdgeIndex(source, dest);
     if (edgePos == -1) {
         std::cout << "ERROR : Edge " << source << " - " << dest << " doesn't exists." << std::endl;
+        CURRENT_EDGE = {};
         return;
     }
 

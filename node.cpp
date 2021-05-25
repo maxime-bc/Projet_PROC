@@ -12,6 +12,7 @@ std::list<std::string> IDS_LIST;
 void createNode(const std::string &nodeId, float xPos, float yPos) {
     if (getNodeIndex(nodeId) != -1) {
         std::cout << "ERROR : Node " << nodeId << " already exists." << std::endl;
+        CURRENT_NODE = {};
         return;
     }
 
@@ -126,6 +127,7 @@ void editNode(const std::string &nodeId) {
     int nodePos = getNodeIndex(nodeId);
     if (nodePos == -1) {
         std::cout << "ERROR : Node " << nodeId << " doesn't exists." << std::endl;
+        CURRENT_NODE = {};
         return;
     }
 
