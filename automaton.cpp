@@ -68,7 +68,9 @@ void completeNode(const Node &node, const std::string &wellId, const std::set<st
         }
     }
 
-    createEdge(node.id, wellId, join(lettersToAdd.begin(), lettersToAdd.end(), ','));
+    if (!lettersToAdd.empty()) {
+        createEdge(node.id, wellId, join(lettersToAdd.begin(), lettersToAdd.end(), ','));
+    }
 }
 
 

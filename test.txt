@@ -54,6 +54,8 @@ node a1 {xPos=100, yPos=100, label=a1, color=black, backgroundColor=red, size=30
 clear all
 dump
 
+# PARTIE LASF
+
 # automates entiers
 
 # not complete
@@ -68,7 +70,7 @@ IS COMPLETE
 COMPLETE WITH p AT 500 500
 IS COMPLETE
 
-# not complete
+# not complete (exemple du sujet)
 create node i at 100 300 initial
 create node a1 at 200 200 label "1"
 create node a0 at 200 300 label "0"
@@ -113,6 +115,7 @@ create edge from p to p label "a,b,c,d"
 create edge from a4 to p label "a,b"
 create edge from a5 to p label "a,b,c,d"
 dump "test.svg"
+is complete
 
 # automate non-déterministe
 create node q0 at 100 100 initial
@@ -151,4 +154,4 @@ dump "test.svg"
 is deterministic
 is accepted "aabb"
 show "aabb"
-show "aab"
+show "aab" --> not accepted by automaton.
