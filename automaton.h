@@ -29,6 +29,8 @@ bool traverse(const Node &node, std::string &wordCopy);
 
 bool isAccepted(const std::string &word);
 
+int getNextNodeIndex(const Node &currentNode, char symbol);
+
 Node getInitialState();
 
 #endif //AUTOMATON_H

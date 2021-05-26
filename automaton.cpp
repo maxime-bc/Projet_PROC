@@ -158,31 +158,35 @@ Node getInitialState() {
     return initialState.operator*();
 }
 
+int getNextNodeIndex(const Node &currentNode, char symbol) {
+
+    for (const auto &edge : EDGES_LIST) {
+        if (edge.source == currentNode.id) {
+            std::list<std::string> letters = split(edge.label, ',');
+
+            if (std::any_of(letters.cbegin(), letters.cend(),
+                            [&symbol](const std::string &x) { return x.at(0) == symbol; })) {
+                return getNodeIndex(edge.dest);
+            }
+        }
+    }
+    return -1;
+}
+
 bool traverse(const Node &node, std::string &word) {
 
     Node currentNode = node;
     int strIndex = 0;
 
     while (strIndex < word.length()) {
+        int nextNodeIndex = getNextNodeIndex(currentNode, word.at(strIndex));
 
-        for (const auto &edge : EDGES_LIST) {
-            if (edge.source == currentNode.id) {
-                std::list<std::string> letters = split(edge.label, ',');
-
-                if (std::any_of(letters.cbegin(), letters.cend(),
-                                [&word, &strIndex](const std::string &x) { return x.at(0) == word.at(strIndex); })) {
-                    int index = getNodeIndex(edge.dest);
-                    auto destNode = NODES_LIST.begin();
-                    std::advance(destNode, index);
-
-                    strIndex++;
-                    currentNode = destNode.operator*();
-                }
-
-            }
-
-        }
+        auto destNode = NODES_LIST.begin();
+        std::advance(destNode, nextNodeIndex);
+        currentNode = destNode.operator*();
+        strIndex++;
     }
+
     return !currentNode.final.empty();
 }
 
