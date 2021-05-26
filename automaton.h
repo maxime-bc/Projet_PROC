@@ -15,7 +15,8 @@ void completeNode(const Node &node, const std::string &wellId, const std::set<st
 
 bool isNodeComplete(const Node &node, const std::set<std::string> &alphabet);
 
-std::string joinSet(const std::set<std::string> &set, char separator);
+template<typename Iter>
+std::string join(Iter begin, Iter end, char separator);
 
 void complete(const std::string &wellId, float xPos, float yPos);
 
@@ -25,9 +26,9 @@ bool isNodeDeterministic(const Node &node, const std::set<std::string> &alphabet
 
 bool isDeterministic(const std::string &color = "");
 
-bool traverse(const Node &node, std::string &wordCopy);
+bool traverse(const Node &node, std::string &word, bool showPath);
 
-bool isAccepted(const std::string &word);
+bool isAccepted(const std::string &word, bool showPath = false);
 
 int getNextNodeIndex(const Node &currentNode, char symbol);
 

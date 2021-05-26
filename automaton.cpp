@@ -68,7 +68,7 @@ void completeNode(const Node &node, const std::string &wellId, const std::set<st
         }
     }
 
-    createEdge(node.id, wellId, joinSet(lettersToAdd, ','));
+    createEdge(node.id, wellId, join(lettersToAdd.begin(), lettersToAdd.end(), ','));
 }
 
 
@@ -85,12 +85,14 @@ bool isComplete(const std::string &color) {
     return isComplete;
 }
 
-std::string joinSet(const std::set<std::string> &set, char separator) {
+template<typename Iter>
+std::string join(Iter begin, Iter end, char separator) {
     std::string s;
 
-    for (auto const &e : set) {
-        s += e;
+    while (begin != end) {
+        s += *begin;
         s += separator;
+        ++begin;
     }
 
     if (!s.empty()) {
@@ -173,10 +175,13 @@ int getNextNodeIndex(const Node &currentNode, char symbol) {
     return -1;
 }
 
-bool traverse(const Node &node, std::string &word) {
+bool traverse(const Node &node, std::string &word, bool showPath) {
 
+    std::list<std::string> traversedNodesLabels;
     Node currentNode = node;
     int strIndex = 0;
+
+    traversedNodesLabels.push_back(currentNode.label);
 
     while (strIndex < word.length()) {
         int nextNodeIndex = getNextNodeIndex(currentNode, word.at(strIndex));
@@ -184,7 +189,12 @@ bool traverse(const Node &node, std::string &word) {
         auto destNode = NODES_LIST.begin();
         std::advance(destNode, nextNodeIndex);
         currentNode = destNode.operator*();
+        traversedNodesLabels.push_back(currentNode.label);
         strIndex++;
+    }
+
+    if (showPath) {
+        std::cout << join(traversedNodesLabels.begin(), traversedNodesLabels.end(), ',') << std::endl;
     }
 
     return !currentNode.final.empty();
@@ -201,17 +211,12 @@ bool isDeterministic(const std::string &color) {
     });
 }
 
-bool isAccepted(const std::string &word) {
+bool isAccepted(const std::string &word, bool showPath) {
     std::string wordCopy = word;
 
     if (!isDeterministic()) {
         std::cout << "ERROR : automaton is not deterministic." << std::endl;
         return false;
     }
-
-    Node initialState = getInitialState();
-    bool isAccepted = traverse(initialState, wordCopy);
-
-    return isAccepted;
-
+    return traverse(getInitialState(), wordCopy, showPath);
 }

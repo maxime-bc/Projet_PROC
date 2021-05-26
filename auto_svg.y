@@ -65,6 +65,7 @@ Command:
   | IS DETERMINISTIC {  if(isDeterministic()) { std::cout << "true" << std::endl; } else { std::cout << "false" << std::endl; } }
   | SHOW DETERMINISTIC LABEL_STRING { isDeterministic($3); }
   | IS ACCEPTED LABEL_STRING { if(isAccepted($3)) { std::cout << "true" << std::endl; } else { std::cout << "false" << std::endl; } }
+  | SHOW LABEL_STRING { isAccepted($2, true); }
   | CLEAR ALL { EDGES_LIST.clear(); NODES_LIST.clear(); }
   | CLEAR EDGES { EDGES_LIST.clear(); }
   ;
