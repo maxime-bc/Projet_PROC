@@ -8,6 +8,7 @@
 #include "svg.h"
 #include "node.h"
 #include "edge.h"
+#include "automaton.h"
 
 
 std::tuple<double, double, double, double>
@@ -161,7 +162,18 @@ generateCurvedArrowBetweenPoints(double x1, double y1, double x2, double y2, dou
     return std::make_tuple(curve.str(), cx1, cy1);
 }
 
-void dumpSVG(const std::string &outputFile) {
+std::string generateAnimations(const std::string &word) { // TODO
+    if (!isDeterministic()) {
+        std::cout << "ERROR : automaton is not deterministic." << std::endl;
+        return "";
+    }
+
+    auto[isAccepted, traversedNodes] = traverse(getInitialState(), word);
+    std::cout << join(traversedNodes.begin(), traversedNodes.end(), ',');
+    return "";
+}
+
+void dumpSVG(const std::string &outputFile, const std::string &word) {
 
     std::stringstream svgContent, svgNodes, svgNodesLabels;
     std::list<std::string> nodesPaths, nodesIOArrowsPaths;
@@ -173,6 +185,10 @@ void dumpSVG(const std::string &outputFile) {
                   "<defs>\n<marker id='head' orient='auto' markerWidth='10' markerHeight='10'\n"
                   "refX='10' refY='5'>\n<path d='M 0 0 V 10 L 10 5 Z' fill='black' />\n</marker>\n</defs>\n\n"
                << generateAutomatonSVG() << "</svg>";
+
+    if (!word.empty()) {
+        generateAnimations(word);
+    }
 
     std::ofstream fileStream;
     fileStream.open(outputFile);

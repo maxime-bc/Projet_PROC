@@ -26,7 +26,7 @@ bool isNodeDeterministic(const Node &node, const std::set<std::string> &alphabet
 
 bool isDeterministic(const std::string &color = "");
 
-bool traverse(const Node &node, std::string &word, bool showPath);
+std::tuple<bool, std::list<std::string>> traverse(const Node &node, const std::string &word);
 
 bool isAccepted(const std::string &word, bool showPath = false);
 

@@ -15,7 +15,7 @@ std::string generateArrow(double xPos, double yPos, double size, const std::stri
 
 std::string generateEdgeLabels(double x, double y, const std::string &label);
 
-void dumpSVG(const std::string &outputFile);
+void dumpSVG(const std::string &outputFile, const std::string &word = "");
 
 std::tuple<std::string, double, double>
 generateCurvedArrowBetweenPoints(double x1, double y1, double x2, double y2, double offset = 15);

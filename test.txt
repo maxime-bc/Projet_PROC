@@ -150,3 +150,5 @@ create edge from q3 to q1 label "a"
 dump "test.svg"
 is deterministic
 is accepted "aabb"
+show "aabb"
+show "aab"

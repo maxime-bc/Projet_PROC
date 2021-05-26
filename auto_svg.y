@@ -49,6 +49,7 @@ Command:
   | RENAME ID WITH ID { renameNode($2, $4); }
   | DUMP LABEL_STRING { dumpSVG($2); }
   | DUMP { printNodes(); printEdges(); }
+  | DUMP LABEL_STRING WITH LABEL_STRING { dumpSVG($2, $4); }
   | EDIT ID WITH Create_Attrs_1 { editNode($2); }
   | EDIT EDGE FROM ID TO ID WITH Create_Attrs_2 { editEdge($4, $6); }
   | REMOVE NODE ID { removeNode($3); }

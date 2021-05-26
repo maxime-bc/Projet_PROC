@@ -175,7 +175,7 @@ int getNextNodeIndex(const Node &currentNode, char symbol) {
     return -1;
 }
 
-bool traverse(const Node &node, std::string &word, bool showPath) {
+std::tuple<bool, std::list<std::string>> traverse(const Node &node, const std::string &word) {
 
     std::list<std::string> traversedNodesLabels;
     Node currentNode = node;
@@ -193,11 +193,7 @@ bool traverse(const Node &node, std::string &word, bool showPath) {
         strIndex++;
     }
 
-    if (showPath) {
-        std::cout << join(traversedNodesLabels.begin(), traversedNodesLabels.end(), ',') << std::endl;
-    }
-
-    return !currentNode.final.empty();
+    return std::make_tuple(!currentNode.final.empty(), traversedNodesLabels);
 }
 
 bool isDeterministic(const std::string &color) {
@@ -212,11 +208,20 @@ bool isDeterministic(const std::string &color) {
 }
 
 bool isAccepted(const std::string &word, bool showPath) {
-    std::string wordCopy = word;
 
     if (!isDeterministic()) {
         std::cout << "ERROR : automaton is not deterministic." << std::endl;
         return false;
     }
-    return traverse(getInitialState(), wordCopy, showPath);
+
+    auto[isAccepted, traversedNodes] = traverse(getInitialState(), word);
+
+    if (showPath) {
+        if (isAccepted) {
+            std::cout << join(traversedNodes.begin(), traversedNodes.end(), ',') << std::endl;
+        } else {
+            std::cout << "\"" << word << "\" not accepted by automaton." << std::endl;
+        }
+    }
+    return isAccepted;
 }
