@@ -60,7 +60,8 @@ generateArrow(double xPos, double yPos, double size, const std::string &type, co
     return std::get<0>(arrowPath);
 }
 
-std::string generateAutomatonSVG(const std::list<std::tuple<std::string, std::string>> &edgesToAnimate) {
+std::string
+generateAutomatonSVG(const std::list<std::tuple<std::string, std::string>> &edgesToAnimate, bool isAccepted) {
     std::stringstream nodesCircles, nodesLabels, initialStates, finalStates, global;
 
     nodesCircles << "<!-- nodes -->\n<g stroke-width='2'>\n";
@@ -85,7 +86,7 @@ std::string generateAutomatonSVG(const std::list<std::tuple<std::string, std::st
     }
 
     global << nodesCircles.str() << "</g>\n" << nodesLabels.str() << "</g>\n" << initialStates.str() << "</g>\n"
-           << finalStates.str() << "</g>\n" + generateEdges(edgesToAnimate);
+           << finalStates.str() << "</g>\n" + generateEdges(edgesToAnimate, isAccepted);
     return global.str();
 }
 
@@ -107,7 +108,7 @@ bool edgeToAnimate(const std::string &source, const std::string &dest,
     return false;
 }
 
-std::string generateEdges(const std::list<std::tuple<std::string, std::string>> &edgesToAnimate) {
+std::string generateEdges(const std::list<std::tuple<std::string, std::string>> &edgesToAnimate, bool isAccepted) {
     std::stringstream edges, labels, frames;
     edges << "<!-- edges -->\n<g fill='none' marker-end='url(#head)'>\n";
     labels << "<!-- label for edges -->\n<g fill='black' text-anchor='middle'>\n";
@@ -158,7 +159,7 @@ std::string generateEdges(const std::list<std::tuple<std::string, std::string>> 
 
         if (animatedEdge) {
             frames << generateFrame(counter, curvePath, sourceNode.xPos, sourceNode.yPos, sourceNode.size, lx, ly,
-                                    sourceNode.label, edge.label) << "\n";
+                                    sourceNode.label, edge.label, isAccepted) << "\n";
             counter += 1;
         }
 
@@ -198,22 +199,26 @@ std::string generateStyle(int nodesCount, double delay) {
 
 std::string
 generateFrame(int frameId, const std::string &path, double cx, double cy, double size, double lx, double ly,
-              const std::string &nodeLabel, const std::string &edgeLabel) {
+              const std::string &nodeLabel, const std::string &edgeLabel, bool isAccepted) {
     std::stringstream frame; // TODO : add triangles for arrows
     // TODO : if first, add node and input arrow
     // TODO : if last, add output arrow
-    frame << "<g id='_frame_" << frameId << "' class='frame'>\n"
-                                            "<g stroke-width='2' >\n"
-                                            "<circle stroke='green' fill='lightGreen' cx='" << cx << "' cy='" << cy
-          << "' r='" << size << "' />\n"
-                                "<path d='"
-          << path << "' stroke='green' fill='none'/>\n</g>\n"
-                     "<g text-anchor='middle' stroke='green'>\n"
-                     "<text x='" << lx << "' y='" << ly << "'>" << edgeLabel << "</text>\n"
-                                                                                "<text dominant-baseline='middle' x='"
-          << cx << "' y='" << cy
-          << "'>"
-          << nodeLabel << "</text>\n</g>\n</g>";
+    std::string fillColor, strokeColor;
+
+    if (isAccepted) {
+        fillColor = "lightGreen";
+        strokeColor = "green";
+    } else {
+        fillColor = "lightCoral";
+        strokeColor = "red";
+    }
+
+    frame << "<g id='_frame_" << frameId << "' class='frame'>\n<g stroke-width='2' >\n<circle stroke='" << strokeColor
+          << "' fill='" << fillColor << "' cx='" << cx << "' cy='" << cy << "' r='" << size << "' />\n<path d='" << path
+          << "' stroke='" << strokeColor << "' fill='none'/>\n</g>\n<g text-anchor='middle' stroke='" << strokeColor
+          << "'>\n<text x='" << lx << "' y='" << ly << "'>" << edgeLabel
+          << "</text>\n<text dominant-baseline='middle' x='" << cx << "' y='" << cy << "'>" << nodeLabel
+          << "</text>\n</g>\n</g>";
 
     return frame.str();
 }
@@ -242,7 +247,7 @@ void dumpSVGWithWord(const std::string &outputFile, const std::string &word) {
                "stroke-width='2'/>\n"
                "<defs>\n<marker id='head' orient='auto' markerWidth='10' markerHeight='10'\n"
                "refX='10' refY='5'>\n<path d='M 0 0 V 10 L 10 5 Z' fill='black' />\n</marker>\n</defs>\n\n"
-               << generateAutomatonSVG(edgesToAnimate) << "</svg>";
+               << generateAutomatonSVG(edgesToAnimate, isAccepted) << "</svg>";
 
     std::cout << traversedNodes.size() << std::endl;
 

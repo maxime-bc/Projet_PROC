@@ -157,3 +157,4 @@ show "aabb"
 show "aab" --> not accepted by automaton.
 
 dump "test.svg" with "aabb"
+dump "test.svg" with "aab"
