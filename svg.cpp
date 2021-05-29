@@ -158,8 +158,18 @@ std::string generateEdges(const std::list<std::tuple<std::string, std::string>> 
         }
 
         if (animatedEdge) {
+            std::string initialPath, finalPath;
+            if (counter == 0) {
+                initialPath = generateArrow(sourceNode.xPos, sourceNode.yPos, sourceNode.size, "initial",
+                                            sourceNode.initial);
+            }
+
+            if (counter == edgesToAnimate.size() - 1 && isAccepted) {
+                finalPath = generateArrow(destNode.xPos, destNode.yPos, destNode.size, "final", destNode.final);
+            }
+
             frames << generateFrame(counter, curvePath, sourceNode.xPos, sourceNode.yPos, sourceNode.size, lx, ly,
-                                    sourceNode.label, edge.label, isAccepted) << "\n";
+                                    sourceNode.label, edge.label, isAccepted, initialPath, finalPath) << "\n";
             counter += 1;
         }
 
@@ -199,10 +209,10 @@ std::string generateStyle(int nodesCount, double delay) {
 
 std::string
 generateFrame(int frameId, const std::string &path, double cx, double cy, double size, double lx, double ly,
-              const std::string &nodeLabel, const std::string &edgeLabel, bool isAccepted) {
-    std::stringstream frame; // TODO : add triangles for arrows
-    // TODO : if first, add node and input arrow
-    // TODO : if last, add output arrow
+              const std::string &nodeLabel, const std::string &edgeLabel, bool isAccepted,
+              const std::string &initialPath, const std::string &finalPath) {
+    std::stringstream frame;
+    // TODO : add a last frame
     std::string fillColor, strokeColor;
 
     if (isAccepted) {
@@ -215,8 +225,18 @@ generateFrame(int frameId, const std::string &path, double cx, double cy, double
 
     frame << "<g id='_frame_" << frameId << "' class='frame'>\n<g stroke-width='2' >\n<circle stroke='" << strokeColor
           << "' fill='" << fillColor << "' cx='" << cx << "' cy='" << cy << "' r='" << size << "' />\n<path d='" << path
-          << "' stroke='" << strokeColor << "' fill='none'/>\n</g>\n<g text-anchor='middle' stroke='" << strokeColor
-          << "'>\n<text x='" << lx << "' y='" << ly << "'>" << edgeLabel
+          << "' stroke='" << strokeColor << "' fill='none'/>\n";
+
+    if (!initialPath.empty()) {
+        frame << "<!-- initial -->\n<path d='" << initialPath << "' stroke='green' fill='none'/>\n";
+    }
+
+    if (!finalPath.empty()) {
+        frame << "<!-- final -->\n<path d='" << finalPath << "' stroke='green' fill='none'/>\n";
+    }
+
+    frame << "</g>\n<g text-anchor='middle' stroke='" << strokeColor
+          << "'>\n" << "<text x='" << lx << "' y='" << ly << "'>" << edgeLabel
           << "</text>\n<text dominant-baseline='middle' x='" << cx << "' y='" << cy << "'>" << nodeLabel
           << "</text>\n</g>\n</g>";
 

@@ -32,6 +32,7 @@ std::string generateEdges(const std::list<std::tuple<std::string, std::string>> 
 
 std::string
 generateFrame(int frameId, const std::string &path, double cx, double cy, double size, double lx, double ly,
-              const std::string &nodeLabel, const std::string &edgeLabel, bool isAccepted);
+              const std::string &nodeLabel, const std::string &edgeLabel, bool isAccepted,
+              const std::string &initialPath, const std::string &finalPath);
 
 #endif //SVG_H
