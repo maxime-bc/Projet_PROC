@@ -155,3 +155,5 @@ is deterministic
 is accepted "aabb"
 show "aabb"
 show "aab" --> not accepted by automaton.
+
+dump "test.svg" with "aabb"
