@@ -108,8 +108,11 @@ bool edgeToAnimate(const std::string &source, const std::string &dest,
     return false;
 }
 
+
 std::string generateEdges(const std::list<std::tuple<std::string, std::string>> &edgesToAnimate, bool isAccepted) {
     std::stringstream edges, labels, frames;
+    std::map<std::string, std::tuple<std::string, std::string, double, double>> pathAndLabelPos;
+
     edges << "<!-- edges -->\n<g fill='none' marker-end='url(#head)'>\n";
     labels << "<!-- label for edges -->\n<g fill='black' text-anchor='middle'>\n";
     int counter = 0;
@@ -122,7 +125,6 @@ std::string generateEdges(const std::list<std::tuple<std::string, std::string>> 
         nodesIterator = NODES_LIST.begin();
         std::advance(nodesIterator, getNodeIndex(edge.dest));
         Node destNode = *nodesIterator;
-        bool animatedEdge = edgeToAnimate(edge.source, edge.dest, edgesToAnimate);
 
         std::string curvePath;
         double lx, ly;
@@ -157,17 +159,27 @@ std::string generateEdges(const std::list<std::tuple<std::string, std::string>> 
             ly = std::get<1>(points) += edge.yPos;
         }
 
-        if (animatedEdge) {
-            frames << generateFrame(counter, curvePath, lx, ly, sourceNode, edge.label, isAccepted) << "\n";
-
-            if (counter == edgesToAnimate.size() - 1) {
-                // last edge, we need to add a frame for the last node and output arrow if accepted
-                frames << generateLastFrame(counter + 1, destNode, isAccepted) << "\n";
-            }
-            counter += 1;
-        }
-
         labels << generateEdgeLabels(lx, ly, edge.label);
+        pathAndLabelPos[edge.source + edge.dest] = std::make_tuple(curvePath, edge.label, lx, ly);
+    }
+
+    for (const auto &elem: edgesToAnimate) {
+        const auto&[source, dest] = elem;
+        const auto&[path, label, lx, ly] = pathAndLabelPos[source + dest];
+
+        Node sourceNode = getNode(source);
+        Node destNode = getNode(dest);
+
+        std::cout << "edge " << source << " - " << dest << ", path=" << path << ", lx=" << lx << ", ly =" << ly
+                  << std::endl;
+
+        frames << generateFrame(counter, path, lx, ly, sourceNode, label, isAccepted) << "\n";
+
+        if (counter == edgesToAnimate.size() - 1) {
+            // last edge, we need to add a frame for the last node and output arrow if accepted
+            frames << generateLastFrame(counter + 1, destNode, isAccepted) << "\n";
+        }
+        counter += 1;
     }
 
     edges << "</g>\n";

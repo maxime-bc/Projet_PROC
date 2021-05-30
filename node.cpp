@@ -69,6 +69,12 @@ int getNodeIndex(const std::string &nodeId) {
     return -1;
 }
 
+Node getNode(const std::string &nodeId) {
+    auto nodesIterator = NODES_LIST.begin();
+    std::advance(nodesIterator, getNodeIndex(nodeId));
+    return *nodesIterator;
+}
+
 void renameNode(const std::string &currentNodeId, const std::string &newNodeId) {
     int currentNodePos = getNodeIndex(currentNodeId);
 
