@@ -158,18 +158,12 @@ std::string generateEdges(const std::list<std::tuple<std::string, std::string>> 
         }
 
         if (animatedEdge) {
-            std::string initialPath, finalPath;
-            if (counter == 0) {
-                initialPath = generateArrow(sourceNode.xPos, sourceNode.yPos, sourceNode.size, "initial",
-                                            sourceNode.initial);
-            }
+            frames << generateFrame(counter, curvePath, lx, ly, sourceNode, edge.label, isAccepted) << "\n";
 
-            if (counter == edgesToAnimate.size() - 1 && isAccepted) {
-                finalPath = generateArrow(destNode.xPos, destNode.yPos, destNode.size, "final", destNode.final);
+            if (counter == edgesToAnimate.size() - 1) {
+                // last edge, we need to add a frame for the last node and output arrow if accepted
+                frames << generateLastFrame(counter + 1, destNode, isAccepted) << "\n";
             }
-
-            frames << generateFrame(counter, curvePath, sourceNode.xPos, sourceNode.yPos, sourceNode.size, lx, ly,
-                                    sourceNode.label, edge.label, isAccepted, initialPath, finalPath) << "\n";
             counter += 1;
         }
 
@@ -208,9 +202,8 @@ std::string generateStyle(int nodesCount, double delay) {
 }
 
 std::string
-generateFrame(int frameId, const std::string &path, double cx, double cy, double size, double lx, double ly,
-              const std::string &nodeLabel, const std::string &edgeLabel, bool isAccepted,
-              const std::string &initialPath, const std::string &finalPath) {
+generateFrame(int frameId, const std::string &path, double lx, double ly, const Node &node,
+              const std::string &edgeLabel, bool isAccepted) {
     std::stringstream frame;
     // TODO : add a last frame
     std::string fillColor, strokeColor;
@@ -224,20 +217,48 @@ generateFrame(int frameId, const std::string &path, double cx, double cy, double
     }
 
     frame << "<g id='_frame_" << frameId << "' class='frame'>\n<g stroke-width='2' >\n<circle stroke='" << strokeColor
-          << "' fill='" << fillColor << "' cx='" << cx << "' cy='" << cy << "' r='" << size << "' />\n<path d='" << path
+          << "' fill='" << fillColor << "' cx='" << node.xPos << "' cy='" << node.yPos << "' r='" << node.size
+          << "' />\n<path d='" << path
           << "' stroke='" << strokeColor << "' fill='none'/>\n";
 
-    if (!initialPath.empty()) {
-        frame << "<!-- initial -->\n<path d='" << initialPath << "' stroke='green' fill='none'/>\n";
-    }
-
-    if (!finalPath.empty()) {
-        frame << "<!-- final -->\n<path d='" << finalPath << "' stroke='green' fill='none'/>\n";
+    if (frameId == 0) { // first frame == draw input arrow
+        std::string initialPath = generateArrow(node.xPos, node.yPos, node.size, "initial", node.initial);
+        frame << "<!-- initial -->\n<path d='" << initialPath << "' stroke='" << strokeColor << "' fill='none'/>\n";
     }
 
     frame << "</g>\n<g text-anchor='middle' stroke='" << strokeColor
           << "'>\n" << "<text x='" << lx << "' y='" << ly << "'>" << edgeLabel
-          << "</text>\n<text dominant-baseline='middle' x='" << cx << "' y='" << cy << "'>" << nodeLabel
+          << "</text>\n<text dominant-baseline='middle' x='" << node.xPos << "' y='" << node.yPos << "'>" << node.label
+          << "</text>\n</g>\n</g>";
+
+    return frame.str();
+
+}
+
+std::string generateLastFrame(int frameId, const Node &node, bool isAccepted) {
+    std::stringstream frame;
+    // TODO : add a last frame
+    std::string fillColor, strokeColor;
+
+    if (isAccepted) {
+        fillColor = "lightGreen";
+        strokeColor = "green";
+    } else {
+        fillColor = "lightCoral";
+        strokeColor = "red";
+    }
+
+    frame << "<g id='_frame_" << frameId << "' class='frame'>\n<g stroke-width='2' >\n<circle stroke='" << strokeColor
+          << "' fill='" << fillColor << "' cx='" << node.xPos << "' cy='" << node.yPos << "' r='" << node.size
+          << "' />\n";
+
+    if (isAccepted) {
+        std::string finalPath = generateArrow(node.xPos, node.yPos, node.size, "final", node.final);
+        frame << "<!-- final -->\n<path d='" << finalPath << "' stroke='green' fill='none'/>\n";
+    }
+
+    frame << "</g>\n<g text-anchor='middle' stroke='" << strokeColor
+          << "'>\n" << "<text dominant-baseline='middle' x='" << node.xPos << "' y='" << node.yPos << "'>" << node.label
           << "</text>\n</g>\n</g>";
 
     return frame.str();
@@ -262,7 +283,7 @@ void dumpSVGWithWord(const std::string &outputFile, const std::string &word) {
 
     svgContent << "<svg xmlns='http://www.w3.org/2000/svg' xmlns:xlink='http://www.w3.org/1999/xlink' "
                   "width='800' height='600' viewBox='0 0 800 600'>\n\n"
-               << generateStyle(edgesToAnimate.size(), 1.5) <<
+               << generateStyle(edgesToAnimate.size() + 1, 1.5) <<
                "<rect x='0' y='0' width='800' height='600' fill='none' stroke='black' "
                "stroke-width='2'/>\n"
                "<defs>\n<marker id='head' orient='auto' markerWidth='10' markerHeight='10'\n"

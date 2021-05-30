@@ -28,11 +28,12 @@ bool edgeToAnimate(const std::string &source, const std::string &dest,
 std::tuple<std::string, double, double>
 generateCurvedArrowBetweenPoints(double x1, double y1, double x2, double y2, double offset = 15);
 
+std::string generateLastFrame(int frameId, const Node &node, bool isAccepted);
+
 std::string generateEdges(const std::list<std::tuple<std::string, std::string>> &edgesToAnimate = {}, bool = false);
 
 std::string
-generateFrame(int frameId, const std::string &path, double cx, double cy, double size, double lx, double ly,
-              const std::string &nodeLabel, const std::string &edgeLabel, bool isAccepted,
-              const std::string &initialPath, const std::string &finalPath);
+generateFrame(int frameId, const std::string &path, double lx, double ly, const Node &node,
+              const std::string &edgeLabel, bool isAccepted);
 
 #endif //SVG_H
