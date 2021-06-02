@@ -165,3 +165,6 @@ show "aab" --> not accepted by automaton.
 dump "test.svg" with "aabb"
 dump "test.svg" with "aab"
 dump "test.svg" with "aabaabbaba"
+
+remove node q1
+dump "test.svg" with "aabb" --> ERROR : automaton is not deterministic.

@@ -170,9 +170,6 @@ std::string generateEdges(const std::list<std::tuple<std::string, std::string>> 
         Node sourceNode = getNode(source);
         Node destNode = getNode(dest);
 
-        std::cout << "edge " << source << " - " << dest << ", path=" << path << ", lx=" << lx << ", ly =" << ly
-                  << std::endl;
-
         frames << generateFrame(counter, path, lx, ly, sourceNode, label, isAccepted) << "\n";
 
         if (counter == edgesToAnimate.size() - 1) {
@@ -286,7 +283,6 @@ void dumpSVGWithWord(const std::string &outputFile, const std::string &word) {
     }
 
     auto[isAccepted, traversedNodes] = traverse(getInitialState(), word);
-    std::cout << join(traversedNodes.begin(), traversedNodes.end(), ',') << std::endl;
 
     for (auto source = traversedNodes.begin(), dest = ++traversedNodes.begin();
          dest != traversedNodes.end(); ++source, ++dest) {
@@ -301,8 +297,6 @@ void dumpSVGWithWord(const std::string &outputFile, const std::string &word) {
                "<defs>\n<marker id='head' orient='auto' markerWidth='10' markerHeight='10'\n"
                "refX='10' refY='5'>\n<path d='M 0 0 V 10 L 10 5 Z' fill='black' />\n</marker>\n</defs>\n\n"
                << generateAutomatonSVG(edgesToAnimate, isAccepted) << "</svg>";
-
-    std::cout << traversedNodes.size() << std::endl;
 
     std::ofstream fileStream;
     fileStream.open(outputFile);

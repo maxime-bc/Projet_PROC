@@ -132,22 +132,33 @@ bool isNodeDeterministic(const Node &node, const std::set<std::string> &alphabet
 
     bool isDeterministic = true;
 
-    std::list<std::string> viewedLetters;
+    // 1 - retrieve all symbols from edges starting from node.
+    // If symbols appears more than one time, node is not deterministic.
+    std::set<std::string> viewedLetters;
     for (auto edge = EDGES_LIST.begin(); edge != EDGES_LIST.end();) {
         if (edge->source == node.id) {
             std::list<std::string> letters = split(edge->label, ',');
             for (const auto &letter : letters) {
-                if (std::find(std::begin(viewedLetters), std::end(viewedLetters), letter) != std::end(viewedLetters)) {
+                // if the letter was already seen
+                if (viewedLetters.find(letter) != viewedLetters.end()) {
                     if (!color.empty()) {
                         edge->color = color;
                     }
-                    isDeterministic = false;;
+                    isDeterministic = false;
                 } else {
-                    viewedLetters.push_back(letter);
+                    viewedLetters.insert(letter);
                 }
             }
         }
         edge++;
+    }
+
+    // 2 - check if entire alphabet is used
+    for (const auto &letter: alphabet) {
+        if (viewedLetters.find(letter) == viewedLetters.end()) {
+            isDeterministic = false;
+            break;
+        }
     }
     return isDeterministic;
 }
@@ -205,7 +216,7 @@ std::tuple<bool, std::list<std::string>> traverse(const Node &node, const std::s
 
 bool isDeterministic(const std::string &color) {
     std::set<std::string> alphabet = getAlphabet();
-    if (countInitialStates() > 1) {
+    if (countInitialStates() != 1) {
         return false;
     }
 
