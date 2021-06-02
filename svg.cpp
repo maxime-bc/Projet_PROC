@@ -278,7 +278,7 @@ void dumpSVGWithWord(const std::string &outputFile, const std::string &word) {
     std::list<std::tuple<std::string, std::string >> edgesToAnimate;
 
     if (!isDeterministic()) {
-        std::cout << "ERROR : automaton is not deterministic." << std::endl;
+        std::cerr << "ERROR : automaton is not deterministic." << std::endl;
         return;
     }
 

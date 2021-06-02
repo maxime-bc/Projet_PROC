@@ -106,7 +106,7 @@ std::string join(Iter begin, Iter end, char separator) {
 void complete(const std::string &wellId, float xPos, float yPos) {
 
     if (isComplete()) {
-        std::cout << "ERROR : automaton is already complete." << std::endl;
+        std::cerr << "ERROR : automaton is already complete." << std::endl;
         return;
     }
 
@@ -228,7 +228,7 @@ bool isDeterministic(const std::string &color) {
 bool isAccepted(const std::string &word, bool showPath) {
 
     if (!isDeterministic()) {
-        std::cout << "ERROR : automaton is not deterministic." << std::endl;
+        std::cerr << "ERROR : automaton is not deterministic." << std::endl;
         return false;
     }
 
@@ -239,7 +239,7 @@ bool isAccepted(const std::string &word, bool showPath) {
         if (isAccepted) {
             std::cout << joinedNodes << std::endl;
         } else {
-            std::cout << joinedNodes << "\n(\"" << word << "\" not accepted by automaton.)" << std::endl;
+            std::cerr << "ERROR : " << joinedNodes << "\n(\"" << word << "\" not accepted by automaton.)" << std::endl;
         }
     }
     return isAccepted;
