@@ -69,17 +69,22 @@ dump "test.svg"
 IS COMPLETE
 COMPLETE WITH p AT 500 500
 IS COMPLETE
+dump "test.svg"
 
 # not complete (exemple du sujet)
-create node i at 100 300 initial
-create node a1 at 200 200 label "1"
-create node a0 at 200 300 label "0"
-create node f at 300 300 final
+create node i at 200 300 initial
+create node a1 at 300 200 label "1"
+create node a0 at 300 300 label "0"
+create node f at 400 300 final
 create edge from i to a0 label "a"
 create edge from a0 to a1 label "b"
 create edge from a1 to a0 label "b"
 create edge from a0 to a0 label "a"
 create edge from a0 to f label "a"
+dump "test.svg"
+IS COMPLETE
+COMPLETE WITH p AT 100 100
+IS COMPLETE
 dump "test.svg"
 
 # not complete
@@ -97,6 +102,7 @@ is complete
 show complete "red"
 dump "test.svg"
 complete with p at 200 420
+is complete
 dump "test.svg"
 
 # complete

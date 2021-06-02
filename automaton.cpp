@@ -105,6 +105,11 @@ std::string join(Iter begin, Iter end, char separator) {
 
 void complete(const std::string &wellId, float xPos, float yPos) {
 
+    if (isComplete()) {
+        std::cout << "ERROR : automaton is already complete." << std::endl;
+        return;
+    }
+
     std::set<std::string> alphabet = getAlphabet();
     createNode(wellId, xPos, yPos);
 
@@ -159,7 +164,7 @@ Node getInitialState() {
 
     auto initialState = NODES_LIST.begin();
     std::advance(initialState, index);
-    return initialState.operator*();
+    return *initialState;
 }
 
 int getNextNodeIndex(const Node &currentNode, char symbol) {
@@ -190,7 +195,7 @@ std::tuple<bool, std::list<std::string>> traverse(const Node &node, const std::s
 
         auto destNode = NODES_LIST.begin();
         std::advance(destNode, nextNodeIndex);
-        currentNode = destNode.operator*();
+        currentNode = *destNode;
         traversedNodesLabels.push_back(currentNode.label);
         strIndex++;
     }
@@ -219,10 +224,11 @@ bool isAccepted(const std::string &word, bool showPath) {
     auto[isAccepted, traversedNodes] = traverse(getInitialState(), word);
 
     if (showPath) {
+        std::string joinedNodes = join(traversedNodes.begin(), traversedNodes.end(), ',');
         if (isAccepted) {
-            std::cout << join(traversedNodes.begin(), traversedNodes.end(), ',') << std::endl;
+            std::cout << joinedNodes << std::endl;
         } else {
-            std::cout << "\"" << word << "\" not accepted by automaton." << std::endl;
+            std::cout << joinedNodes << "\n(\"" << word << "\" not accepted by automaton.)" << std::endl;
         }
     }
     return isAccepted;
