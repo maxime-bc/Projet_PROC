@@ -54,24 +54,22 @@ node a1 {xPos=100, yPos=100, label=a1, color=black, backgroundColor=red, size=30
 clear all
 dump
 
-# PARTIE LASF
+===== PARTIE LASF =====
 
-# automates entiers
-
-# not complete
+# exemple 1 complete
 CREATE NODE un AT 100 300 INITIAL north
 create node deux at 200 300  FINAL north
-create node trois at 200 200 FINAL north
+create node trois at 300 300 FINAL north
 CREATE EDGE FROM un to deux LABEL "a"
 CREATE EDGE FROM deux to trois LABEL "b"
 CREATE EDGE FROM trois to deux LABEL "b"
 dump "test.svg"
 IS COMPLETE
-COMPLETE WITH p AT 500 500
+COMPLETE WITH p AT 200 400
 IS COMPLETE
 dump "test.svg"
 
-# not complete (exemple du sujet)
+# exemple 2 complete (exemple du sujet)
 create node i at 200 300 initial
 create node a1 at 300 200 label "1"
 create node a0 at 300 300 label "0"
@@ -87,9 +85,9 @@ COMPLETE WITH p AT 100 100
 IS COMPLETE
 dump "test.svg"
 
-# not complete
+# exemple 3 complete
 create node a1 at 100 300 label "1" initial
-create node a2 at 200 200 label "2"
+create node a2 at 200 150 label "2"
 create node a4 at 200 300 label "4"
 create node a5 at 300 300 label "5" final
 create edge from a1 to a2 label "a"
@@ -105,25 +103,7 @@ complete with p at 200 420
 is complete
 dump "test.svg"
 
-# complete
-create node a1 at 80 300 label "1" initial
-create node a2 at 200 180 label "2"
-create node a4 at 200 300 label "4"
-create node a5 at 320 300 label "5" final
-create node p at 200 420 label "P"
-create edge from a1 to a2 label "a"
-create edge from a1 to a4 label "b"
-create edge from a2 to a2 label "a,b"
-create edge from a2 to a5 label "c,d"
-create edge from a4 to a5 label "c,d"
-create edge from a1 to p label "c,d"
-create edge from p to p label "a,b,c,d"
-create edge from a4 to p label "a,b"
-create edge from a5 to p label "a,b,c,d"
-dump "test.svg"
-is complete
-
-# automate non-déterministe
+# exemple 4 is deterministic : automate non-déterministe
 create node q0 at 100 100 initial
 create node q1 at 200 100
 create node q2 at 300 100
@@ -141,7 +121,7 @@ show deterministic "blue"
 dump "test.svg"
 is accepted "aabb"
 
-# automate déterministe
+# exemple 5 is deterministic : automate déterministe
 create node q0 at 100 100 initial
 create node q1 at 200 100
 create node q2 at 300 100
@@ -158,6 +138,8 @@ create edge from q2 to q2 label "a"
 create edge from q3 to q1 label "a"
 dump "test.svg"
 is deterministic
+show deterministic "blue" --> does nothing
+dump "test.svg"
 is accepted "aabb"
 show "aabb"
 show "aab" --> not accepted by automaton.

@@ -239,7 +239,7 @@ bool isAccepted(const std::string &word, bool showPath) {
         if (isAccepted) {
             std::cout << joinedNodes << std::endl;
         } else {
-            std::cerr << "ERROR : " << joinedNodes << "\n(\"" << word << "\" not accepted by automaton.)" << std::endl;
+            std::cerr << joinedNodes << "\nERROR : " << word << " is not accepted by automaton." << std::endl;
         }
     }
     return isAccepted;
